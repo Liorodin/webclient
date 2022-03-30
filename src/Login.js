@@ -4,7 +4,7 @@ import Input from './Input'
 
 export default function Login() {
     return (
-        <div>
+        <div className='cube'>
             <h1>Shirin's and Leonardo's WebClient</h1>
             <Input inputName="Username" inputType="text" />
             <Input inputName="Password" inputType="password" />
