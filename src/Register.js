@@ -4,7 +4,7 @@ import Input from './Input';
 
 export default function Register() {
     return (
-        <div className='cube'>
+        <form action="" className='cube'>
             <h1>Register</h1>
             <Input inputName="Username" inputType="text" />
             <Input inputName="Nickname" inputType="text" />
@@ -15,6 +15,6 @@ export default function Register() {
             <div>
                 Already registered? <Link to="/">Click Here</Link> to login
             </div>
-        </div>
+        </form>
     )
 }

@@ -1,9 +1,9 @@
 const Input = ({ inputName, inputType }) => {
     return (
         <div className="row mb-3">
-            <label class="col-sm-2 col-form-label" htmlFor={inputName}>{inputName}</label>
-            <div class="col-sm-10">
-                <input class="form-control" htmlFor={inputType} id={inputName}></input>
+            <label className="col-sm-2 col-form-label" htmlFor={inputName}>{inputName}</label>
+            <div className="col-sm-10">
+                <input className="form-control" htmlFor={inputType} id={inputName}></input>
             </div>
         </div>
     );

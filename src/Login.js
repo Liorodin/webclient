@@ -4,7 +4,7 @@ import Input from './Input'
 
 export default function Login() {
     return (
-        <div className='cube'>
+        <form action="" className='cube'>
             <h1>Shirin's and Leonardo's WebClient</h1>
             <Input inputName="Username" inputType="text" />
             <Input inputName="Password" inputType="password" />
@@ -14,6 +14,6 @@ export default function Login() {
             <div>
                 Not registered? <Link to="/register">Click here</Link> to register
             </div>
-        </div>
+        </form>
     )
 }
