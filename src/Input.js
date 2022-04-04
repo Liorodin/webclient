@@ -1,5 +1,6 @@
 import React from 'react';
 import GetError from './GetError';
+import ValidityErrors from './ValidityErrors';
 
 export default function Input({ inputName, inputType }) {
     return (
@@ -8,6 +9,7 @@ export default function Input({ inputName, inputType }) {
             <div className="col-sm-6">
                 <input className="form-control" id={inputName} type={inputType}></input>
                 <div className="hidden"><GetError inputName={inputName}/></div>
+                <div className="hidden1"><ValidityErrors inputName={inputName}/></div>
             </div>
         </div>
     )
