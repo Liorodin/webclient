@@ -13,15 +13,16 @@ export default function Register() {
     }
 
     const showHidden = () => {
+        var flag = 1;
         var inputs = document.getElementsByTagName('input');
         var hiddenElements = document.getElementsByClassName('hidden');
         for (var i = 0; i < inputs.length - 1; i++) {
             if (inputs[i].value.length == 0) {
                 hiddenElements[i].style.display = 'block';
-                return 0;
+                flag = 0;
             }
         }
-        return 1;
+        return flag;
     }
 
     const register = (event) => {

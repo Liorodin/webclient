@@ -1,7 +1,7 @@
-import React, { users } from 'react';
+import React from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Input from './Input';
-
+import { users } from './users';
 export default function Login({ setFunc }) {
     let navigate = useNavigate();
 
@@ -15,10 +15,11 @@ export default function Login({ setFunc }) {
                 navigate("/chartview");
             }
         })
+        document.getElementById("myForm").reset();
     }
 
     return (
-        <form action="" className='cube center-form'>
+        <form action="" id="myForm" className='cube center-form'>
             <h1>Shirin's and Leonardo's WebClient</h1>
             <hr></hr>
             <Input inputName="Username" inputType="text" />

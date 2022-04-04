@@ -1,5 +1,7 @@
 * {
   font-family: Helvetica, sans-serif;
+  box-sizing: border-box;
+  letter-spacing: 0.05em;
 }
 
 h1 {
