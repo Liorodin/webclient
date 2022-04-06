@@ -1,17 +1,19 @@
 import React from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Input from './Input';
-import { users } from './users';
-export default function Login({ setFunc }) {
-    let navigate = useNavigate();
+import { users } from './db/users';
+import './App.css'
 
+export default function Login({setCurrentUser}) {
+    let navigate = useNavigate();
     const login = () => {
-        // window.location.href = "avi.html";
         var userName = document.getElementById('Username').value;
         var password = document.getElementById('Password').value;
         users.map(user => {
             if (user.username == userName && user.password == password) {
-                setFunc(userName);
+                localStorage.setItem('currentUser', JSON.stringify(userName));
+                console.log(setCurrentUser)
+                setCurrentUser(userName);
                 navigate("/chartview");
             }
         })
