@@ -18,9 +18,7 @@ export default function Login({ setFunc }) {
         var password = document.getElementById('Password').value;
         users.map(user => {
             if (user.username == userName && user.password == password) {
-                localStorage.setItem('currentUser', JSON.stringify(userName));
-                console.log(setCurrentUser)
-                setCurrentUser(userName);
+                setFunc(userName);
                 navigate("/chatview");
             }
         })

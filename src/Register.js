@@ -8,7 +8,6 @@ import { users } from './users';
 export default function Register() {
     let navigate = useNavigate();
 
-
     const register = (event) => {
         event.preventDefault();
         ResetHidden();
@@ -69,4 +68,27 @@ export default function Register() {
             </div>
         </form>
     )
+
+    /*adds a new user to the list of all the users*/
+    function newRegister() {
+        var registerUser = document.getElementById("Username").value;
+        var registerNickname = document.getElementById("Nickname").value;
+        var registerPassword = document.getElementById("Password").value;
+        var newUser = {
+            username: registerUser,
+            nickname: registerNickname,
+            password: registerPassword
+        }
+        for (var i = 0; i < users.length; i++) {
+            if (registerUser == users[i].username) {
+                alert("This username is already in use, please choose other");
+                return;
+            }
+            else if (registerPassword.length < 5) {
+                alert("This password is too short, please choose password includes at least 5 characters");
+                return;
+            }
+        }
+        users.push(newUser);
+    }
 }
