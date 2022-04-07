@@ -25,6 +25,7 @@ export default function Contact({ name, condition = false }) {
             </div>
         )
     }
+    
     return (
         <div className='contact'>
             <div className='contact-name'>{user.nickname}</div>
