@@ -93,6 +93,11 @@ h1 {
   display: none;
 }
 
+<<<<<<< HEAD
+.hidden1 {
+  color: red;
+  display: none;
+=======
 .container {
   position: relative;
   margin: 12% auto;
@@ -225,4 +230,5 @@ h1 {
   border-bottom: 2px solid #b48945;
   border-top: 2px solid #b48945;
   cursor: pointer;
+>>>>>>> e4dcd51bcd9a63d63551753c512008cd3d6c61a3
 }

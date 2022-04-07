@@ -1,24 +1,31 @@
 import React from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Input from './Input';
-import { users } from './db/users';
-import './App.css'
+import { users } from '../src/db/users';
+import ResetHidden from './ResetHidden';
+import ShowHidden from './ShowHidden';
 
-export default function Login({setCurrentUser}) {
+export default function Login({ setFunc }) {
     let navigate = useNavigate();
-    const login = () => {
+
+    const login = (event) => {
+        event.preventDefault();
+        ResetHidden();
+        // if you managed to login
+        if(ShowHidden()) {
+        // window.location.href = "avi.html";
         var userName = document.getElementById('Username').value;
         var password = document.getElementById('Password').value;
         users.map(user => {
             if (user.username == userName && user.password == password) {
-                localStorage.setItem('currentUser', JSON.stringify(userName));
-                console.log(setCurrentUser)
-                setCurrentUser(userName);
-                navigate("/chartview");
+                setFunc(userName);
+                navigate("/chatview");
             }
         })
+    
         document.getElementById("myForm").reset();
     }
+}
 
     return (
         <form action="" id="myForm" className='cube center-form'>
