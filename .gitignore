@@ -4,9 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
-avi.html
 test.html
-test.txt
 
 # testing
 /coverage

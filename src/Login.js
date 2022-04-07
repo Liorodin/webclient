@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Input from './Input';
-import { users } from './users';
+import { users } from '../src/db/users';
 import ResetHidden from './ResetHidden';
 import ShowHidden from './ShowHidden';
 
@@ -18,7 +18,9 @@ export default function Login({ setFunc }) {
         var password = document.getElementById('Password').value;
         users.map(user => {
             if (user.username == userName && user.password == password) {
-                setFunc(userName);
+                localStorage.setItem('currentUser', JSON.stringify(userName));
+                console.log(setCurrentUser)
+                setCurrentUser(userName);
                 navigate("/chatview");
             }
         })
