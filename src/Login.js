@@ -14,7 +14,7 @@ export default function Login({setCurrentUser}) {
                 localStorage.setItem('currentUser', JSON.stringify(userName));
                 console.log(setCurrentUser)
                 setCurrentUser(userName);
-                navigate("/chartview");
+                navigate("/chatview");
             }
         })
         document.getElementById("myForm").reset();
