@@ -5,11 +5,9 @@ import { users } from '../src/db/users';
 import ResetHidden from './ResetHidden';
 import ShowHidden from './ShowHidden';
 
-export default function Login({ setFunc }) {
+export default function Login({ setCurrentUser }) {
     let navigate = useNavigate();
-
-    const login = (event) => {
-        event.preventDefault();
+    const login = () => {
         ResetHidden();
         // if you managed to login
         if(ShowHidden()) {
