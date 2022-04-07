@@ -1,4 +1,4 @@
-export var users = [
+export const users = [
     {
         username: 'shirinB',
         nickname: 'shirin bazis',

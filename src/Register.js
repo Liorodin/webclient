@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import ResetHidden from './ResetHidden';
 import ShowHidden from './ShowHidden';
 import Input from './Input';
-import { users } from './users';
+import { users } from './db/users';
 
 export default function Register() {
     let navigate = useNavigate();

@@ -3,6 +3,7 @@ import Register from "./Register";
 import Login from "./Login";
 import React, { useState, useEffect } from 'react';
 import UserView from "./UserView"
+import './App.css';
 
 export default function App() {
     const [currentUser, setCurrentUser] = useState("default user");
