@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function GetError({inputName}) {
+export default function GetError({ inputName }) {
     switch (inputName) {
         case 'Username':
             return 'Please enter a Username'

@@ -1,5 +1,4 @@
 import React from 'react'
-//import { users } from './users';
 
 export default function ShowHidden() {
     console.log("show hidden");
@@ -14,4 +13,3 @@ export default function ShowHidden() {
     }
     return flag;
 }
-
