@@ -22,4 +22,10 @@ export const users = [
         nickname: 'kehat sudri',
         password: 12345
     },
+
+    {
+        username: 'noamC',
+        nickname: 'noam cohen',
+        password: 12345
+    },
 ];

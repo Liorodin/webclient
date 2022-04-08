@@ -56,11 +56,11 @@ export default function Register() {
         <form action="" className='cube center-form'>
             <h1>Register Now!</h1>
             <hr></hr>
-            <Input inputName="Username" inputType="text" />
+            <Input inputName="Username" inputType="text" text='Username'/>
             {/* <div>bls </div>  */}
-            <Input inputName="Nickname" inputType="text" />
+            <Input inputName="Nickname" inputType="text" text='Nickname'/>
             {/* <div>bls </div>  */}
-            <Input inputName="Password" inputType="password" />
+            <Input inputName="Password" inputType="password" text='Password'/>
             {/* <div>bls </div>  */}
             <div>
                 <input type="submit" value="Register" className="btn" onClick={register}></input>
