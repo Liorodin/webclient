@@ -8,8 +8,8 @@ export default function Input({ inputName, inputType }) {
             <label className="col-sm-3 col-form-label" htmlFor={inputName}>{inputName}</label>
             <div className="col-sm-6">
                 <input className="form-control" id={inputName} type={inputType}></input>
-                <div className="hidden"><GetError inputName={inputName}/></div>
-                <div className="hidden1"><ValidityErrors inputName={inputName}/></div>
+                <div className="hidden"><GetError inputName={inputName} /></div>
+                <div className="hidden1"><ValidityErrors inputName={inputName} /></div>
             </div>
         </div>
     )

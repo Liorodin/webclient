@@ -1,33 +1,40 @@
 import React from 'react'
 import GetUser from './GetUser'
-import { messages } from './db/messages';
+import ContactMessages from './ContactMessages';
 
 export default function Contact({ name, condition = false }) {
     const user = GetUser(name);
-    const getLastMessage = () => {
-        var contactChat;
-        for (var i = 0; i < messages.length; i++) {
-            if (messages[i].contacts.includes(name) && messages[i].contacts.includes(JSON.parse(localStorage.getItem('currentUser')))) {
-                contactChat = messages[i].list.at(-1);
-                break;
-            }
+    const myUserName = JSON.parse(localStorage.getItem('currentUser'));
+    const messages = ContactMessages(myUserName, name);
+    const enterContactChat = () => {
+        if (localStorage.getItem('currentContact') == JSON.stringify(name)) {
+            return;
         }
-        return contactChat;
+        localStorage.setItem('currentContact', JSON.stringify(name));
+        document.getElementById('massage-box').innerHTML = '';
+        messages.map((message) => {
+            var newLi = document.createElement('li');
+            if (message.from == myUserName) {
+                newLi.classList.add('ours');
+            }
+            newLi.appendChild(document.createTextNode(message.content));
+            document.getElementsByClassName('messages massage-box')[0].appendChild(newLi);
+        })
     }
 
-    const message = getLastMessage();
     if (condition) {
+        const lastMessage = messages.at(-1);
         return (
-            <div className='contact'>
+            <div className='contact' onClick={enterContactChat}>
                 <div className='contact-name'>{user.nickname}</div>
-                <div className='last-message'>{message.content}</div>
-                <div className='last-message time'>{message.time}</div>
+                <div className='last-message'>{lastMessage.content}</div>
+                <div className='last-message time'>{lastMessage.time}</div>
             </div>
         )
     }
-    
+
     return (
-        <div className='contact'>
+        <div className='contact' onClick={enterContactChat}>
             <div className='contact-name'>{user.nickname}</div>
             <div className='last-message'></div>
             <div className='last-message time'></div>
