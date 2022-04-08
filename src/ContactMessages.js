@@ -7,4 +7,5 @@ export default function ContactMessages(firstName, secondName) {
             return messages[i].list;
         }
     }
+    return [];
 }

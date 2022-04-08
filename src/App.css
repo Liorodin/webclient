@@ -152,7 +152,7 @@ h1 {
   padding-top: 15px;
 }
 
-.contact-profile {
+#contact-profile {
   background-color: var(--niceWhite);
   width: 100%;
   height: 60px;
@@ -177,7 +177,7 @@ h1 {
   border-color: var(--firstColor);
   display: flex;
   justify-content: end;
-  padding-top:10px;
+  padding-top: 10px;
   padding-right: 25px;
 }
 
@@ -249,4 +249,75 @@ h1 {
   border-style: solid;
   border-top: 1.5px;
   border-color: var(--firstColor);
+}
+
+#welcome {
+  margin-top: 200px;
+  width: 100%;
+  color: var(--firstColor);
+  text-align: center;
+  font-size: 50px;
+  font-weight: 800;
+}
+
+.bi.bi-person-plus {
+  margin-top: 2px;
+  color: var(--firstColor);
+}
+
+#chat {
+  display: none;
+}
+
+#add-contact {
+  width: 100%;
+  height: 60px;
+  display: none;
+  flex-direction: row-reverse;
+}
+
+.hidden1 {
+  display: none;
+}
+
+#add-contact>.row.mb-3>.col-sm-3.col-form-label {
+  margin: 0;
+  color: var(--firstColor);
+  padding-left: 20px;
+  padding-top: 20px;
+  width: 170px;
+  padding-right: 0;
+}
+
+#add-contact>.row.mb-3>.col-sm-6>.form-control {
+  margin-top: 10px;
+}
+
+#add-contact>.row.mb-3>.col-sm-6 {
+  margin-right: 20px;
+  width: 145px;
+}
+
+.contact-add-btn {
+  font-size: 14px;
+  margin: 0 0.5em;
+  border-radius: 2em;
+  padding: 0.6em 1.2em;
+  cursor: pointer;
+  background: none;
+  color: var(--firstColor);
+  border: 1px solid;
+  letter-spacing: 1px;
+  font-family: "Source Sans Pro", sans-serif;
+  color: var(--firstColor);
+  border: var(--firstColor) 1px solid;
+  transition: 250ms ease-out;
+  margin-right: 10px;
+  margin-top: 9px;
+}
+
+.contact-add-btn:hover,
+.btn:focus {
+  color: var(--niceWhite);
+  background: var(--firstColor);
 }

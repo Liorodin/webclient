@@ -1,7 +1,6 @@
 import React from 'react'
 
 export default function ShowHidden() {
-    console.log("show hidden");
     var flag = 1;
     var inputs = document.getElementsByTagName('input');
     var hiddenElements1 = document.getElementsByClassName('hidden');
