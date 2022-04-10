@@ -245,3 +245,13 @@ h1 {
   border-top: 1.5px;
   border-color: var(--firstColor);
 }
+
+.hidden{
+  display: none;
+  color: var(--firstColor);
+}
+
+.hidden1{
+  display: none;
+  color: var(--firstColor);
+}

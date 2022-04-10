@@ -10,22 +10,22 @@ export default function Login({ setCurrentUser }) {
     const login = () => {
         ResetHidden();
         // if you managed to login
-        if(ShowHidden()) {
-        // window.location.href = "avi.html";
-        var userName = document.getElementById('Username').value;
-        var password = document.getElementById('Password').value;
-        users.map(user => {
-            if (user.username == userName && user.password == password) {
-                localStorage.setItem('currentUser', JSON.stringify(userName));
-                console.log(setCurrentUser)
-                setCurrentUser(userName);
-                navigate("/chatview");
-            }
-        })
-    
-        document.getElementById("myForm").reset();
+        if (ShowHidden()) {
+            // window.location.href = "avi.html";
+            var userName = document.getElementById('Username').value;
+            var password = document.getElementById('Password').value;
+            users.map(user => {
+                if (user.username == userName && user.password == password) {
+                    localStorage.setItem('currentUser', JSON.stringify(userName));
+                    console.log(setCurrentUser)
+                    setCurrentUser(userName);
+                    navigate("/chatview");
+                }
+            })
+
+            document.getElementById("myForm").reset();
+        }
     }
-}
 
     return (
         <form action="" id="myForm" className='cube center-form'>
@@ -40,3 +40,4 @@ export default function Login({ setCurrentUser }) {
         </form>
     )
 }
+
