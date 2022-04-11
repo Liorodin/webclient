@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Input from './Input';
 import { users } from '../src/db/users';
@@ -6,6 +6,7 @@ import ResetHidden from './ResetHidden';
 import ShowHidden from './ShowHidden';
 
 export default function Login({ setCurrentUser }) {
+    const [error, setError] = useState("");
     let navigate = useNavigate();
     const login = () => {
         ResetHidden();
@@ -20,22 +21,26 @@ export default function Login({ setCurrentUser }) {
                     setCurrentUser(userName);
                     navigate("/chatview");
                 }
+                else {
+                    setError('wrong');
+                }
             })
-            document.getElementById("myForm").reset();
-        }
+        document.getElementById("myForm").reset();
     }
+}
 
-    return (
-        <form action="" id="myForm" className='cube center-form'>
-            <h1>Shirin's and Leonardo's WebClient</h1>
-            <hr></hr>
-            <Input inputName="Username" inputType="text" text='Username' />
-            <Input inputName="Password" inputType="password" text='Password' />
-            <div>
-                <input type="button" value="Login" className="btn" onClick={login}></input>
-                Not registered? <Link to="/register">Click here</Link> to register
-            </div>
-        </form>
-    )
+return (
+    <form action="" id="myForm" className='cube center-form'>
+        <h1>Shirin's and Leonardo's WebClient</h1>
+        <hr></hr>
+        {(error === 'wrong') ? (<div className="alert alert-danger">Wrong password or username</div>) : ""}
+        <Input inputName="Username" inputType="text" text='Username' />
+        <Input inputName="Password" inputType="password" text='Password' />
+        <div>
+            <input type="button" value="Login" className="btn" onClick={login}></input>
+            Not registered? <Link to="/register">Click here</Link> to register
+        </div>
+    </form>
+)
 }
 
