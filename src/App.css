@@ -265,12 +265,12 @@ hr {
 }
 
 #welcome {
-  margin-top: 200px;
+  margin-top: 25px;
   width: 100%;
   color: var(--firstColor);
   text-align: center;
-  font-size: 50px;
-  font-weight: 800;
+  font-size: 40px;
+  font-weight: 600;
 }
 
 .bi.bi-person-plus {
@@ -345,7 +345,7 @@ hr {
   color: black;
   padding: 10px;
   border: none;
-  margin-top: 2px;
+  margin-bottom: 30px;
   margin-left: 10px;
 }
 
@@ -375,7 +375,7 @@ hr {
 
 /* Change color of dropup links on hover */
 .dropup-content a:hover {
-  background-color: var(--niceWhite)
+  background-color: #a4a7a9;
 }
 
 /* Show the dropup menu on hover */
@@ -385,7 +385,7 @@ hr {
 
 /* Change the background color of the dropup button when the dropup content is shown */
 .dropup:hover .dropbtn {
-  background-color: #878a8d;
+  background-color: #a4a7a9;
 }
 
 
