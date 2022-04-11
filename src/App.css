@@ -251,6 +251,16 @@ h1 {
   border-color: var(--firstColor);
 }
 
+.hidden{
+  display: none;
+  color: var(--firstColor);
+}
+
+.hidden1{
+  display: none;
+  color: var(--firstColor);
+}
+
 #welcome {
   margin-top: 200px;
   width: 100%;
