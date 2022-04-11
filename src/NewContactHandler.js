@@ -5,13 +5,13 @@ document.getElementById('root').addEventListener('click', () => {
     var addDisplay = document.getElementById('add-contact');
     if (addDisplay && addDisplay.style.display != 'none') {
         addDisplay.style.display = 'none';
-        document.getElementById('newContact').value = '';
     }
 })
 
 const handler = () => {
     var addDisplay = document.getElementById('add-contact');
     if (addDisplay) {
+        document.getElementById('newContact').value = '';
         addDisplay.style.display = 'flex';
     }
 }
