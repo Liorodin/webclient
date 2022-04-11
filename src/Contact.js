@@ -46,19 +46,49 @@ export default function Contact({ name, displayNameSetter, currentContact }) {
     }
 
     if (!messages.length) {
+        /*new contact without messages*/
         return (
-            <div id='name' className='contact' onClick={enterContactChat}>
-                <div className='contact-name'>{user.nickname}</div>
-                <div className='last-message'></div>
+            <div id='name' className='contact person' onClick={enterContactChat}>
+                <div className='contact-name name'>{user.nickname}</div>
+                <div className='last-message preview'></div>
                 <div className='last-message time'></div>
+                <hr></hr>
             </div>
         )
     }
+    /*existed contacts with messages*/
     return (
-        <div id='name' className='contact' onClick={enterContactChat}>
-            <div className='contact-name'>{user.nickname}</div>
-            <div className='last-message'>{lastMessage.content}</div>
+        <div id='name' className='contact person' onClick={enterContactChat}>
+            <img src="contactImage.webp" alt="" />
+            <div className='contact-name name'>{user.nickname}</div>
+            <div className='last-message preview'>{lastMessage.content}</div>
             <div className='last-message time'>{lastMessage.time}</div>
+            <hr></hr>
         </div>
     )
 }
+
+{/* <div class="right">
+        <div class="top"><span>To: <span class="name">Dog Woofson</span></span></div>
+        <div class="chat" data-chat="person1">
+            <div class="conversation-start">
+                <span>Today, 6:48 AM</span>
+            </div>
+            <div class="bubble you">
+                Hello,
+            </div>
+            <div class="bubble you">
+                it's me.
+            </div>
+            <div class="bubble you">
+                I was wondering...
+            </div>
+        </div>
+       
+        <div class="write">
+            <a href="javascript:;" class="write-link attach"></a>
+            <input type="text" />
+            <a href="javascript:;" class="write-link smiley"></a>
+            <a href="javascript:;" class="write-link send"></a>
+        </div>
+    </div> */}

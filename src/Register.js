@@ -108,7 +108,7 @@ export default function Register() {
             {(error === 'lettersU') ? (<div className="alert alert-danger">The username should contain letters too</div>) : ""}
             {(error === 'lettersN') ? (<div className="alert alert-danger">The nickname should contain letters too</div>) : ""}
 
-            <Input inputName="Username" inputType="text" />
+            <Input inputName="Username" inputType="text" text='Username'/>
             {/* <div>bls </div>  */}
             <Input inputName="Nickname" inputType="text" text='Nickname'/>
             {/* <div>bls </div>  */}

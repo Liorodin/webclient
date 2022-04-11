@@ -162,7 +162,7 @@ h1 {
 }
 
 #chat-box {
-  background: #e3b3a4;
+  background: white;
   height: 100%;
 }
 
@@ -228,18 +228,21 @@ h1 {
 }
 
 .space {
-  background-color: #e3b3a4;
+  background-color: grey;
   height: 20px;
 }
 
 .contact {
   height: 75px;
   margin-bottom: 0.5px;
-  border-radius: 1px;
-  border-bottom: 2px solid #b48945;
-  border-top: 2px solid #b48945;
   cursor: pointer;
   font-size: 100%;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
 }
 
 .messages.massage-box {
@@ -262,17 +265,18 @@ h1 {
 }
 
 #welcome {
-  margin-top: 200px;
+  margin-top: 25px;
   width: 100%;
   color: var(--firstColor);
   text-align: center;
-  font-size: 50px;
-  font-weight: 800;
+  font-size: 40px;
+  font-weight: 600;
 }
 
 .bi.bi-person-plus {
   margin-top: 2px;
   color: var(--firstColor);
+  cursor: pointer;
 }
 
 #chat {
@@ -341,7 +345,7 @@ h1 {
   color: black;
   padding: 10px;
   border: none;
-  margin-top: 2px;
+  margin-bottom: 30px;
   margin-left: 10px;
 }
 
@@ -371,7 +375,7 @@ h1 {
 
 /* Change color of dropup links on hover */
 .dropup-content a:hover {
-  background-color: var(--niceWhite)
+  background-color: #a4a7a9;
 }
 
 /* Show the dropup menu on hover */
@@ -381,5 +385,69 @@ h1 {
 
 /* Change the background color of the dropup button when the dropup content is shown */
 .dropup:hover .dropbtn {
-  background-color: #878a8d;
+  background-color: #a4a7a9;
+}
+
+
+
+
+.people {
+  margin-left: -1px;
+  border-right: 1px solid var(--light);
+  border-left: 1px solid var(--light);
+  width: calc(100% + 2px);
+}
+
+.person {
+  position: relative;
+  width: 100%;
+  padding: 12px 10% 16px;
+  cursor: pointer;
+  background-color: var(--white);
+}
+.person:after {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  display: block;
+  width: 80%;
+  height: 1px;
+  content: "";
+  background-color: var(--light);
+  transform: translate(-50%, 0);
+}
+.person img {
+  float: left;
+  width: 40px;
+  height: 40px;
+  margin-right: 12px;
+  margin-top: 5px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.person .name {
+  font-size: 14px;
+  line-height: 22px;
+  color: rgb(54, 52, 52);
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: 600;
+}
+.person .time {
+  font-size: 14px;
+  position: absolute;
+  top: 16px;
+  right: 10%;
+  padding: 0 0 5px 5px;
+  color: grey;
+  background-color: white;
+}
+.person .preview {
+  font-size: 14px;
+  display: inline-block;
+  overflow: hidden !important;
+  width: 70%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: rgb(97, 96, 96);
 }
