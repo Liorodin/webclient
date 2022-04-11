@@ -74,9 +74,12 @@ document.addEventListener('keydown', (e) => {
 export default function UserView({ currentUser }) {
   const [currentContact, setCurrentContact] = useState('')
   const [openChatCount, setOpenChatCount] = useState(0)
+
   const addNewContact = () => {
     const newContact = document.getElementById('newContact').value;
+    console.log(newContact)
     if (!newContact || GetUser(newContact).username == 'not found') {
+      console.log('not found')
       return;
     }
     for (var i = 0; i < contactsList.length; i++) {
@@ -91,14 +94,11 @@ export default function UserView({ currentUser }) {
           list: [],
         })
         setOpenChatCount(openChatCount + 1);
-        document.getElementById('newContact').value = '';
+        // document.getElementById('newContact').value = '';
         return;
       }
     }
   }
-
-
-
 
   document.addEventListener('keydown', (e) => { if (e.key === 'Enter') { addNewContact() } });
   return (
@@ -124,9 +124,10 @@ export default function UserView({ currentUser }) {
                 <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z" />
               </svg>
             </div>
-
-            <div class="dropup">
-              <button className="dropbtn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-paperclip" viewBox="0 0 16 16">
+            
+          </div>
+          <div class="dropup">
+              <button className="dropbtn"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" className="bi bi-paperclip" viewBox="0 0 16 16">
                 <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z" />
               </svg></button>
               <div class="dropup-content">
@@ -145,9 +146,6 @@ export default function UserView({ currentUser }) {
                 </svg></a>
               </div>
             </div>
-
-            {/* </div> */}
-          </div>
         </div>
       </div>
       <Link to='/login'>Click</Link>

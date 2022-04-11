@@ -251,12 +251,12 @@ h1 {
   border-color: var(--firstColor);
 }
 
-.hidden{
+.hidden {
   display: none;
   color: var(--firstColor);
 }
 
-.hidden1{
+.hidden1 {
   display: none;
   color: var(--firstColor);
 }
@@ -337,13 +337,12 @@ h1 {
 
 /* Dropup Button */
 .dropbtn {
-  background-color: #d0dfe9de;
+  background-color: var(--niceWhite);
   color: black;
   padding: 10px;
   border: none;
-  margin-right: 500px;
-  margin-bottom: 30px;
-  padding-bottom: 30px;
+  margin-top: 2px;
+  margin-left: 10px;
 }
 
 /* The container <div> - needed to position the dropup content */
@@ -355,11 +354,10 @@ h1 {
 /* Dropup content (Hidden by Default) */
 .dropup-content {
   display: none;
-  position: absolute;
   bottom: 50px;
-  background-color: #f1f1f1;
+  background-color: var(--niceWhite);
   min-width: 30px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
 
@@ -372,7 +370,9 @@ h1 {
 }
 
 /* Change color of dropup links on hover */
-.dropup-content a:hover {background-color: #ddd}
+.dropup-content a:hover {
+  background-color: var(--niceWhite)
+}
 
 /* Show the dropup menu on hover */
 .dropup:hover .dropup-content {
