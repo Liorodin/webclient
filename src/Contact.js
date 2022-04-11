@@ -20,14 +20,14 @@ export default function Contact({ name, displayNameSetter, currentContact }) {
 
     //shows chat on display
     const enterContactChat = () => {
-        //updates cuurent contact name on disply
+        //updates cuurent contact name on display
         displayNameSetter(user.nickname);
-        //checks if nobody is on disply
+        //checks if nobody is on display
         if (currentContact == '') {
             document.getElementById('welcome').style.display = 'none';
             document.getElementById('chat').style.display = 'block';
         }
-        //checks if the contact is already on disply
+        //checks if the contact is already on display
         if (currentContact == JSON.stringify(name)) {
             return;
         }
