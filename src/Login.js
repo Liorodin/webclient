@@ -17,12 +17,10 @@ export default function Login({ setCurrentUser }) {
             users.map(user => {
                 if (user.username == userName && user.password == password) {
                     localStorage.setItem('currentUser', JSON.stringify(userName));
-                    console.log(setCurrentUser)
                     setCurrentUser(userName);
                     navigate("/chatview");
                 }
             })
-
             document.getElementById("myForm").reset();
         }
     }
@@ -31,8 +29,8 @@ export default function Login({ setCurrentUser }) {
         <form action="" id="myForm" className='cube center-form'>
             <h1>Shirin's and Leonardo's WebClient</h1>
             <hr></hr>
-            <Input inputName="Username" inputType="text" />
-            <Input inputName="Password" inputType="password" />
+            <Input inputName="Username" inputType="text" text='Username' />
+            <Input inputName="Password" inputType="password" text='Password' />
             <div>
                 <input type="button" value="Login" className="btn" onClick={login}></input>
                 Not registered? <Link to="/register">Click here</Link> to register
