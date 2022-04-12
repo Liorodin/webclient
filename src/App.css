@@ -239,6 +239,11 @@ h1 {
   font-size: 100%;
 }
 
+/* Change the background color of the other contact before switching to his chat */
+.contact.person:hover {
+  background-color: #e5e7e8;
+}
+
 hr {
   border: 0;
   height: 1px;
@@ -375,7 +380,7 @@ hr {
 
 /* Change color of dropup links on hover */
 .dropup-content a:hover {
-  background-color: #a4a7a9;
+  background-color: #e5e7e8;
 }
 
 /* Show the dropup menu on hover */
@@ -385,7 +390,7 @@ hr {
 
 /* Change the background color of the dropup button when the dropup content is shown */
 .dropup:hover .dropbtn {
-  background-color: #a4a7a9;
+  background-color: #e5e7e8;
 }
 
 
@@ -427,20 +432,19 @@ hr {
      object-fit: cover;
 }
 .person .name {
-  font-size: 14px;
+  font-size: 16px;
   line-height: 22px;
   color: rgb(54, 52, 52);
   font-family: "Source Sans Pro", sans-serif;
   font-weight: 600;
 }
 .person .time {
-  font-size: 14px;
+  font-size: 12px;
   position: absolute;
   top: 16px;
   right: 10%;
   padding: 0 0 5px 5px;
   color: grey;
-  background-color: white;
 }
 .person .preview {
   font-size: 14px;
