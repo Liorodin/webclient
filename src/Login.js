@@ -25,22 +25,22 @@ export default function Login({ setCurrentUser }) {
                     setError('wrong');
                 }
             })
-        document.getElementById("myForm").reset();
+            document.getElementById("myForm").reset();
+        }
     }
-}
 
-return (
-    <form action="" id="myForm" className='cube center-form'>
-        <h1>Shirin's and Leonardo's WebClient</h1>
-        <hr></hr>
-        {(error === 'wrong') ? (<div className="alert alert-danger">Wrong password or username</div>) : ""}
-        <Input inputName="Username" inputType="text" text='Username' />
-        <Input inputName="Password" inputType="password" text='Password' />
-        <div>
-            <input type="button" value="Login" className="btn" onClick={login}></input>
-            Not registered? <Link to="/register">Click here</Link> to register
-        </div>
-    </form>
-)
+    return (
+        <form action="" id="myForm" className='cube center-form'>
+            <h1>Shirin's and Leonardo's WebClient</h1>
+            <hr></hr>
+            {(error === 'wrong') ? (<div className="alert alert-danger">Wrong password or username</div>) : ""}
+            <Input inputName="Username" inputType="text" text='Username' />
+            <Input inputName="Password" inputType="password" text='Password' />
+            <div>
+                <input type="button" value="Login" className="btn" onClick={login}></input>
+                Not registered? <Link to="/register">Click here</Link> to register
+            </div>
+        </form>
+    )
 }
 

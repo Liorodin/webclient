@@ -1,34 +1,33 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import GetUser from './GetUser'
 import ContactMessages from './ContactMessages';
 
 export default function Contact({ name, displayNameSetter, currentContact }) {
     //gets current contact
-    const user = GetUser(name);
+    const contact = GetUser(name);
     //gets current logged user
     const myUserName = JSON.parse(localStorage.getItem('currentUser'));
     //gets the message list between current contact and logged user
     const messages = ContactMessages(myUserName, name);
     //state of last message
     const [lastMessage, setLastMessage] = useState(messages.at(-1));
+
     //updates last message content
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && currentContact == user.nickname) {
-            setLastMessage(messages.at(-1));
-        }
-    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Enter') { setLastMessage(messages.at(-1)); } });
+    document.addEventListener('click', () => setLastMessage(messages.at(-1)));
+    document.addEventListener('timeupdate', (e) => { console.log(e) });
 
     //shows chat on display
     const enterContactChat = () => {
         //updates cuurent contact name on display
-        displayNameSetter(user.nickname);
+        displayNameSetter(contact.nickname);
         //checks if nobody is on display
         if (currentContact == '') {
             document.getElementById('welcome').style.display = 'none';
-            document.getElementById('chat').style.display = 'block';
+            document.getElementById('chat-grid').style.display = 'grid';
         }
         //checks if the contact is already on display
-        if (currentContact == JSON.stringify(name)) {
+        if (currentContact == GetUser(name).nickname) {
             return;
         }
         //updates current contact
@@ -49,7 +48,8 @@ export default function Contact({ name, displayNameSetter, currentContact }) {
         /*new contact without messages*/
         return (
             <div id='name' className='contact person' onClick={enterContactChat}>
-                <div className='contact-name name'>{user.nickname}</div>
+                <img src="contactImage.webp" alt="" />
+                <div className='contact-name name'>{contact.nickname}</div>
                 <div className='last-message preview'></div>
                 <div className='last-message time'></div>
                 <hr></hr>
@@ -60,35 +60,10 @@ export default function Contact({ name, displayNameSetter, currentContact }) {
     return (
         <div id='name' className='contact person' onClick={enterContactChat}>
             <img src="contactImage.webp" alt="" />
-            <div className='contact-name name'>{user.nickname}</div>
+            <div className='contact-name name'>{contact.nickname}</div>
             <div className='last-message preview'>{lastMessage.content}</div>
             <div className='last-message time'>{lastMessage.time}</div>
             <hr></hr>
         </div>
     )
 }
-
-{/* <div class="right">
-        <div class="top"><span>To: <span class="name">Dog Woofson</span></span></div>
-        <div class="chat" data-chat="person1">
-            <div class="conversation-start">
-                <span>Today, 6:48 AM</span>
-            </div>
-            <div class="bubble you">
-                Hello,
-            </div>
-            <div class="bubble you">
-                it's me.
-            </div>
-            <div class="bubble you">
-                I was wondering...
-            </div>
-        </div>
-       
-        <div class="write">
-            <a href="javascript:;" class="write-link attach"></a>
-            <input type="text" />
-            <a href="javascript:;" class="write-link smiley"></a>
-            <a href="javascript:;" class="write-link send"></a>
-        </div>
-    </div> */}
