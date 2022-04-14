@@ -15,6 +15,7 @@ h1 {
   color: var(--firstColor);
   text-align: center;
   font-size: 2.2em;
+  padding-bottom: 0.9rem;
 }
 
 body {
@@ -45,10 +46,6 @@ body {
 
 .btn:hover {
   background-color: var(--secondColor);
-}
-
-h1 {
-  padding-bottom: 0.9rem;
 }
 
 .messages {
@@ -93,16 +90,6 @@ h1 {
   display: none;
 }
 
-.container {
-  position: relative;
-  margin: 12% auto;
-  padding: 0;
-  width: 100%;
-  height: 75%;
-  min-height: 600px;
-  min-width: 900px;
-}
-
 #root {
   height: 100vh;
   display: flex;
@@ -110,31 +97,35 @@ h1 {
   align-items: center;
 }
 
-.canvas {
-  display: flex;
+.container {
+  padding: 0;
   width: 100%;
-  height: 80%;
-  min-width: 400px;
+  height: 75%;
+  min-height: 600px;
+  min-width: 900px;
+  display: grid;
+  grid-template-columns: 30% 70%;
+  grid-template-rows: 99% 1%;
+
+  box-sizing: border-box;
+  align-items: center;
 }
 
 .user-side {
-  overflow: hidden;
-  position: absolute;
+  width: 100%;
+  height: calc(100% - 60px);
   background: var(--niceWhite);
-  width: 30%;
-  height: 70%;
-  top: 2.5%;
-  left: 5%;
   border-radius: 10px 0 0 10px;
   box-shadow: -5px 5px 10px rgba(119, 119, 119, 0.5);
+  overflow-y: auto;
 }
 
 .contact-side {
-  position: absolute;
-  left: 35%;
-  height: 75%;
-  width: 60%;
+  height: 100%;
+  width: 100%;
   border-radius: 10px;
+  display: grid;
+  grid-template-rows: 8% 84% 8%;
   box-shadow: 5px 5px 15px rgba(119, 119, 119, 0.5);
 }
 
@@ -146,16 +137,21 @@ h1 {
 .user-profile {
   background-color: var(--niceWhite);
   height: 60px;
-  display: flex;
-  justify-content: end;
-  padding-right: 20px;
-  padding-top: 15px;
+  display: grid;
+  grid-template-columns: 2% 60% 10%;
+  justify-content: space-around;
+  width: 100%;
+  align-items: center;
+}
+
+
+.new-contact-btn {
+  padding-right: 5%;
 }
 
 #contact-profile {
   background-color: var(--niceWhite);
   width: 100%;
-  height: 60px;
   border-radius: 10px 10px 0 0;
   border-style: solid;
   border-color: var(--firstColor);
@@ -163,17 +159,14 @@ h1 {
 
 #chat-box {
   background: white;
-  height: 100%;
 }
 
 #bottom-bar {
-  position: absolute;
   width: 100%;
-  height: 55px;
-  bottom: 0;
   background: var(--niceWhite);
   border-radius: 0 0 10px 10px;
   border-style: solid;
+  border-top: none;
   border-color: var(--firstColor);
 }
 
@@ -183,18 +176,13 @@ h1 {
   justify-items: center;
   align-items: center;
   height: 100%;
-
 }
 
 .message-input {
   padding: 7px;
   padding-bottom: 10px;
-  width: 80%;
-  left: 10%;
-  bottom: 20%;
-  position: absolute;
+  width: 100%;
   border: 0;
-  top: 13px;
   color: var(--firstColor);
   background-color: var(--niceWhite);
 }
@@ -212,9 +200,6 @@ h1 {
   height: 35px;
   background: linear-gradient(to bottom left, var(--firstColor) 20%, var(--secondColor) 100%);
   border-radius: 50%;
-  position: absolute;
-  top: 15px;
-  left: 15px;
 }
 
 .avatar p {
@@ -222,13 +207,9 @@ h1 {
   margin: 7px 12px;
 }
 
-.user-fullName {
-  position: absolute;
-  top: 22px;
-  left: 70px;
-  height: auto;
-  overflow: hidden;
-  max-height: 24px;
+#user-fullName {
+  width: 100%;
+  padding-left: 5%;
   color: var(--firstColor);
 }
 
@@ -255,10 +236,9 @@ hr {
   background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
 }
 
-.messages.massage-box {
+.messages#massage-box {
   background-image: url(../public/app.webp);
   background-size: 400px;
-  height: 85%;
   border-style: solid;
   border-top: 1.5px;
   border-color: var(--firstColor);
@@ -275,13 +255,20 @@ hr {
 }
 
 #welcome {
-  margin-top: 25px;
   width: 100%;
-  color: var(--firstColor);
+  height: 100%;
   text-align: center;
-  font-size: 40px;
+  display: flex;
+  align-items: center;
+}
+
+#welcome>span {
+  padding: 50px;
+  color: var(--firstColor);
+  font-size: 2.5rem;
   font-weight: 600;
 }
+
 
 .bi.bi-person-plus {
   margin-top: 2px;
@@ -294,33 +281,14 @@ hr {
 }
 
 #add-contact {
-  width: 100%;
-  height: 60px;
-  display: none;
-  flex-direction: row-reverse;
-}
-
-#add-contact>.row.mb-3>.col-sm-3.col-form-label {
-  margin: 0;
-  color: var(--firstColor);
-  padding-left: 20px;
-  padding-top: 20px;
-  width: 170px;
-  padding-right: 0;
-}
-
-#add-contact>.row.mb-3>.col-sm-6>.form-control {
-  margin-top: 10px;
-}
-
-#add-contact>.row.mb-3>.col-sm-6 {
-  margin-right: 20px;
-  width: 145px;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .contact-add-btn {
   font-size: 14px;
-  margin: 0 0.5em;
   border-radius: 2em;
   padding: 0.6em 1.2em;
   cursor: pointer;
@@ -332,8 +300,11 @@ hr {
   color: var(--firstColor);
   border: var(--firstColor) 1px solid;
   transition: 250ms ease-out;
-  margin-right: 10px;
-  margin-top: 9px;
+  margin: 5px;
+}
+
+#newContact {
+  width: 100%;
 }
 
 .contact-add-btn:hover,
@@ -343,42 +314,46 @@ hr {
 }
 
 /* Dropup content (Hidden by Default) */
-.dropup-content {
+#dropup-content {
   display: none;
   position: absolute;
   background-color: var(--niceWhite);
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  bottom: 60px;
+  bottom: 210px;
 }
 
 /* Links inside the dropup */
-.dropup-content a {
+#dropup-content a {
   color: black;
   display: block;
   padding: 10px;
 }
 
 /* Change color of dropup links on hover */
-.dropup-content a:hover {
+#dropup-content a:hover {
   background-color: #e5e7e8;
-}
-
-/* Show the dropup menu on hover */
-#chat-item1:hover .dropup-content {
-  display: block;
-  transition-duration: 2s;
 }
 
 #chat-item1 {
   display: flex;
   align-items: center;
   flex-direction: column;
+  cursor: pointer;
+  height: 100%;
+  width: 100%;
+}
+
+.bottom-bar-options {
+  height: 100%;
+}
+
+#chat-item2 {
+  width: 100%;
 }
 
 #chat-item3 {
   cursor: pointer;
 }
-
 
 .people {
   margin-left: -1px;
