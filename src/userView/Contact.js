@@ -81,12 +81,11 @@ export default function Contact({ name, displayNameSetter, currentContact }) {
     //updates last message content
     document.addEventListener('keydown', (e) => { if (e.key === 'Enter') { setLastMessage(messages.at(-1)); } });
     document.addEventListener('click', () => setLastMessage(messages.at(-1)));
-    document.addEventListener('timeupdate', (e) => { console.log(e) });
 
     //shows chat on display
     const enterContactChat = () => {
         //updates cuurent contact name on display
-        displayNameSetter(contact.nickname);
+        displayNameSetter(contact.username);
         //checks if nobody is on display
         if (currentContact == '') {
             document.getElementById('welcome').style.display = 'none';
