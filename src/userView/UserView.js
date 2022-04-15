@@ -1,10 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
-import Contact from './Contact'
-import { contactsList } from './db/contactsList'
-import ContactMessages from './ContactMessages';
-import GetUser from './GetUser'
-import NewContactHandler from './NewContactHandler'
+import Contact, { GetProfilePic, ContactMessages, AddNewContact, GetUser } from './Contact'
+import { contactsList } from '../db/contactsList'
 
 const postMessage = () => {
   var message = document.getElementById('post-message');
@@ -30,18 +27,15 @@ const postMessage = () => {
   message.value = '';
 }
 
-document.addEventListener('keydown', (e) => { if (e.key === 'Enter') { postMessage() } });
-
-const getContacts = (currentUser, displayNameSetter, currentContact) => {
+const getContacts = (currentUser, currentContact, displayNameSetter) => {
   const list = [];
-  var userList = [];
-  contactsList.map((user) => {
-    if (user.username == currentUser) {
-      userList = user.contactsList;
+  for (var i in contactsList) {
+    if (contactsList[i].username == currentUser) {
+      for (var j = contactsList[i].contactsList.length - 1; j >= 0; j--) {
+        list.push(<Contact key={j} name={contactsList[i].contactsList[j]} displayNameSetter={displayNameSetter} currentContact={currentContact} />);
+      }
+      break;
     }
-  })
-  for (let i = userList.length - 1; i >= 0; i--) {
-    list.push(<Contact name={userList[i]} displayNameSetter={displayNameSetter} currentContact={currentContact} />);
   }
   return list;
 }
@@ -50,7 +44,7 @@ const profile = (name) => {
   const user = GetUser(name);
   return (
     <div className='user-profile'>
-      <div className="avatar"><p>{user.nickname[0].toUpperCase()}</p></div>
+      {GetProfilePic(user, user.picture)}
       <div id='user-fullName'>{user.nickname}</div>
       <div className='new-contact-btn'>
         <svg xmlns="http://www.w3.org/2000/svg"
@@ -59,7 +53,7 @@ const profile = (name) => {
             if (addDisplay) {
               addDisplay.style.display = 'flex';
             }
-          }} width="30" height="30" fill="currentColor" className="bi bi-person-plus" data-bs-toggle="collapse" data-bs-target="#collapseExample" viewBox="0 0 16 16">
+          }} width="30" height="30" fill="currentColor" className="bi bi-person-plus" data-bs-toggle="modal" data-bs-target="#exampleModal" viewBox="0 0 16 16">
           <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
           <path fillRule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
         </svg>
@@ -69,10 +63,10 @@ const profile = (name) => {
 }
 
 const getChatOptions = () => document.getElementById('dropup-content').style.display = 'block';
-
 const closeChatOptions = () => document.getElementById('dropup-content').style.display = 'none';
 
 export default function UserView({ currentUser }) {
+  document.addEventListener('keydown', (e) => { if (e.key === 'Enter' && window.location.href.split('/').at(-1) == 'chatview') { postMessage() } });
   const [currentContact, setCurrentContact] = useState('')
   const [openChatCount, setOpenChatCount] = useState(0)
   return (
@@ -80,13 +74,13 @@ export default function UserView({ currentUser }) {
       <div className='user-side'>
         <div className='user-side-top'>
           {profile(currentUser)}
-          <div className="collapse" id="collapseExample">
+          {/* <div className="collapse" id="collapseContact">
             <NewContactHandler setter={setOpenChatCount} />
-          </div>
+          </div> */}
         </div>
         <div id='chat-box'>
           <div className='space'></div>
-          {getContacts(currentUser, setCurrentContact, currentContact)}
+          {getContacts(currentUser, currentContact, setCurrentContact)}
         </div>
       </div>
       <div className='contact-side'>
@@ -126,9 +120,25 @@ export default function UserView({ currentUser }) {
             </div>
           </div>
         </div>
-
       </div>
       <div>  <Link to='/login'>Click</Link></div>
+      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="addContactModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="addContactModalLabel">Add new contact</h5>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <input id="newContact" type="text" placeholder='Enter new contact by username'></input>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" className="btn btn-primary" onClick={() => AddNewContact(setOpenChatCount)}>Add now</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

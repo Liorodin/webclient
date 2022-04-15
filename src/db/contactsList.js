@@ -8,4 +8,19 @@ export const contactsList = [
         username: 'leonardoR',
         contactsList: ['shirinB', 'kehatS',],
     },
+
+    {
+        username: 'aviS',
+        contactsList: [],
+    },
+
+    {
+        username: 'kehatS',
+        contactsList: [],
+    },
+
+    {
+        username: 'noamC',
+        contactsList: [],
+    },
 ];

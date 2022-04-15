@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Register from "./Register";
-import Login from "./Login";
 import React, { useState, useEffect } from 'react';
-import UserView from "./UserView"
+import Register from "./form/Register";
+import Login from "./form/Login";
+import UserView from "./userView/UserView"
 import './App.css';
 
 export default function App() {
