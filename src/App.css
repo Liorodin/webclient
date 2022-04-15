@@ -319,7 +319,13 @@ hr {
   position: absolute;
   background-color: var(--niceWhite);
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  bottom: 210px;
+  bottom: 20%;
+}
+
+@media all and (max-height: 800px){
+  #dropup-content {
+    bottom: calc(50vh - 240px);
+  }
 }
 
 /* Links inside the dropup */
