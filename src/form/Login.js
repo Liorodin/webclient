@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Input from './Input';
-import { users } from '../src/db/users';
+import { users } from '../db/users';
 import ResetHidden from './ResetHidden';
 import ShowHidden from './ShowHidden';
 

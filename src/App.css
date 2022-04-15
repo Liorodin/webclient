@@ -1,5 +1,6 @@
 :root {
   --firstColor: #E73C7E;
+  --firstColorFaded: #E73C7ECC;
   --secondColor: #EE7752;
   --niceWhite: #F9FBFF;
 }
@@ -62,7 +63,7 @@ body {
 }
 
 .messages li {
-  background: #eee;
+  background: var(--niceWhite);
   border-radius: 8px;
   padding: 8px;
   margin: 2px 8px 2px 0;
@@ -71,6 +72,7 @@ body {
 .messages li.ours {
   align-self: flex-end;
   margin: 2px 0 2px 8px;
+  background-color: var(--firstColorFaded);
 }
 
 .borderW {
@@ -196,15 +198,13 @@ body {
 }
 
 .avatar {
-  width: 35px;
-  height: 35px;
+  width: 40px;
+  height: 40px;
   background: linear-gradient(to bottom left, var(--firstColor) 20%, var(--secondColor) 100%);
   border-radius: 50%;
-}
-
-.avatar p {
+  text-align: center;
+  padding-top: 8px;
   color: var(--niceWhite);
-  margin: 7px 12px;
 }
 
 #user-fullName {
@@ -322,7 +322,7 @@ hr {
   bottom: 20%;
 }
 
-@media all and (max-height: 800px){
+@media all and (max-height: 800px) {
   #dropup-content {
     bottom: calc(50vh - 240px);
   }
@@ -395,13 +395,29 @@ hr {
   margin-right: 12px;
   margin-top: 5px;
   border-radius: 50%;
-  -o-object-fit: cover;
-  object-fit: cover;
+}
+
+.user-profile img {
+  float: left;
+  width: 40px;
+  height: 40px;
+  margin-right: 12px;
+  margin-top: 5px;
+  border-radius: 50%;
+}
+
+.person .avatar {
+  float: left;
+  width: 40px;
+  height: 40px;
+  margin-right: 12px;
+  margin-top: 5px;
+  padding-left: 3px;
 }
 
 .person .name {
   font-size: 16px;
-  line-height: 22px;
+  line-height: 25px;
   color: rgb(54, 52, 52);
   font-family: "Source Sans Pro", sans-serif;
   font-weight: 600;
@@ -413,7 +429,7 @@ hr {
   top: 16px;
   right: 10%;
   padding: 0 0 5px 5px;
-  color: grey;
+  color: rgb(97, 96, 96);
 }
 
 .person .preview {
@@ -424,4 +440,10 @@ hr {
   white-space: nowrap;
   text-overflow: ellipsis;
   color: rgb(97, 96, 96);
+}
+
+.modal .fade {}
+
+.modal-footer {
+  justify-content: center;
 }

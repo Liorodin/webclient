@@ -1,6 +1,5 @@
 import React from 'react';
-import GetError from './GetError';
-import ValidityErrors from './ValidityErrors';
+import ValidityErrors ,{GetError} from './ValidityErrors';
 
 export default function Input({ inputName, inputType, text }) {
     return (
