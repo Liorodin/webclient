@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import Contact, { GetProfilePic, ContactMessages, AddNewContact, GetUser } from './Contact'
 import { contactsList } from '../db/contactsList'
 
-const postMessage = () => {
+const postMessage = (currentUser, currentContact) => {
   var message = document.getElementById('post-message');
   if (message.value.length == 0) {
     return;
@@ -14,17 +14,16 @@ const postMessage = () => {
   const box = document.getElementsByClassName('messages massage-box')[0];
   box.appendChild(newLi);
   box.scroll(0, box.scrollHeight);
-  const fromUser = JSON.parse(localStorage.getItem('currentUser'));
-  const toUser = JSON.parse(localStorage.getItem('currentContact'));
   var time = new Date;
-  ContactMessages(fromUser, toUser).push(
+  ContactMessages(currentUser, currentContact).push(
     {
-      from: fromUser,
+      from: currentUser,
       content: message.value,
       time: time.toLocaleString('en-GB', { hour: '2-digit', minute: '2-digit' }),
     }
   );
   message.value = '';
+  return false;
 }
 
 const getContacts = (currentUser, currentContact, displayNameSetter) => {
@@ -53,7 +52,7 @@ const profile = (name) => {
             if (addDisplay) {
               addDisplay.style.display = 'flex';
             }
-          }} width="30" height="30" fill="currentColor" className="bi bi-person-plus" data-bs-toggle="modal" data-bs-target="#exampleModal" viewBox="0 0 16 16">
+          }} width="30" height="30" fill="currentColor" className="bi bi-person-plus" data-bs-toggle="modal" data-bs-target="#addContact-modal" viewBox="0 0 16 16">
           <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
           <path fillRule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
         </svg>
@@ -66,25 +65,25 @@ const getChatOptions = () => document.getElementById('dropup-content').style.dis
 const closeChatOptions = () => document.getElementById('dropup-content').style.display = 'none';
 
 export default function UserView({ currentUser }) {
-  document.addEventListener('keydown', (e) => { if (e.key === 'Enter' && window.location.href.split('/').at(-1) == 'chatview') { postMessage() } });
-  const [currentContact, setCurrentContact] = useState('')
-  const [openChatCount, setOpenChatCount] = useState(0)
+  const [currentContact, setCurrentContact] = useState('');
+  const [openChatCount, setOpenChatCount] = useState(0);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && window.location.href.split('/').at(-1) == 'chatview' && currentContact != '') {
+      console.log(window.location.href.split('/').at(-1))
+      postMessage(currentUser, currentContact)
+    }
+  });
   return (
     <div className='container'>
       <div className='user-side'>
-        <div className='user-side-top'>
-          {profile(currentUser)}
-          {/* <div className="collapse" id="collapseContact">
-            <NewContactHandler setter={setOpenChatCount} />
-          </div> */}
-        </div>
+        <div className='user-side-top'>{profile(currentUser)}</div>
         <div id='chat-box'>
           <div className='space'></div>
           {getContacts(currentUser, currentContact, setCurrentContact)}
         </div>
       </div>
       <div className='contact-side'>
-        <div id='contact-profile'>{currentContact}</div>
+        <div id='contact-profile'>{currentContact != '' ? GetUser(currentContact).nickname : ''}</div>
         <ol className="messages massage-box" id='massage-box'>
           <div id='welcome'><span>Welcome to Shirin's and Leonardo's WebClient</span></div>
         </ol>
@@ -111,22 +110,25 @@ export default function UserView({ currentUser }) {
               </svg>
             </div>
             <div id='chat-item2'>
+              {/* <form onSubmit={() => { postMessage(currentUser, currentContact); return false }}> */}
               <input id='post-message' className='message-input grid2' type="text" placeholder="Type a message..." />
+              {/* </form> */}
             </div>
             <div id='chat-item3'>
-              <svg xmlns="http://www.w3.org/2000/svg" onClick={postMessage} width="25" height="25" fill="currentColor" className="bi bi-send" viewBox="0 0 16 16">
+              <svg xmlns="http://www.w3.org/2000/svg" onClick={() => postMessage(currentUser, currentContact)} width="25" height="25" fill="currentColor" className="bi bi-send" viewBox="0 0 16 16">
                 <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z" />
               </svg>
             </div>
           </div>
         </div>
       </div>
-      <div>  <Link to='/login'>Click</Link></div>
-      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="addContactModalLabel" aria-hidden="true">
+      {/* <Link to='/login'><img src='settings.png' /></Link> */}
+      <img src='settings.png' data-bs-toggle="modal" data-bs-target="#settings-modal" />
+      <div className="modal fade" id="addContact-modal" tabIndex="-1" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title" id="addContactModalLabel">Add new contact</h5>
+              <h5 className="modal-title">Add new contact</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
@@ -134,11 +136,49 @@ export default function UserView({ currentUser }) {
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" className="btn btn-primary" onClick={() => AddNewContact(setOpenChatCount)}>Add now</button>
+              <button id='post-btn' type="button" className="btn btn-primary" onClick={() => AddNewContact(setOpenChatCount)}>Add now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="modal fade" id="settings-modal" tabIndex="-1" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Settings</h5>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <label>Change your websites theme:</label>
+              <input id="color1" type="color" name="color1" defaultValue="#E73C7E" />
+              <input id="color2" type="color" name="color2" defaultValue="#EE7752" />
+            </div>
+
+            <div className="modal-footer center">
+              <button type="button" onClick={resetSettings} className="btn btn-secondary" data-bs-dismiss="modal">Reset settings</button>
+              <Link to='/login'><button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Log out</button></Link>
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
           </div>
         </div>
       </div>
     </div>
   )
+}
+
+document.addEventListener("input", () => {
+  if (document.getElementById('color1') && document.getElementById('color2')) {
+    var color1 = document.getElementById('color1').value;
+    var color2 = document.getElementById('color2').value;
+    document.documentElement.style.setProperty('--firstColor', color1);
+    document.documentElement.style.setProperty('--firstColorFaded', color1 + "AA");
+    document.documentElement.style.setProperty('--secondColor', color2);
+  }
+});
+
+const resetSettings = () => {
+  document.documentElement.style.setProperty('--firstColor', '#E73C7E');
+  document.documentElement.style.setProperty('--firstColorFaded', '#E73C7EAA');
+  document.documentElement.style.setProperty('--secondColor', '#EE7752');
 }

@@ -160,7 +160,7 @@ body {
 }
 
 #chat-box {
-  background: white;
+  background: var(--niceWhite);
 }
 
 #bottom-bar {
@@ -210,7 +210,7 @@ body {
 #user-fullName {
   width: 100%;
   padding-left: 5%;
-  color: var(--firstColor);
+  color: rgb(54, 52, 52);
 }
 
 .space {
@@ -442,8 +442,23 @@ hr {
   color: rgb(97, 96, 96);
 }
 
-.modal .fade {}
+Link,
+img {
+  width: 40px;
+  height: 40px;
+}
 
-.modal-footer {
+.modal-body,
+label {
+  margin-right: 20px;
+}
+
+.modal-body,
+input {
+  margin-right: 5px;
+}
+
+.modal-footer.center {
+  display: flex;
   justify-content: center;
 }
