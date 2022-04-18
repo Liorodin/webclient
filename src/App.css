@@ -349,6 +349,11 @@ hr {
   width: 100%;
 }
 
+/* Change color of dropup botton on hover */
+#chat-item1:hover {
+  background-color: #e5e7e8;
+}
+
 .bottom-bar-options {
   height: 100%;
 }

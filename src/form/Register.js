@@ -7,7 +7,6 @@ import { users } from '../db/users';
 import { contactsList } from '../db/contactsList';
 
 export default function Register() {
-    //
     const [error, setError] = useState("");
     let navigate = useNavigate();
 
@@ -33,9 +32,10 @@ export default function Register() {
             password: registerPassword,
             picture: 'default',
         }
+        // if the user gives a picture, put adress instead of the 'default'
+
 
         var hiddenElements1 = document.getElementsByClassName('hidden1');
-        //var flag = 1;
         // show the errors in the invalid cases
         for (var j = 0; j < users.length; j++) {
             if (registerUser == users[j].username) {
@@ -43,12 +43,6 @@ export default function Register() {
                 return 0;
             }
         }
-        // if (registerPassword.length < 4 || registerPassword.length > 20) {
-        //     //
-        //     console.log("passworddd");
-        //     hiddenElements1[2].style.display = 'block';
-        //     flag = 0;
-        // }
         if (registerPassword.length < 4 || registerPassword.length > 20) {
             setError('passwordLength');
             return 0;
@@ -80,11 +74,18 @@ export default function Register() {
         })
         return 1;
     }
+
+    ///////////////////////////
+    const AddNewPicture = () => {
+
+    }
+
     return (
+        <>
         <form action="" className='cube center-form'>
             <h1>Register Now!</h1>
             <hr></hr>
-
+            <img src="contactImage.webp" data-bs-toggle="modal" data-bs-target="#addPicture-modal"/>
             {(error === 'existedUsername') ? (<div className="alert alert-danger">This username is already in use, please choose other name</div>) : ""}
             {(error === 'passwordLength') ? (<div className="alert alert-danger">This password is too short, please choose password includes at least 4 character and not more than 20</div>) : ""}
             {(error === 'numbers') ? (<div className="alert alert-danger">The password should contain numbers too</div>) : ""}
@@ -102,7 +103,26 @@ export default function Register() {
                 <input type="submit" value="Register" className="btn" onClick={register}></input>
                 Already registered? <Link to="/">Click Here</Link> to login
             </div>
+
         </form>
+        <div className="modal fade" id="addPicture-modal" tabIndex="-1" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Add new picture</h5>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <input id="newContact" type="text" placeholder='Enter new contact by username'></input>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button id='post-btn' type="button" className="btn btn-primary" onClick={AddNewPicture}>Add now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
     )
 }
 

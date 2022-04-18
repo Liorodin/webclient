@@ -3,6 +3,7 @@ export const users = [
         username: 'shirinB',
         nickname: 'shirin bazis',
         password: 's12345',
+        // put the adress of the pic here
         picture: 'avatar',
     },
 
