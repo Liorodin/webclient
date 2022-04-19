@@ -14,10 +14,8 @@ export default function App() {
     return (
         <Router>
             <Routes>
-                {/* <Route path="/" element={<Login setFunc={setCurrentUser} />}></Route>*/}
                 <Route path="/" element={<Login setCurrentUser={setCurrentUser} />}></Route>
                 <Route path="/register" element={<Register />}></Route>
-                <Route path="/login" element={<Login setCurrentUser={setCurrentUser} />}></Route>
                 <Route path="/chatview" element={<UserView currentUser={currentUser} />}></Route>
             </Routes>
         </Router>

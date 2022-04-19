@@ -1,7 +1,25 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom';
-import Contact, { GetProfilePic, ContactMessages, AddNewContact, GetUser } from './Contact'
+import React, { useState, useEffect, useRef } from 'react'
+import { Link, useNavigate } from "react-router-dom";
+import Contact, { GetProfilePic, ContactMessages, GetUser } from './Contact'
 import { contactsList } from '../db/contactsList'
+import { messages } from '../db/messages';
+
+const newContactMap = new Map();
+
+const checkOpenChat = (currentUser, currentContact) => {
+  if (newContactMap.get(currentContact) != 0) {
+    return;
+  }
+  for (var i = 0; i < contactsList.length; i++) {
+    if (contactsList[i].username == currentContact) {
+      if (!contactsList[i].contactsList.includes(currentUser)) {
+        contactsList[i].contactsList.push(currentUser);
+        newContactMap.set(currentContact, 1);
+      }
+      return;
+    }
+  }
+}
 
 const postMessage = (currentUser, currentContact) => {
   var message = document.getElementById('post-message');
@@ -19,11 +37,12 @@ const postMessage = (currentUser, currentContact) => {
     {
       from: currentUser,
       content: message.value,
-      time: time.toLocaleString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+      time: time.getTime(),
     }
   );
+  //check if currentContact has an open chat with currentUser if not then opens a new chat
+  checkOpenChat(currentUser, currentContact);
   message.value = '';
-  return false;
 }
 
 const getContacts = (currentUser, currentContact, displayNameSetter) => {
@@ -39,11 +58,40 @@ const getContacts = (currentUser, currentContact, displayNameSetter) => {
   return list;
 }
 
-const profile = (name) => {
+/* Adds a new contact to user's contact list.
+*  Returns 1 if input is empty, -1 if it's a non valid username, 2 if the contact already exists, 0 otherwise
+*/
+const AddNewContact = (currentUser, newContact, setter) => {
+  if (!newContact) {
+    return 1;
+  }
+  //checks if the username doesn't exist in the database or its himself
+  if (GetUser(newContact).username == 'not found' || GetUser(newContact).username == currentUser) {
+    return -1;
+  }
+  for (var i = 0; i < contactsList.length; i++) {
+    if (contactsList[i].username == currentUser) {
+      if (contactsList[i].contactsList.includes(newContact)) {
+        return 2;
+      }
+      contactsList[i].contactsList.push(newContact);
+      messages.push({
+        contacts: [newContact, currentUser],
+        list: [],
+      })
+      setter(oldValue => oldValue + 1);
+      document.getElementById('newContact').value = '';
+      newContactMap.set(newContact, 0);
+      return 0;
+    }
+  }
+}
+
+const userProfile = (name) => {
   const user = GetUser(name);
   return (
     <div className='user-profile'>
-      {GetProfilePic(user, user.picture)}
+      {GetProfilePic(user)}
       <div id='user-fullName'>{user.nickname}</div>
       <div className='new-contact-btn'>
         <svg xmlns="http://www.w3.org/2000/svg"
@@ -61,16 +109,40 @@ const profile = (name) => {
   )
 }
 
+const contactProfile = (name) => {
+  const user = GetUser(name);
+  return (
+    <div id='contact-profile'>
+      <div className='pic'>
+        {name != '' ? GetProfilePic(user) : ''}
+      </div>
+      {name != '' ? user.nickname : ''}
+    </div>
+  )
+}
+
 const getChatOptions = () => document.getElementById('dropup-content').style.display = 'block';
 const closeChatOptions = () => document.getElementById('dropup-content').style.display = 'none';
 
 export default function UserView({ currentUser }) {
   const [currentContact, setCurrentContact] = useState('');
   const [openChatCount, setOpenChatCount] = useState(0);
+  let navigate = useNavigate();
+
+  const logOut = () => {
+    localStorage.setItem('currentUser', JSON.stringify('default user'));
+    localStorage.setItem('currentContact', JSON.stringify(''));
+    navigate("/");
+  }
+
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && window.location.href.split('/').at(-1) == 'chatview' && currentContact != '') {
-      console.log(window.location.href.split('/').at(-1))
-      postMessage(currentUser, currentContact)
+    const from = JSON.parse(localStorage.getItem('currentUser'));
+    const to = JSON.parse(localStorage.getItem('currentContact'));
+    if (!(from && to)) {
+      return;
+    }
+    if (e.key === 'Enter' && window.location.href.split('/').at(-1) == 'chatview' && to != 'default user') {
+      postMessage(from, to)
     }
   });
 
@@ -92,14 +164,14 @@ export default function UserView({ currentUser }) {
   return (
     <div className='container'>
       <div className='user-side'>
-        <div className='user-side-top'>{profile(currentUser)}</div>
-        <div id='chat-box'>
+        <div className='user-side-top'>{userProfile(currentUser)}</div>
+        <div id='contact-box'>
           <div className='space'></div>
           {getContacts(currentUser, currentContact, setCurrentContact)}
         </div>
       </div>
       <div className='contact-side'>
-        <div id='contact-profile'>{currentContact != '' ? GetUser(currentContact).nickname : ''}</div>
+        {contactProfile(currentContact)}
         <ol className="messages massage-box" id='massage-box'>
           <div id='welcome'><span>Welcome to Shirin's and Leonardo's WebClient</span></div>
         </ol>
@@ -121,14 +193,12 @@ export default function UserView({ currentUser }) {
                   <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z" />
                 </svg></a>
               </div>
-              <svg xmlns="http://www.w3.org/2000/svg" onClick={getChatOptions} width="22" height="22" fill="currentColor" id='paperclip' className="bi bi-paperclip bottom-bar-options" viewBox="0 0 16 16">
+              <svg xmlns="http://www.w3.org/2000/svg" onClick={getChatOptions} width="25" height="25" fill="currentColor" className="bi bi-paperclip" viewBox="0 0 16 16">
                 <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z" />
               </svg>
             </div>
             <div id='chat-item2'>
-              {/* <form onSubmit={() => { postMessage(currentUser, currentContact); return false }}> */}
               <input id='post-message' className='message-input grid2' type="text" placeholder="Type a message..." />
-              {/* </form> */}
             </div>
             <div id='chat-item3'>
               <svg xmlns="http://www.w3.org/2000/svg" onClick={() => postMessage(currentUser, currentContact)} width="25" height="25" fill="currentColor" className="bi bi-send" viewBox="0 0 16 16">
@@ -138,7 +208,6 @@ export default function UserView({ currentUser }) {
           </div>
         </div>
       </div>
-      {/* <Link to='/login'><img src='settings.png' /></Link> */}
       <img src='settings.png' data-bs-toggle="modal" data-bs-target="#settings-modal" />
       <div className="modal fade" id="addContact-modal" tabIndex="-1" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
@@ -147,18 +216,38 @@ export default function UserView({ currentUser }) {
               <h5 className="modal-title">Add new contact</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div className="modal-body">
+            <div id='modal-body' className="modal-body">
               <input id="newContact" type="text" placeholder='Enter new contact by username'></input>
+              <div id='input-result'></div>
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button id='post-btn' type="button" className="btn btn-primary" onClick={() => AddNewContact(setOpenChatCount)}>Add now</button>
+              <button id='post-btn' type="button" className="btn btn-primary" onClick={() => {
+                const resultDiv = document.getElementById('input-result');
+                resultDiv.innerHTML = '';
+                var returnValue = AddNewContact(currentUser, document.getElementById('newContact').value, setOpenChatCount);
+                if (returnValue == -1) {
+                  resultDiv.style.color = 'red';
+                  resultDiv.appendChild(document.createTextNode('Invalid contact username'));
+                }
+                if (returnValue == 1) {
+                  resultDiv.style.color = 'red';
+                  resultDiv.appendChild(document.createTextNode('Please enter contact username'));
+                }
+                if (returnValue == 2) {
+                  resultDiv.style.color = 'red';
+                  resultDiv.appendChild(document.createTextNode('Contact already exists in your list'));
+                }
+                if (returnValue == 0) {
+                  resultDiv.style.color = 'green';
+                  resultDiv.appendChild(document.createTextNode('You have successfully added a new contact'));
+                }
+              }}>Add now</button>
             </div>
           </div>
         </div>
       </div>
-
-      
+     
       <div className="modal fade" id="addVoice-modal" tabIndex="-1" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
@@ -228,7 +317,7 @@ export default function UserView({ currentUser }) {
 
             <div className="modal-footer center">
               <button type="button" onClick={resetSettings} className="btn btn-secondary" data-bs-dismiss="modal">Reset settings</button>
-              <Link to='/login'><button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Log out</button></Link>
+              <button type="button" onClick={logOut} className="btn btn-secondary" data-bs-dismiss="modal">Log out</button>
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
           </div>
