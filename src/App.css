@@ -49,6 +49,14 @@ body {
   background-color: var(--secondColor);
 }
 
+img {
+  width: 80px;
+  height: 80px;
+  margin-left: 300px;
+  margin-top: 10px;
+  vertical-align: right;
+}
+
 .messages {
   display: flex;
   flex-direction: column;
