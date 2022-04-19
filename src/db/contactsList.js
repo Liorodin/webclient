@@ -11,12 +11,12 @@ export const contactsList = [
 
     {
         username: 'aviS',
-        contactsList: [],
+        contactsList: ['shirinB',],
     },
 
     {
         username: 'kehatS',
-        contactsList: [],
+        contactsList: ['leonardoR',],
     },
 
     {

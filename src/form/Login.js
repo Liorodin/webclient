@@ -30,7 +30,7 @@ export default function Login({ setCurrentUser }) {
     }
 
     return (
-        <form action="" id="myForm" className='cube center-form'>
+        <form id="myForm" className='cube center-form'>
             <h1>Shirin's and Leonardo's WebClient</h1>
             <hr></hr>
             {(error === 'wrong') ? (<div className="alert alert-danger">Wrong password or username</div>) : ""}

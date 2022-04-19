@@ -2,23 +2,23 @@ export const messages = [
     {
         contacts: ['shirinB', 'leonardoR'],
         list: [
-            { from: 'shirinB', content: 'Hello partner', time: '12:46' },
-            { from: 'leonardoR', content: 'Hello to you too :)', time: '13:11' }
+            { from: 'shirinB', content: 'Hello partner', time: 1650061953118 },
+            { from: 'leonardoR', content: 'Hello to you too :)', time: 1650061953118 }
         ],
     },
 
     {
         contacts: ['shirinB', 'aviS'],
         list: [
-            { from: 'shirinB', content: 'Hey avi', time: '14:00' }
+            { from: 'shirinB', content: 'Hey avi', time: 1650061953118 }
         ],
     },
 
     {
         contacts: ['kehatS', 'leonardoR'],
         list: [
-            { from: 'kehatS', content: 'ראית חישוביות?', time: '10:30' },
-            { from: 'leonardoR', content: 'וואלה לא', time: '10:35' }
+            { from: 'kehatS', content: 'ראית חישוביות?', time: 1650061953118 },
+            { from: 'leonardoR', content: 'וואלה לא', time: 1650061953118 }
         ],
     },
 ];
