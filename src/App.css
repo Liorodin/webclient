@@ -49,6 +49,14 @@ body {
   background-color: var(--secondColor);
 }
 
+img {
+  width: 80px;
+  height: 80px;
+  margin-left: 300px;
+  margin-top: 10px;
+  vertical-align: right;
+}
+
 .messages {
   display: flex;
   flex-direction: column;
@@ -362,6 +370,15 @@ hr {
   justify-content: center;
   height: 100%;
   width: 100%;
+}
+
+/* Change color of dropup botton on hover */
+#chat-item1:hover {
+  background-color: #e5e7e8;
+}
+
+.bottom-bar-options {
+  height: 100%;
 }
 
 #chat-item2 {

@@ -4,6 +4,7 @@ import { users } from '../db/users';
 
 export function GetProfilePic(user) {
     switch (user.picture) {
+        // case the user gives a picture
         case 'avatar':
             return <div className="avatar">{user.nickname[0].toUpperCase()}</div>;
         case 'default':
@@ -22,6 +23,7 @@ export function ContactMessages(firstName, secondName) {
     return [];
 }
 
+/*returns the username */
 export function GetUser(userName) {
     for (var i = 0; i < users.length; i++) {
         if (users[i].username == userName) {
