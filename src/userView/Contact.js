@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { messages } from '../db/messages';
 import { users } from '../db/users';
 
@@ -14,7 +14,7 @@ export function GetProfilePic(user) {
     }
 }
 
-export function ContactMessages(firstName, secondName) {
+export function GetContactMessages(firstName, secondName) {
     for (var i = 0; i < messages.length; i++) {
         if (messages[i].contacts.includes(firstName) && messages[i].contacts.includes(secondName)) {
             return messages[i].list;
@@ -38,74 +38,72 @@ export function GetUser(userName) {
     }
 }
 
+const getTime = (lastMessage) => {
+    const time = new Date;
+    const day = 86400000;
+    const difference = (time.getTime() - lastMessage.time);
+    if (difference < day) {
+        var lastTime = new Date(lastMessage.time);
+        const [hour, minute] = lastTime.toString().split(' ')[4].split(':')
+        var minuteDif = time.getMinutes() - parseInt(minute);
+        if (time.getHours() - parseInt(hour) == 0 && Math.abs(minuteDif) <= 5) {
+            if (minuteDif < 1) {
+                return 'now';
+            }
+            else {
+                return minuteDif + ' minutes ago';
+            }
+        }
+        if ((time.getHours() - parseInt(hour) == 1 || time.getHours() - parseInt(hour) == 23)
+            && 59 >= Math.abs(minuteDif) >= 55) {
+            minuteDif = 60 - minuteDif;
+            if (minuteDif < 1) {
+                return 'now';
+            }
+            else {
+                return minuteDif + ' minutes ago';
+            }
+        }
+        else {
+            return hour + ':' + minute;
+        }
+    }
+    else if (difference < day * 2) {
+        return 'Yesterday'
+    }
+    else if (difference < day * 3) {
+        return '2 days ago'
+    }
+    else if (difference < day * 4) {
+        return '3 days ago'
+    }
+    else if (difference < day * 5) {
+        return '4 days ago'
+    }
+    else if (difference < day * 6) {
+        return '5 days ago'
+    }
+    else if (difference < day * 14) {
+        return 'a week days ago'
+    }
+    else if (difference < day * 31) {
+        return 'this month'
+    }
+    else {
+        return ''
+    }
+}
+
 export default function Contact({ name, currentContact, displayNameSetter }) {
+    console.log(currentContact)
     //gets current contact
     const contact = GetUser(name);
     //gets current logged user
     const myUserName = JSON.parse(localStorage.getItem('currentUser'));
     //gets the message list between current contact and logged user
-    const messages = ContactMessages(myUserName, name);
+    const contactMessages = GetContactMessages(myUserName, name);
     //state of last message
-    const [lastMessage, setLastMessage] = useState(messages.at(-1));
-
-    const time = new Date;
-    const getTime = () => {
-        const day = 86400000;
-        const difference = (time.getTime() - lastMessage.time);
-        if (difference < day) {
-            var lastTime = new Date(lastMessage.time);
-            const [hour, minute] = lastTime.toString().split(' ')[4].split(':')
-            var minuteDif = time.getMinutes() - minute;
-            if (time.getHours() - hour == 0 && Math.abs(minuteDif) <= 5) {
-                if (minuteDif < 1) {
-                    return 'now';
-                }
-                else {
-                    return minuteDif + ' minutes ago';
-                }
-            }
-            if (time.getHours() - hour == 1 && Math.abs(minuteDif) >= 55) {
-                minuteDif = 60 - minuteDif;
-                if (minuteDif < 1) {
-                    return 'now';
-                }
-                else {
-                    return minuteDif + ' minutes ago';
-                }
-            }
-            else {
-                return hour + ':' + minute;
-            }
-        }
-        else if (difference < day * 2) {
-            return '2 days ago'
-        }
-        else if (difference < day * 3) {
-            return '3 days ago'
-        }
-        else if (difference < day * 4) {
-            return '4 days ago'
-        }
-        else if (difference < day * 5) {
-            return '5 days ago'
-        }
-        else if (difference < day * 6) {
-            return '6 days ago'
-        }
-        else if (difference < day * 14) {
-            return 'a week days ago'
-        }
-        else if (difference < day * 31) {
-            return 'this month'
-        }
-        else {
-            return ''
-        }
-    }
-
-    //updates last message content
-    document.addEventListener('keydown', (e) => { if (e.key === 'Enter') { setLastMessage(messages.at(-1)); } });
-    document.addEventListener('click', () => setLastMessage(messages.at(-1)));
+    const lastMessage = contactMessages.at(-1);
 
     //shows chat on display
     const enterContactChat = () => {
@@ -124,12 +122,20 @@ export default function Contact({ name, currentContact, displayNameSetter }) {
         localStorage.setItem('currentContact', JSON.stringify(name));
         //inserts chat
         document.getElementById('massage-box').innerHTML = '';
-        for (var i = 0; i < messages.length; i++) {
+        for (var i = 0; i < contactMessages.length; i++) {
             var newLi = document.createElement('li');
-            if (messages[i].from == myUserName) {
+            var newDiv = document.createElement('div');
+            newDiv.classList.add('message-time')
+            if (contactMessages[i].from == myUserName) {
                 newLi.classList.add('ours');
             }
-            newLi.appendChild(document.createTextNode(messages[i].content));
+            newLi.appendChild(document.createTextNode(contactMessages[i].content));
+            newDiv.appendChild(document.createTextNode((new Date(contactMessages[i].time)).toLocaleTimeString('en-GB',
+                {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                })));
+            newLi.appendChild(newDiv);
             document.getElementsByClassName('messages massage-box')[0].appendChild(newLi);
         }
     }
@@ -139,7 +145,7 @@ export default function Contact({ name, currentContact, displayNameSetter }) {
             {GetProfilePic(contact)}
             <div className='name'>{contact.nickname}</div>
             <div className='preview'>{messages.length ? lastMessage.content : ''}</div>
-            <div className='time'>{messages.length ? getTime() : ''}</div>
+            <div className='time'>{messages.length ? getTime(lastMessage) : ''}</div>
             <hr></hr>
         </div>
     )
