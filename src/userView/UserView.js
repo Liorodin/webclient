@@ -4,6 +4,12 @@ import Contact, { GetProfilePic, GetContactMessages, GetUser } from './Contact'
 import { contactsList } from '../db/contactsList'
 import { messages } from '../db/messages';
 
+import $ from 'jquery';
+import { VoiceRecorder } from './VoiceRecorder'
+
+
+window.VoiceRecorder = new VoiceRecorder();
+
 const newContactMap = new Map();
 const MINUTE = 60000;
 
@@ -45,10 +51,12 @@ const postMessage = (currentUser, currentContact, setter) => {
   GetContactMessages(currentUser, currentContact).push(
     {
       from: currentUser,
+      type: 'text',
       content: message.value,
       time: messageThis,
     }
   );
+  //
   //check if currentContact has an open chat with currentUser if not then opens a new chat
   checkOpenChat(currentUser, currentContact);
   setter(prevValue => prevValue + 1);
@@ -169,20 +177,105 @@ export default function UserView({ currentUser }) {
 
   }
 
+  function humanFileSize(bytes, si) {
+    var thresh = si ? 1000 : 1024;
+    if (bytes < thresh) return bytes + " B";
+    var units = si
+      ? ["kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+      : ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
+    var u = -1;
+    do {
+      bytes /= thresh;
+      ++u;
+    } while (bytes >= thresh);
+    return bytes.toFixed(1) + " " + units[u];
+  }
+
+  ///////////////////
+  function sendPicture(url) {
+    var newImg = document.createElement('img');
+    newImg.classList.add('ours');
+    //
+    newImg.appendChild(document.src(url));
+    const box = document.getElementsByClassName('messages massage-box')[0];
+    box.appendChild(newImg);
+    box.scroll(0, box.scrollHeight);
+    var time = new Date;
+    GetContactMessages(currentUser, currentContact).push(
+      {
+        from: currentUser,
+        //
+        content: "",
+        //html("<img src='" + url + "' />"),
+        time: time.toLocaleString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+      }
+    );
+    // message.value = '';
+    // return false;
+  }
+
+  document.addEventListener("change", () => {
+    const img_input = document.getElementById("picture_input");
+    if (img_input) {
+      var uploaded_image = "";
+      img_input.addEventListener("change", function () {
+        const reader = new FileReader();
+        document.getElementById("post-btn").addEventListener("click", () => {
+          var profile = document.getElementById("profile");
+          profile.src = reader.result;
+        })
+        reader.addEventListener("load", () => {
+          uploaded_image = reader.result;
+          //var img = document.createElement("img");
+          //img.src = uploaded_image;
+          //document.getElementById("display_img").appendChild(img);
+        });
+        reader.readAsDataURL(this.files[0]);
+      })
+    }
+  })
+
 
   const AddVideoMessage = () => {
 
   }
 
+  document.addEventListener("change", () => {
+    const video_input = document.getElementById("video_input");
+    if (video_input) {
+      var url = "";
+      video_input.addEventListener("change", function () {
+        const reader = new FileReader();
+        reader.readAsDataURL(this.files[0]);
+      })
+    }
+  })
+
+  //this function is called when the input loads a video
+  // function renderVideo(file) {
+  //   var reader = new FileReader();
+  //   reader.onload = function (event) {
+  //     var the_url = event.target.result
+  //     $('#data-vid').html("<video width='400' controls><source id='vid-source' src='" + the_url + "' type='video/mp4'></video>")
+  //     $('#name-vid').html(file.name)
+  //     $('#size-vid').html(humanFileSize(file.size, "MB"))
+  //     $('#type-vid').html(file.type)
+
+  //   }
+  //when the file is read it triggers the onload event above.
+  //   reader.readAsDataURL(file);
+  // }
+
   const AddVoiceMessage = () => {
 
   }
+
   return (
     <div className='container'>
       <div className='user-side'>
         <div className='user-side-top'>{userProfile(currentUser)}</div>
         <div id='contact-box'>
-          <div className='space'></div>
+          {/* <div className='space'></div> */}
           {getContacts(currentUser, currentContact, setCurrentContact)}
         </div>
       </div>
@@ -224,7 +317,10 @@ export default function UserView({ currentUser }) {
           </div>
         </div>
       </div>
+      {/* <Link to='/login'><img src='settings.png' /></Link> */}
       <img src='settings.png' data-bs-toggle="modal" data-bs-target="#settings-modal" />
+
+      {/* adding a new contact */}
       <div className="modal fade" id="addContact-modal" tabIndex="-1" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
@@ -264,6 +360,7 @@ export default function UserView({ currentUser }) {
         </div>
       </div>
 
+      {/* adding a voice message */}
       <div className="modal fade" id="addVoice-modal" tabIndex="-1" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
@@ -271,17 +368,23 @@ export default function UserView({ currentUser }) {
               <h5 className="modal-title">Add voice message</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div className="modal-body">
-              <input id="newContact" type="text" placeholder='Enter new contact by username'></input>
+            <div className="record-buttons">
+              <audio id="recorder" muted hidden></audio>
+              <div>
+                <button id="start">Record</button>
+                <button id="stop">Stop Recording</button>
+              </div>
+              <span className="saved">Saved Recording</span>
+              <audio id="player" controls></audio>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
               <button id='post-btn' type="button" className="btn btn-primary" onClick={AddVoiceMessage}>Add now</button>
             </div>
           </div>
         </div>
       </div>
 
+      {/* adding a picture */}
       <div className="modal fade" id="addPic-modal" tabIndex="-1" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
@@ -289,17 +392,17 @@ export default function UserView({ currentUser }) {
               <h5 className="modal-title">Add picture message</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div className="modal-body">
-              <input id="newContact" type="text" placeholder='Enter new contact by username'></input>
-            </div>
+
+            <input type="file" id="picture_input" accept="image/*"></input>
+
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button id='post-btn' type="button" className="btn btn-primary" onClick={AddPictureMessage}>Add now</button>
+              <button id='post-btn' type="button" className="btn btn-primary" data-bs-dismiss="modal">Send now</button>
             </div>
           </div>
         </div>
       </div>
 
+      {/* adding a video */}
       <div className="modal fade" id="addVideo-modal" tabIndex="-1" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
@@ -307,12 +410,11 @@ export default function UserView({ currentUser }) {
               <h5 className="modal-title">Add video message</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div className="modal-body">
-              <input id="newContact" type="text" placeholder='Enter new contact by username'></input>
-            </div>
+
+            <input type="file" id="video_input" accept="video/*"></input>
+            {/* <div id="data-vid" class="large-8 columns"></div> */}
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button id='post-btn' type="button" className="btn btn-primary" onClick={AddVideoMessage}>Add now</button>
+              <button id='post-btn' type="button" className="btn btn-primary" onClick={AddVideoMessage}>Send now</button>
             </div>
           </div>
         </div>

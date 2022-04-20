@@ -49,12 +49,13 @@ body {
   background-color: var(--secondColor);
 }
 
-/* img {
-  width: 80px;
-  height: 80px;
-  margin-left: 300px;
-  margin-top: 10px;
-  vertical-align: right;
+Link, img {
+  width: 40px;
+  height: 40px;
+}
+
+/* div .row .mb-3 {
+  position: relative;
 } */
 
 .messages {
@@ -93,6 +94,31 @@ body {
   margin-top: 13%;
   width: 50%;
   padding: 40px;
+}
+
+.register {
+  display: grid;
+  grid-template-columns: 80% 20%;
+  justify-content: center;
+  align-items: center;
+}
+
+.register-submit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.register-pic {
+  width: 100%;
+}
+
+.register img {
+  width: 100px;
+  height: 100px;
+  margin-right: 100px;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 .hidden {
@@ -151,6 +177,11 @@ body {
   justify-content: space-around;
   width: 100%;
   align-items: center;
+  border-style: solid;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  border-color: var(--firstColor);
 }
 
 
@@ -159,6 +190,9 @@ body {
 }
 
 #contact-profile {
+  font-weight: bold;
+  padding-left: 20px;
+  padding-top: 10px;
   background-color: var(--niceWhite);
   width: 100%;
   border-radius: 10px 10px 0 0;
@@ -226,10 +260,10 @@ body {
   color: rgb(54, 52, 52);
 }
 
-.space {
+/* .space {
   background-color: grey;
   height: 20px;
-}
+} */
 
 .contact {
   height: 75px;
@@ -390,11 +424,6 @@ hr {
   width: 100%;
 }
 
-/* Change color of dropup botton on hover */
-#chat-item1:hover {
-  background-color: #e5e7e8;
-}
-
 .bottom-bar-options {
   height: 100%;
 }
@@ -495,3 +524,30 @@ input {
 #input-result {
   margin-top: 10px;
 }
+
+.record-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  width: 480px;
+}
+
+#start, #stop {
+  margin: 20px 20px 20px 20px;
+  max-width: 300px;
+  padding: 10px 20px;
+  border: 2px solid var(--firstColor);
+  font-size: 20px;
+  color: var(--firstColor);
+  background-color: transparent;
+}
+
+audio {
+  border: 1px solid var(--firstColor);
+  margin: 10px 10px 10px 10px;
+  border-radius: 30px;
+}
+
+
