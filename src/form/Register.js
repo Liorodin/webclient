@@ -202,7 +202,6 @@ export default function Register() {
                         Already registered? <Link to="/">Click Here</Link> to login
                     </div>
                 </div>
-
             </form>
             <div className="modal fade" id="addPicture-modal" tabIndex="-1" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered">
