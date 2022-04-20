@@ -36,7 +36,6 @@ export default function Register() {
         }
         // if the user gives a picture, put adress instead of the 'default'
 
-
         var hiddenElements1 = document.getElementsByClassName('hidden1');
         // show the errors in the invalid cases
         for (var j = 0; j < users.length; j++) {
@@ -114,7 +113,6 @@ export default function Register() {
                     <input type="submit" value="Register" className="btn" onClick={register}></input>
                     Already registered? <Link to="/">Click Here</Link> to login
                 </div>
-
             </form>
             <div className="modal fade" id="addPicture-modal" tabIndex="-1" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered">
