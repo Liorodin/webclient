@@ -177,6 +177,11 @@ Link, img {
   justify-content: space-around;
   width: 100%;
   align-items: center;
+  border-style: solid;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  border-color: var(--firstColor);
 }
 
 
@@ -255,10 +260,10 @@ Link, img {
   color: rgb(54, 52, 52);
 }
 
-.space {
+/* .space {
   background-color: grey;
   height: 20px;
-}
+} */
 
 .contact {
   height: 75px;
@@ -519,3 +524,30 @@ input {
 #input-result {
   margin-top: 10px;
 }
+
+.record-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  width: 480px;
+}
+
+#start, #stop {
+  margin: 20px 20px 20px 20px;
+  max-width: 300px;
+  padding: 10px 20px;
+  border: 2px solid var(--firstColor);
+  font-size: 20px;
+  color: var(--firstColor);
+  background-color: transparent;
+}
+
+audio {
+  border: 1px solid var(--firstColor);
+  margin: 10px 10px 10px 10px;
+  border-radius: 30px;
+}
+
+

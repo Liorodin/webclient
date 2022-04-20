@@ -89,38 +89,38 @@ export default function Register() {
 
 
 
-    function humanFileSize(bytes, si) {
-        var thresh = si ? 1000 : 1024;
-        if (bytes < thresh) return bytes + " B";
-        var units = si
-            ? ["kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
-            : ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
-        var u = -1;
-        do {
-            bytes /= thresh;
-            ++u;
-        } while (bytes >= thresh);
-        return bytes.toFixed(1) + " " + units[u];
-    }
+    // function humanFileSize(bytes, si) {
+    //     var thresh = si ? 1000 : 1024;
+    //     if (bytes < thresh) return bytes + " B";
+    //     var units = si
+    //         ? ["kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+    //         : ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
+    //     var u = -1;
+    //     do {
+    //         bytes /= thresh;
+    //         ++u;
+    //     } while (bytes >= thresh);
+    //     return bytes.toFixed(1) + " " + units[u];
+    // }
 
     //this function is called when the input loads an image
-    function renderImage(file) {
-        var reader = new FileReader();
-        reader.onload = function (event) {
-            var the_url = event.target.result;
-            $("#preview").html("<img src='" + the_url + "' />");
-            $("#name").html(file.name);
-            $("#size").html(humanFileSize(file.size, "MB"));
-            $("#type").html(file.type);
-            $("#post-btn").click(function () {
-                var img = document.getElementById("profile");
-                img.src = the_url;
-                //$("#img").src(the_url);
-            });
-        };
-        //when the file is read it triggers the onload event above.
-        reader.readAsDataURL(file);
-    }
+    // function renderImage(file) {
+    //     var reader = new FileReader();
+    //     reader.onload = function (event) {
+    //         var the_url = event.target.result;
+    //         $("#preview").html("<img src='" + the_url + "' />");
+    //         $("#name").html(file.name);
+    //         $("#size").html(humanFileSize(file.size, "MB"));
+    //         $("#type").html(file.type);
+    //         $("#post-btn").click(function () {
+    //             var img = document.getElementById("profile");
+    //             img.src = the_url;
+    //             //$("#img").src(the_url);
+    //         });
+    //     };
+    //     //when the file is read it triggers the onload event above.
+    //     reader.readAsDataURL(file);
+    // }
 
     //watch for change on the file field
     // $(document.body).delegate("#the-photo-file-field", "change", function() {
@@ -154,18 +154,17 @@ export default function Register() {
         const img_input = document.getElementById("img_input");
         if (img_input) {
             var uploaded_image = "";
-
-           img_input.addEventListener("change", function () {
+            img_input.addEventListener("change", function () {
                 const reader = new FileReader();
                 document.getElementById("post-btn").addEventListener("click" , () => {
-                    var img = document.getElementById("profile");
-                    img.src = reader.result;
+                    var profile = document.getElementById("profile");
+                    profile.src = reader.result;
                 })
                 reader.addEventListener("load", () => {
                     uploaded_image = reader.result;
-                    var img = document.createElement("img");
-                    img.src = uploaded_image;
-                    document.getElementById("display_img").appendChild(img);
+                    //var img = document.createElement("img");
+                    //img.src = uploaded_image;
+                    //document.getElementById("display_img").appendChild(img);
                 });
                 reader.readAsDataURL(this.files[0]);
            })
@@ -213,15 +212,14 @@ export default function Register() {
 
                         {/* <input type="file" id="the-photo-file-field"></input> */}
                         <input type="file" id="img_input" accept="image/*"></input>
-                        <div id="display_img" ></div>
+                        {/* <div id="display_img" ></div> */}
 
-
-                        <div id="preview"></div>
+                        {/* <div id="preview"></div>
                         <div id="data" className="large-8 columns">
                             <p id="name"></p>
                             <p id="size"></p>
                             <p id="type"></p>
-                        </div>
+                        </div> */}
 
                         <div className="modal-footer">
                             {/* onClick={() => AddNewPicture(setOpenChatCount)} */}

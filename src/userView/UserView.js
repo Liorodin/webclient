@@ -2,9 +2,13 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from "react-router-dom";
 import Contact, { GetProfilePic, GetContactMessages, GetUser } from './Contact'
 import { contactsList } from '../db/contactsList'
-import $ from 'jquery';
-
 import { messages } from '../db/messages';
+
+import $ from 'jquery';
+import { VoiceRecorder } from './VoiceRecorder'
+
+
+window.VoiceRecorder = new VoiceRecorder();
 
 const newContactMap = new Map();
 const MINUTE = 60000;
@@ -197,7 +201,7 @@ export default function UserView({ currentUser }) {
     box.appendChild(newImg);
     box.scroll(0, box.scrollHeight);
     var time = new Date;
-    ContactMessages(currentUser, currentContact).push(
+    GetContactMessages(currentUser, currentContact).push(
       {
         from: currentUser,
         //
@@ -210,71 +214,68 @@ export default function UserView({ currentUser }) {
     // return false;
   }
 
-  //this function is called when the input loads an image
-  function renderImage(file) {
-    var reader = new FileReader();
-    reader.onload = function (event) {
-      var the_url = event.target.result;
-      $("#preview").html("<img src='" + the_url + "' />");
-      $("#name").html(file.name);
-      $("#size").html(humanFileSize(file.size, "MB"));
-      $("#type").html(file.type);
-      $("#post-btn").click(function () {
-        sendPicture(the_url);
-        //$("#img").src(the_url);
-      });
-    };
-    //when the file is read it triggers the onload event above.
-    reader.readAsDataURL(file);
-  }
-
-  //watch for change on the file field
-  $("#the-photo-file-field").change(function () {
-    console.log("photo file has been chosen");
-    //grab the first image in the fileList (there is only one)        
-    console.log(this.files[0].size);
-    renderImage(this.files[0]);
-    //AddNewPicture(this.files[0]);
-  });
+  document.addEventListener("change", () => {
+    const img_input = document.getElementById("picture_input");
+    if (img_input) {
+      var uploaded_image = "";
+      img_input.addEventListener("change", function () {
+        const reader = new FileReader();
+        document.getElementById("post-btn").addEventListener("click", () => {
+          var profile = document.getElementById("profile");
+          profile.src = reader.result;
+        })
+        reader.addEventListener("load", () => {
+          uploaded_image = reader.result;
+          //var img = document.createElement("img");
+          //img.src = uploaded_image;
+          //document.getElementById("display_img").appendChild(img);
+        });
+        reader.readAsDataURL(this.files[0]);
+      })
+    }
+  })
 
 
   const AddVideoMessage = () => {
 
   }
 
-  //this function is called when the input loads a video
-  function renderVideo(file) {
-    var reader = new FileReader();
-    reader.onload = function (event) {
-      var the_url = event.target.result
-      $('#data-vid').html("<video width='400' controls><source id='vid-source' src='" + the_url + "' type='video/mp4'></video>")
-      $('#name-vid').html(file.name)
-      $('#size-vid').html(humanFileSize(file.size, "MB"))
-      $('#type-vid').html(file.type)
-
+  document.addEventListener("change", () => {
+    const video_input = document.getElementById("video_input");
+    if (video_input) {
+      var url = "";
+      video_input.addEventListener("change", function () {
+        const reader = new FileReader();
+        reader.readAsDataURL(this.files[0]);
+      })
     }
-    //when the file is read it triggers the onload event above.
-    reader.readAsDataURL(file);
-  }
+  })
 
-  $("#the-video-file-field").change(function () {
-    console.log("video file has been chosen")
-    //grab the first image in the fileList
-    //in this example we are only loading one file.
-    console.log(this.files[0].size)
-    renderVideo(this.files[0])
+  //this function is called when the input loads a video
+  // function renderVideo(file) {
+  //   var reader = new FileReader();
+  //   reader.onload = function (event) {
+  //     var the_url = event.target.result
+  //     $('#data-vid').html("<video width='400' controls><source id='vid-source' src='" + the_url + "' type='video/mp4'></video>")
+  //     $('#name-vid').html(file.name)
+  //     $('#size-vid').html(humanFileSize(file.size, "MB"))
+  //     $('#type-vid').html(file.type)
 
-  });
+  //   }
+  //when the file is read it triggers the onload event above.
+  //   reader.readAsDataURL(file);
+  // }
 
   const AddVoiceMessage = () => {
 
   }
+
   return (
     <div className='container'>
       <div className='user-side'>
         <div className='user-side-top'>{userProfile(currentUser)}</div>
         <div id='contact-box'>
-          <div className='space'></div>
+          {/* <div className='space'></div> */}
           {getContacts(currentUser, currentContact, setCurrentContact)}
         </div>
       </div>
@@ -367,9 +368,15 @@ export default function UserView({ currentUser }) {
               <h5 className="modal-title">Add voice message</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-
-
-
+            <div className="record-buttons">
+              <audio id="recorder" muted hidden></audio>
+              <div>
+                <button id="start">Record</button>
+                <button id="stop">Stop Recording</button>
+              </div>
+              <span className="saved">Saved Recording</span>
+              <audio id="player" controls></audio>
+            </div>
             <div className="modal-footer">
               <button id='post-btn' type="button" className="btn btn-primary" onClick={AddVoiceMessage}>Add now</button>
             </div>
@@ -386,13 +393,7 @@ export default function UserView({ currentUser }) {
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <input type="file" id="the-photo-file-field"></input>
-            <div id="preview"></div>
-            <div id="data" className="large-8 columns">
-              <p id="name"></p>
-              <p id="size"></p>
-              <p id="type"></p>
-            </div>
+            <input type="file" id="picture_input" accept="image/*"></input>
 
             <div className="modal-footer">
               <button id='post-btn' type="button" className="btn btn-primary" data-bs-dismiss="modal">Send now</button>
@@ -410,13 +411,8 @@ export default function UserView({ currentUser }) {
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <input type="file" id="the-video-file-field"></input>
-            <div id="data-vid" class="large-8 columns">
-            </div>
-            <h2 id="name-vid"></h2>
-            <p id="size-vid"></p>
-            <p id="type-vid"></p>
-
+            <input type="file" id="video_input" accept="video/*"></input>
+            {/* <div id="data-vid" class="large-8 columns"></div> */}
             <div className="modal-footer">
               <button id='post-btn' type="button" className="btn btn-primary" onClick={AddVideoMessage}>Send now</button>
             </div>
