@@ -130,7 +130,6 @@ div .row .mb-3 {
   display: grid;
   grid-template-columns: 30% 70%;
   grid-template-rows: 99% 1%;
-
   box-sizing: border-box;
   align-items: center;
 }
@@ -182,9 +181,17 @@ div .row .mb-3 {
   border-radius: 10px 10px 0 0;
   border-style: solid;
   border-color: var(--firstColor);
+  display: flex;
+  align-items: center;
 }
 
-#chat-box {
+#contact-profile .pic {
+  margin-left: 20px;
+  margin-right: 15px;
+}
+
+
+#contact-box {
   background: var(--niceWhite);
 }
 
@@ -206,8 +213,6 @@ div .row .mb-3 {
 }
 
 .message-input {
-  padding: 7px;
-  padding-bottom: 10px;
   width: 100%;
   border: 0;
   color: var(--firstColor);
@@ -301,6 +306,16 @@ hr {
   cursor: pointer;
 }
 
+.bi.bi-send {
+  color: var(--firstColor);
+  cursor: pointer;
+}
+
+.bi.bi-paperclip {
+  color: var(--firstColor);
+  cursor: pointer;
+}
+
 #chat {
   display: none;
 }
@@ -367,9 +382,9 @@ hr {
 
 #chat-item1 {
   display: flex;
-  align-items: center;
   flex-direction: column;
-  cursor: pointer;
+  align-items: center;
+  justify-content: center;
   height: 100%;
   width: 100%;
 }
@@ -385,37 +400,21 @@ hr {
 
 #chat-item2 {
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #chat-item3 {
   cursor: pointer;
 }
 
-.people {
-  margin-left: -1px;
-  border-right: 1px solid var(--light);
-  border-left: 1px solid var(--light);
-  width: calc(100% + 2px);
-}
-
 .person {
   position: relative;
   width: 100%;
-  padding: 12px 10% 16px;
+  padding: 12px 5% 16px;
   cursor: pointer;
   background-color: var(--white);
-}
-
-.person:after {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  display: block;
-  width: 80%;
-  height: 1px;
-  content: "";
-  background-color: var(--light);
-  transform: translate(-50%, 0);
 }
 
 .person img {
@@ -465,8 +464,6 @@ hr {
 .person .preview {
   font-size: 14px;
   display: inline-block;
-  overflow: hidden !important;
-  width: 70%;
   white-space: nowrap;
   text-overflow: ellipsis;
   color: rgb(97, 96, 96);
@@ -476,6 +473,7 @@ Link,
 img {
   width: 40px;
   height: 40px;
+  cursor: pointer;
 }
 
 .modal-body,
@@ -491,4 +489,8 @@ input {
 .modal-footer.center {
   display: flex;
   justify-content: center;
+}
+
+#input-result {
+  margin-top: 10px;
 }

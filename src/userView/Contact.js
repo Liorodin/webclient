@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import { messages } from '../db/messages';
 import { users } from '../db/users';
-import { contactsList } from '../db/contactsList';
 
-export function GetProfilePic(user, gaga) {
+export function GetProfilePic(user) {
     switch (user.picture) {
         // case the user gives a picture
         case 'avatar':
@@ -39,38 +38,7 @@ export function GetUser(userName) {
     }
 }
 
-export function AddNewContact(setter) {
-    const newContact = document.getElementById('newContact').value;
-    if (!newContact || GetUser(newContact).username == 'not found') {
-        return;
-    }
-    var flag = 0;
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    for (var i = 0; i < contactsList.length; i++) {
-        if (contactsList[i].username == currentUser) {
-            if (contactsList[i].contactsList.includes(newContact)) {
-                return;
-            }
-            contactsList[i].contactsList.push(newContact);
-            messages.push({
-                contacts: [newContact, currentUser],
-                list: [],
-            })
-            setter(oldValue => oldValue + 1);
-            document.getElementById('newContact').value = '';
-            flag++;
-        }
-        else if (flag != 2 && contactsList[i].username == newContact) {
-            contactsList[i].contactsList.push(currentUser);
-            flag++;
-        }
-        if (flag == 2) {
-            return;
-        }
-    }
-}
-
-export default function Contact({ name, displayNameSetter, currentContact }) {
+export default function Contact({ name, currentContact, displayNameSetter }) {
     //gets current contact
     const contact = GetUser(name);
     //gets current logged user
@@ -79,6 +47,61 @@ export default function Contact({ name, displayNameSetter, currentContact }) {
     const messages = ContactMessages(myUserName, name);
     //state of last message
     const [lastMessage, setLastMessage] = useState(messages.at(-1));
+
+    const time = new Date;
+    const getTime = () => {
+        const day = 86400000;
+        const difference = (time.getTime() - lastMessage.time);
+        if (difference < day) {
+            var lastTime = new Date(lastMessage.time);
+            const [hour, minute] = lastTime.toString().split(' ')[4].split(':')
+            var minuteDif = time.getMinutes() - minute;
+            if (time.getHours() - hour == 0 && Math.abs(minuteDif) <= 5) {
+                if (minuteDif < 1) {
+                    return 'now';
+                }
+                else {
+                    return minuteDif + ' minutes ago';
+                }
+            }
+            if (time.getHours() - hour == 1 && Math.abs(minuteDif) >= 55) {
+                minuteDif = 60 - minuteDif;
+                if (minuteDif < 1) {
+                    return 'now';
+                }
+                else {
+                    return minuteDif + ' minutes ago';
+                }
+            }
+            else {
+                return hour + ':' + minute;
+            }
+        }
+        else if (difference < day * 2) {
+            return '2 days ago'
+        }
+        else if (difference < day * 3) {
+            return '3 days ago'
+        }
+        else if (difference < day * 4) {
+            return '4 days ago'
+        }
+        else if (difference < day * 5) {
+            return '5 days ago'
+        }
+        else if (difference < day * 6) {
+            return '6 days ago'
+        }
+        else if (difference < day * 14) {
+            return 'a week days ago'
+        }
+        else if (difference < day * 31) {
+            return 'this month'
+        }
+        else {
+            return ''
+        }
+    }
 
     //updates last message content
     document.addEventListener('keydown', (e) => { if (e.key === 'Enter') { setLastMessage(messages.at(-1)); } });
@@ -111,25 +134,12 @@ export default function Contact({ name, displayNameSetter, currentContact }) {
         }
     }
 
-    if (!messages.length) {
-        /*new contact without messages*/
-        return (
-            <div id='name' className='contact person' onClick={enterContactChat}>
-                {GetProfilePic(contact)}
-                <div className='contact-name name'>{contact.nickname}</div>
-                <div className='last-message preview'></div>
-                <div className='last-message time'></div>
-                <hr></hr>
-            </div>
-        )
-    }
-    /*existed contacts with messages*/
     return (
         <div id='name' className='contact person' onClick={enterContactChat}>
             {GetProfilePic(contact)}
-            <div className='contact-name name'>{contact.nickname}</div>
-            <div className='last-message preview'>{lastMessage.content}</div>
-            <div className='last-message time'>{lastMessage.time}</div>
+            <div className='name'>{contact.nickname}</div>
+            <div className='preview'>{messages.length ? lastMessage.content : ''}</div>
+            <div className='time'>{messages.length ? getTime() : ''}</div>
             <hr></hr>
         </div>
     )
