@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import Contact, { GetProfilePic, ContactMessages, AddNewContact, GetUser } from './Contact'
 import { contactsList } from '../db/contactsList'
+import $ from 'jquery';
+
 
 const postMessage = (currentUser, currentContact) => {
   var message = document.getElementById('post-message');
@@ -79,10 +81,98 @@ export default function UserView({ currentUser }) {
 
   }
 
+  function humanFileSize(bytes, si) {
+    var thresh = si ? 1000 : 1024;
+    if (bytes < thresh) return bytes + " B";
+    var units = si
+      ? ["kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+      : ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
+    var u = -1;
+    do {
+      bytes /= thresh;
+      ++u;
+    } while (bytes >= thresh);
+    return bytes.toFixed(1) + " " + units[u];
+  }
+
+  ///////////////////
+  function sendPicture(url) {
+    var newImg = document.createElement('img');
+    newImg.classList.add('ours');
+    //
+    newImg.appendChild(document.src(url));
+    const box = document.getElementsByClassName('messages massage-box')[0];
+    box.appendChild(newImg);
+    box.scroll(0, box.scrollHeight);
+    var time = new Date;
+    ContactMessages(currentUser, currentContact).push(
+      {
+        from: currentUser,
+        //
+        content: "",
+        //html("<img src='" + url + "' />"),
+        time: time.toLocaleString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+      }
+    );
+    // message.value = '';
+    // return false;
+  }
+
+  //this function is called when the input loads an image
+  function renderImage(file) {
+    var reader = new FileReader();
+    reader.onload = function (event) {
+      var the_url = event.target.result;
+      $("#preview").html("<img src='" + the_url + "' />");
+      $("#name").html(file.name);
+      $("#size").html(humanFileSize(file.size, "MB"));
+      $("#type").html(file.type);
+      $("#post-btn").click(function () {
+        sendPicture(the_url);
+        //$("#img").src(the_url);
+      });
+    };
+    //when the file is read it triggers the onload event above.
+    reader.readAsDataURL(file);
+  }
+
+  //watch for change on the file field
+  $("#the-photo-file-field").change(function () {
+    console.log("photo file has been chosen");
+    //grab the first image in the fileList (there is only one)        
+    console.log(this.files[0].size);
+    renderImage(this.files[0]);
+    //AddNewPicture(this.files[0]);
+  });
+
 
   const AddVideoMessage = () => {
 
   }
+
+  //this function is called when the input loads a video
+  function renderVideo(file) {
+    var reader = new FileReader();
+    reader.onload = function (event) {
+      var the_url = event.target.result
+      $('#data-vid').html("<video width='400' controls><source id='vid-source' src='" + the_url + "' type='video/mp4'></video>")
+      $('#name-vid').html(file.name)
+      $('#size-vid').html(humanFileSize(file.size, "MB"))
+      $('#type-vid').html(file.type)
+
+    }
+    //when the file is read it triggers the onload event above.
+    reader.readAsDataURL(file);
+  }
+
+  $("#the-video-file-field").change(function () {
+    console.log("video file has been chosen")
+    //grab the first image in the fileList
+    //in this example we are only loading one file.
+    console.log(this.files[0].size)
+    renderVideo(this.files[0])
+
+  });
 
   const AddVoiceMessage = () => {
 
@@ -139,6 +229,7 @@ export default function UserView({ currentUser }) {
         </div>
       </div>
       {/* <Link to='/login'><img src='settings.png' /></Link> */}
+      {/* adding a new contact */}
       <img src='settings.png' data-bs-toggle="modal" data-bs-target="#settings-modal" />
       <div className="modal fade" id="addContact-modal" tabIndex="-1" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
@@ -158,7 +249,7 @@ export default function UserView({ currentUser }) {
         </div>
       </div>
 
-      
+      {/* adding a voice message */}
       <div className="modal fade" id="addVoice-modal" tabIndex="-1" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
@@ -166,17 +257,17 @@ export default function UserView({ currentUser }) {
               <h5 className="modal-title">Add voice message</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div className="modal-body">
-              <input id="newContact" type="text" placeholder='Enter new contact by username'></input>
-            </div>
+
+
+
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
               <button id='post-btn' type="button" className="btn btn-primary" onClick={AddVoiceMessage}>Add now</button>
             </div>
           </div>
         </div>
       </div>
 
+      {/* adding a picture */}
       <div className="modal fade" id="addPic-modal" tabIndex="-1" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
@@ -184,17 +275,23 @@ export default function UserView({ currentUser }) {
               <h5 className="modal-title">Add picture message</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div className="modal-body">
-              <input id="newContact" type="text" placeholder='Enter new contact by username'></input>
+
+            <input type="file" id="the-photo-file-field"></input>
+            <div id="preview"></div>
+            <div id="data" className="large-8 columns">
+              <p id="name"></p>
+              <p id="size"></p>
+              <p id="type"></p>
             </div>
+
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button id='post-btn' type="button" className="btn btn-primary" onClick={AddPictureMessage}>Add now</button>
+              <button id='post-btn' type="button" className="btn btn-primary" data-bs-dismiss="modal">Send now</button>
             </div>
           </div>
         </div>
       </div>
 
+      {/* adding a video */}
       <div className="modal fade" id="addVideo-modal" tabIndex="-1" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
@@ -202,12 +299,16 @@ export default function UserView({ currentUser }) {
               <h5 className="modal-title">Add video message</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div className="modal-body">
-              <input id="newContact" type="text" placeholder='Enter new contact by username'></input>
+
+            <input type="file" id="the-video-file-field"></input>
+            <div id="data-vid" class="large-8 columns">
             </div>
+            <h2 id="name-vid"></h2>
+            <p id="size-vid"></p>
+            <p id="type-vid"></p>
+
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button id='post-btn' type="button" className="btn btn-primary" onClick={AddVideoMessage}>Add now</button>
+              <button id='post-btn' type="button" className="btn btn-primary" onClick={AddVideoMessage}>Send now</button>
             </div>
           </div>
         </div>
