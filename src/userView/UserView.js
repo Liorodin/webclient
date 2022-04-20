@@ -34,14 +34,17 @@ const postMessage = (currentUser, currentContact) => {
   const box = document.getElementsByClassName('messages massage-box')[0];
   box.appendChild(newLi);
   box.scroll(0, box.scrollHeight);
+  //
   var time = new Date;
   ContactMessages(currentUser, currentContact).push(
     {
       from: currentUser,
+      type: 'text',
       content: message.value,
       time: time.getTime(),
     }
   );
+  //
   //check if currentContact has an open chat with currentUser if not then opens a new chat
   checkOpenChat(currentUser, currentContact);
   message.value = '';
