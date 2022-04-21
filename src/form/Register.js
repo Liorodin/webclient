@@ -5,8 +5,6 @@ import ShowHidden from './ShowHidden';
 import Input from './Input';
 import { users } from '../db/users';
 import { contactsList } from '../db/contactsList';
-import $ from 'jquery';
-import SimpleImage from 'react'
 
 {/* <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js">
 </script> */}

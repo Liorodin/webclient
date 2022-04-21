@@ -94,9 +94,46 @@ const getTime = (lastMessage) => {
     }
 }
 
+
+// //shows chat on display
+// const enterContactChat = () => {
+//     //updates cuurent contact name on display
+//     displayNameSetter(contact.username);
+//     //checks if nobody is on display
+//     if (currentContact == '') {
+//         document.getElementById('welcome').style.display = 'none';
+//         document.getElementById('chat-grid').style.display = 'grid';
+//     }
+//checks if the contact is already on display
+//         if (currentContact == GetUser(name).nickname) {
+//             return;
+//         }
+//         //updates current contact
+//         localStorage.setItem('currentContact', JSON.stringify(name));
+//         //inserts chat
+//         document.getElementById('massage-box').innerHTML = '';
+//         for (var i = 0; i < contactMessages.length; i++) {
+//             var newLi = document.createElement('li');
+//             var newDiv = document.createElement('div');
+//             newDiv.classList.add('message-time')
+//             if (contactMessages[i].from == myUserName) {
+//                 newLi.classList.add('ours');
+//             }
+//         if
+//             newLi.appendChild(document.createTextNode(contactMessages[i].content));
+//             newDiv.appendChild(document.createTextNode((new Date(contactMessages[i].time)).toLocaleTimeString('en-GB',
+//                 {
+//                     hour: '2-digit',
+//                     minute: '2-digit',
+//                 })));
+//             newLi.appendChild(newDiv);
+
+//             document.getElementsByClassName('messages massage-box')[0].appendChild(newLi);
+//         }
+//     box.scroll(0, box.scrollHeight);
+// }
+
 export default function Contact({ name, currentContact, displayNameSetter }) {
-    console.log(currentContact)
-    //gets current contact
     const contact = GetUser(name);
     //gets current logged user
     const myUserName = JSON.parse(localStorage.getItem('currentUser'));
@@ -109,19 +146,11 @@ export default function Contact({ name, currentContact, displayNameSetter }) {
     const enterContactChat = () => {
         //updates cuurent contact name on display
         displayNameSetter(contact.username);
-        //checks if nobody is on display
-        if (currentContact == '') {
-            document.getElementById('welcome').style.display = 'none';
-            document.getElementById('chat-grid').style.display = 'grid';
-        }
-        //checks if the contact is already on display
-        if (currentContact == GetUser(name).nickname) {
-            return;
-        }
         //updates current contact
         localStorage.setItem('currentContact', JSON.stringify(name));
         //inserts chat
-        document.getElementById('massage-box').innerHTML = '';
+        const box = document.getElementById('massage-box');
+        box.innerHTML = '';
         for (var i = 0; i < contactMessages.length; i++) {
             var newLi = document.createElement('li');
             var newDiv = document.createElement('div');
@@ -129,7 +158,9 @@ export default function Contact({ name, currentContact, displayNameSetter }) {
             if (contactMessages[i].from == myUserName) {
                 newLi.classList.add('ours');
             }
-            newLi.appendChild(document.createTextNode(contactMessages[i].content));
+            if (contactMessages[i].type == 'text') {
+                newLi.appendChild(document.createTextNode(contactMessages[i].content));
+            }
             newDiv.appendChild(document.createTextNode((new Date(contactMessages[i].time)).toLocaleTimeString('en-GB',
                 {
                     hour: '2-digit',
@@ -138,10 +169,19 @@ export default function Contact({ name, currentContact, displayNameSetter }) {
             newLi.appendChild(newDiv);
             document.getElementsByClassName('messages massage-box')[0].appendChild(newLi);
         }
+        box.scroll(0, box.scrollHeight);
     }
 
     return (
-        <div id='name' className='contact person' onClick={enterContactChat}>
+        <div id={contact.username} className='contact person' onClick={() => {
+            //checks if nobody is on display
+            if (currentContact == '') {
+                document.getElementById('welcome').style.display = 'none';
+                document.getElementById('chat-grid').style.display = 'grid';
+            }
+            //updates current contact
+            enterContactChat(name, contact, displayNameSetter)
+        }}>
             {GetProfilePic(contact)}
             <div className='name'>{contact.nickname}</div>
             <div className='preview'>{messages.length ? lastMessage.content : ''}</div>
