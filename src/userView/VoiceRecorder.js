@@ -3,8 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 
 export class VoiceRecorder {
     constructor() {
-        this.mediaRecorder
-        this.stream
+        // this.mediaRecorder
+        // this.stream
         this.chunks = []
         this.isRecording = false
         this.recorderRef = document.querySelector("#recorder");

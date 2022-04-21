@@ -1,18 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from "react-router-dom";
 import Contact, { GetProfilePic, GetContactMessages, GetUser } from './Contact'
 import { contactsList } from '../db/contactsList'
 import { messages } from '../db/messages';
-
-import $ from 'jquery';
-import { VoiceRecorder } from './VoiceRecorder'
-
-
-window.VoiceRecorder = new VoiceRecorder();
+// import {VoiceRecorder} from './VoiceRecorder'
 
 const newContactMap = new Map();
-const MINUTE = 60000;
-
 const checkOpenChat = (currentUser, currentContact) => {
   if (newContactMap.get(currentContact) != 0) {
     return;
@@ -33,21 +26,7 @@ const postMessage = (currentUser, currentContact, setter) => {
   if (message.value.length == 0) {
     return;
   }
-  var newLi = document.createElement('li');
-  newLi.classList.add('ours');
-  newLi.appendChild(document.createTextNode(message.value));
-  const box = document.getElementsByClassName('messages massage-box')[0];
-  box.appendChild(newLi);
-  box.scroll(0, box.scrollHeight);
   var messageThis = (new Date).getTime();
-  var newDiv = document.createElement('div');
-  newDiv.classList.add('message-time')
-  newDiv.appendChild(document.createTextNode((new Date(messageThis)).toLocaleTimeString('en-GB',
-    {
-      hour: '2-digit',
-      minute: '2-digit',
-    })));
-  newLi.appendChild(newDiv);
   GetContactMessages(currentUser, currentContact).push(
     {
       from: currentUser,
@@ -56,11 +35,10 @@ const postMessage = (currentUser, currentContact, setter) => {
       time: messageThis,
     }
   );
-  //
-  //check if currentContact has an open chat with currentUser if not then opens a new chat
   checkOpenChat(currentUser, currentContact);
   setter(prevValue => prevValue + 1);
   message.value = '';
+  document.getElementById(currentContact).click();
 }
 
 const getContacts = (currentUser, currentContact, displayNameSetter) => {
@@ -149,7 +127,7 @@ export default function UserView({ currentUser }) {
 
   useEffect(() => {
     setInterval(() => {
-      setOpenChatCount(prevValue => prevValue + 1);
+      setOpenChatCount(prevValue => !prevValue);
     }, 30000)
   }, [timeInterval])
 
