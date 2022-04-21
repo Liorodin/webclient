@@ -85,6 +85,14 @@ img {
   background-color: var(--firstColorFaded);
 }
 
+.messages .date {
+  background: var(--niceWhite);
+  border-radius: 8px;
+  align-self: center;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
 .borderW {
   background-color: var(--niceWhite);
   padding: 1rem;
