@@ -49,7 +49,8 @@ body {
   background-color: var(--secondColor);
 }
 
-Link, img {
+Link,
+img {
   width: 40px;
   height: 40px;
 }
@@ -82,6 +83,14 @@ Link, img {
   align-self: flex-end;
   margin: 2px 0 2px 8px;
   background-color: var(--firstColorFaded);
+}
+
+.messages .date {
+  background: var(--niceWhite);
+  border-radius: 8px;
+  align-self: center;
+  padding: 8px;
+  margin-bottom: 10px;
 }
 
 .borderW {
@@ -192,7 +201,6 @@ Link, img {
 #contact-profile {
   font-weight: bold;
   padding-left: 20px;
-  padding-top: 10px;
   background-color: var(--niceWhite);
   width: 100%;
   border-radius: 10px 10px 0 0;
@@ -308,6 +316,8 @@ hr {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  max-width: 80%;
+  overflow-wrap: break-word;
 }
 
 #massage-box .ours {
@@ -445,6 +455,7 @@ hr {
   padding: 12px 5% 16px;
   cursor: pointer;
   background-color: var(--white);
+  overflow-y: hidden;
 }
 
 .person img {
@@ -494,9 +505,10 @@ hr {
 .person .preview {
   font-size: 14px;
   display: inline-block;
-  white-space: nowrap;
   text-overflow: ellipsis;
   color: rgb(97, 96, 96);
+  max-width: 70%;
+  overflow-x: hidden;
 }
 
 Link,
@@ -534,7 +546,8 @@ input {
   width: 480px;
 }
 
-#start, #stop {
+#start,
+#stop {
   margin: 20px 20px 20px 20px;
   max-width: 300px;
   padding: 10px 20px;
@@ -549,5 +562,3 @@ audio {
   margin: 10px 10px 10px 10px;
   border-radius: 30px;
 }
-
-

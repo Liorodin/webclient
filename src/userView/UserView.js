@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from "react-router-dom";
 import Contact, { GetProfilePic, GetContactMessages, GetUser } from './Contact'
 import { contactsList } from '../db/contactsList'
 import { messages } from '../db/messages';
 
-import $ from 'jquery';
+//import $ from 'jquery';
 //import VoiceRecorder from './VoiceRecorder'
 
 //const voiceRecorder = new VoiceRecorder();
@@ -12,8 +12,6 @@ import $ from 'jquery';
 
 
 const newContactMap = new Map();
-const MINUTE = 60000;
-
 const checkOpenChat = (currentUser, currentContact) => {
   if (newContactMap.get(currentContact) != 0) {
     return;
@@ -34,21 +32,7 @@ const postMessage = (currentUser, currentContact, setter) => {
   if (message.value.length == 0) {
     return;
   }
-  var newLi = document.createElement('li');
-  newLi.classList.add('ours');
-  newLi.appendChild(document.createTextNode(message.value));
-  const box = document.getElementsByClassName('messages massage-box')[0];
-  box.appendChild(newLi);
-  box.scroll(0, box.scrollHeight);
   var messageThis = (new Date).getTime();
-  var newDiv = document.createElement('div');
-  newDiv.classList.add('message-time')
-  newDiv.appendChild(document.createTextNode((new Date(messageThis)).toLocaleTimeString('en-GB',
-    {
-      hour: '2-digit',
-      minute: '2-digit',
-    })));
-  newLi.appendChild(newDiv);
   GetContactMessages(currentUser, currentContact).push(
     {
       from: currentUser,
@@ -57,11 +41,10 @@ const postMessage = (currentUser, currentContact, setter) => {
       time: messageThis,
     }
   );
-  //
-  //check if currentContact has an open chat with currentUser if not then opens a new chat
   checkOpenChat(currentUser, currentContact);
-  setter(prevValue => prevValue + 1);
+  setter(prevValue => !prevValue);
   message.value = '';
+  document.getElementById(currentContact).click();
 }
 
 const getContacts = (currentUser, currentContact, displayNameSetter) => {
@@ -98,7 +81,7 @@ const AddNewContact = (currentUser, newContact, setter) => {
         contacts: [newContact, currentUser],
         list: [],
       })
-      setter(oldValue => oldValue + 1);
+      setter(prevValue => !prevValue);
       document.getElementById('newContact').value = '';
       newContactMap.set(newContact, 0);
       return 0;
@@ -147,10 +130,9 @@ export default function UserView({ currentUser }) {
   const [currentContact, setCurrentContact] = useState('');
   const [openChatCount, setOpenChatCount] = useState(0);
   const [timeInterval, setTimeInterval] = useState(0);
-
   useEffect(() => {
     setInterval(() => {
-      setOpenChatCount(prevValue => prevValue + 1);
+      setOpenChatCount(prevValue => !prevValue);
     }, 30000)
   }, [timeInterval])
 
@@ -168,7 +150,7 @@ export default function UserView({ currentUser }) {
     if (!(from && to)) {
       return;
     }
-    if (e.key === 'Enter' && window.location.href.split('/').at(-1) == 'chatview' && to != 'default user') {
+    if (e.key === 'Enter' && window.location.href.split('/').at(-1) == 'chatview' && to != '') {
       postMessage(from, to, setOpenChatCount)
     }
   });
@@ -419,9 +401,7 @@ export default function UserView({ currentUser }) {
               <h5 className="modal-title">Add picture message</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-
             <input type="file" id="picture_input" accept="image/*"></input>
-
             <div className="modal-footer">
               <button id='post-btn' type="button" className="btn btn-primary" data-bs-dismiss="modal">Send now</button>
             </div>

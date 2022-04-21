@@ -95,8 +95,6 @@ const getTime = (lastMessage) => {
 }
 
 export default function Contact({ name, currentContact, displayNameSetter }) {
-    console.log(currentContact)
-    //gets current contact
     const contact = GetUser(name);
     //gets current logged user
     const myUserName = JSON.parse(localStorage.getItem('currentUser'));
@@ -109,43 +107,57 @@ export default function Contact({ name, currentContact, displayNameSetter }) {
     const enterContactChat = () => {
         //updates cuurent contact name on display
         displayNameSetter(contact.username);
-        //checks if nobody is on display
-        if (currentContact == '') {
-            document.getElementById('welcome').style.display = 'none';
-            document.getElementById('chat-grid').style.display = 'grid';
-        }
-        //checks if the contact is already on display
-        if (currentContact == GetUser(name).nickname) {
-            return;
-        }
         //updates current contact
         localStorage.setItem('currentContact', JSON.stringify(name));
         //inserts chat
-        document.getElementById('massage-box').innerHTML = '';
+        const box = document.getElementById('massage-box');
+        box.innerHTML = '';
+        var date = '';
         for (var i = 0; i < contactMessages.length; i++) {
+            var options = { weekday: 'long', month: 'long', day: 'numeric' };
+            var tempDate = (new Date(contactMessages[i].time)).toLocaleDateString("en-US", options);
+            if (date != tempDate) {
+                date = tempDate;
+                var newDateDiv = document.createElement('div');
+                newDateDiv.classList.add('date');
+                newDateDiv.appendChild(document.createTextNode(date));
+                box.appendChild(newDateDiv);
+            }
             var newLi = document.createElement('li');
-            var newDiv = document.createElement('div');
-            newDiv.classList.add('message-time')
+            var newTimeDiv = document.createElement('div');
+            newTimeDiv.classList.add('message-time')
             if (contactMessages[i].from == myUserName) {
                 newLi.classList.add('ours');
             }
-            newLi.appendChild(document.createTextNode(contactMessages[i].content));
-            newDiv.appendChild(document.createTextNode((new Date(contactMessages[i].time)).toLocaleTimeString('en-GB',
+            if (contactMessages[i].type == 'text') {
+                newLi.appendChild(document.createTextNode(contactMessages[i].content));
+            }
+            newTimeDiv.appendChild(document.createTextNode((new Date(contactMessages[i].time)).toLocaleTimeString('en-GB',
                 {
                     hour: '2-digit',
                     minute: '2-digit',
                 })));
-            newLi.appendChild(newDiv);
-            document.getElementsByClassName('messages massage-box')[0].appendChild(newLi);
+            newLi.appendChild(newTimeDiv);
+            box.appendChild(newLi);
         }
+        box.scroll(0, box.scrollHeight);
     }
 
     return (
-        <div id='name' className='contact person' onClick={enterContactChat}>
+        <div id={contact.username} className='contact person'
+            onClick={() => {
+                //checks if nobody is on display
+                if (currentContact == '') {
+                    document.getElementById('welcome').style.display = 'none';
+                    document.getElementById('chat-grid').style.display = 'grid';
+                }
+                //updates current contact
+                enterContactChat(name, contact, displayNameSetter)
+            }}>
             {GetProfilePic(contact)}
             <div className='name'>{contact.nickname}</div>
-            <div className='preview'>{messages.length ? lastMessage.content : ''}</div>
-            <div className='time'>{messages.length ? getTime(lastMessage) : ''}</div>
+            <div className='preview'>{lastMessage ? lastMessage.content : ''}</div>
+            <div className='time'>{lastMessage ? getTime(lastMessage) : ''}</div>
             <hr></hr>
         </div>
     )
