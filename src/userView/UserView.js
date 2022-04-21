@@ -5,10 +5,11 @@ import { contactsList } from '../db/contactsList'
 import { messages } from '../db/messages';
 
 import $ from 'jquery';
-import { VoiceRecorder } from './VoiceRecorder'
+//import VoiceRecorder from './VoiceRecorder'
+
+//const voiceRecorder = new VoiceRecorder();
 
 
-window.VoiceRecorder = new VoiceRecorder();
 
 const newContactMap = new Map();
 const MINUTE = 60000;
@@ -268,7 +269,32 @@ export default function UserView({ currentUser }) {
 
   const AddVoiceMessage = () => {
 
+  document.getElementById("start").onClick = () => {
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+      var mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.start();
+      var chuck = [];
+      mediaRecorder.addEventListener("dataavailable", e => {
+        chuck.push(e.data);
+      });
+      mediaRecorder.addEventListener("stop", e => {
+        var blob = new Blob(chuck);
+        var audioURL = URL.createObjectURL(blob);
+        var audio = new Audio(audioURL);
+        audio.setAttribute("controls", 1);
+        document.getElementById("start").appendChild(audio);
+      });
+      document.getElementById("stop").onClick = () => {
+        mediaRecorder.stop();
+      }
+    })
   }
+}
+
+  
+
+
+
 
   return (
     <div className='container'>
@@ -373,6 +399,7 @@ export default function UserView({ currentUser }) {
               <div>
                 <button id="start">Record</button>
                 <button id="stop">Stop Recording</button>
+              {/* {AddVoiceMessage} */}
               </div>
               <span className="saved">Saved Recording</span>
               <audio id="player" controls></audio>
