@@ -132,6 +132,12 @@ export default function Contact({ name, currentContact, displayNameSetter }) {
             if (contactMessages[i].type == 'text') {
                 newLi.appendChild(document.createTextNode(contactMessages[i].content));
             }
+            if (contactMessages[i].type == 'picture') {
+                var newImg = document.createElement('img');
+                newImg.src= contactMessages[i].content;
+                newLi.appendChild(newImg);
+
+            }
             newTimeDiv.appendChild(document.createTextNode((new Date(contactMessages[i].time)).toLocaleTimeString('en-GB',
                 {
                     hour: '2-digit',

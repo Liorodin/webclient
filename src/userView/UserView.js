@@ -175,37 +175,54 @@ export default function UserView({ currentUser }) {
   }
 
   ///////////////////
-  function sendPicture(url) {
-    var newImg = document.createElement('img');
-    newImg.classList.add('ours');
-    //
-    newImg.appendChild(document.src(url));
-    const box = document.getElementsByClassName('messages massage-box')[0];
-    box.appendChild(newImg);
-    box.scroll(0, box.scrollHeight);
-    var time = new Date;
+  // function sendPicture(url) {
+  //   var newImg = document.createElement('img');
+  //   newImg.classList.add('ours');
+  //   //
+  //   newImg.appendChild(document.src(url));
+  //   const box = document.getElementsByClassName('messages massage-box')[0];
+  //   box.appendChild(newImg);
+  //   box.scroll(0, box.scrollHeight);
+  //   var time = new Date;
+  //   GetContactMessages(currentUser, currentContact).push(
+  //     {
+  //       from: currentUser,
+  //       //
+  //       content: "",
+  //       //html("<img src='" + url + "' />"),
+  //       time: time.toLocaleString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+  //     }
+  //   );
+  // }
+
+  const sendPicture = (currentUser, currentContact, setter, url) => {
+    //var message = document.getElementById('post-message');
+    var messageThis = (new Date).getTime();
     GetContactMessages(currentUser, currentContact).push(
       {
         from: currentUser,
-        //
-        content: "",
-        //html("<img src='" + url + "' />"),
-        time: time.toLocaleString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+        type: 'picture',
+        //bytes of the pic
+        content: url.value,
+        time: messageThis,
       }
     );
-    // message.value = '';
-    // return false;
+    checkOpenChat(currentUser, currentContact);
+    setter(prevValue => !prevValue);
+    document.getElementById(currentContact).click();
   }
 
   document.addEventListener("change", () => {
     const img_input = document.getElementById("picture_input");
     if (img_input) {
       var uploaded_image = "";
+      console.log("pictureeee2");
       img_input.addEventListener("change", function () {
         const reader = new FileReader();
-        document.getElementById("post-btn").addEventListener("click", () => {
-          var profile = document.getElementById("profile");
-          profile.src = reader.result;
+        console.log("pictureeee1");
+        document.getElementById('post-pic').addEventListener("click", () => {
+          console.log("pictureeeee");
+          sendPicture(currentUser, currentContact, setOpenChatCount, reader.result);
         })
         reader.addEventListener("load", () => {
           uploaded_image = reader.result;
@@ -272,9 +289,6 @@ export default function UserView({ currentUser }) {
     })
   }
 }
-
-  
-
 
 
 
@@ -387,7 +401,7 @@ export default function UserView({ currentUser }) {
               <audio id="player" controls></audio>
             </div>
             <div className="modal-footer">
-              <button id='post-btn' type="button" className="btn btn-primary" onClick={AddVoiceMessage}>Add now</button>
+              <button id='post-voice' type="button" className="btn btn-primary" onClick={AddVoiceMessage}>Add now</button>
             </div>
           </div>
         </div>
@@ -403,7 +417,7 @@ export default function UserView({ currentUser }) {
             </div>
             <input type="file" id="picture_input" accept="image/*"></input>
             <div className="modal-footer">
-              <button id='post-btn' type="button" className="btn btn-primary" data-bs-dismiss="modal">Send now</button>
+              <button id='post-pic' type="button" className="btn btn-primary" data-bs-dismiss="modal">Send now</button>
             </div>
           </div>
         </div>
@@ -421,7 +435,7 @@ export default function UserView({ currentUser }) {
             <input type="file" id="video_input" accept="video/*"></input>
             {/* <div id="data-vid" class="large-8 columns"></div> */}
             <div className="modal-footer">
-              <button id='post-btn' type="button" className="btn btn-primary" onClick={AddVideoMessage}>Send now</button>
+              <button id='post-video' type="button" className="btn btn-primary" onClick={AddVideoMessage}>Send now</button>
             </div>
           </div>
         </div>
