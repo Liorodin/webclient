@@ -191,7 +191,9 @@ export default function Contact({ name, currentContact, displayNameSetter }) {
                 newLi.appendChild(audio);
             }
             else if (contactMessages[i].type == 'video') {
-                newLi.appendChild(document.createTextNode('video'));
+                var video= document.createElement('video');
+                video.src= contactMessages[i].content;
+                newLi.appendChild(video);
             }
             newTimeDiv.appendChild(document.createTextNode((new Date(contactMessages[i].time)).toLocaleTimeString('en-GB',
                 {
