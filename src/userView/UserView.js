@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from "react-router-dom";
 import Contact, { GetProfilePic, GetContactMessages, GetUser } from './Contact'
 import { contactsList } from '../db/contactsList'
 import { messages } from '../db/messages';
-
-//import $ from 'jquery';
-//import VoiceRecorder from './VoiceRecorder'
-
-//const voiceRecorder = new VoiceRecorder();
-
-
+import { SettingsModal, AddContactModal } from './Modals';
+Element.prototype.setAttributes = function (obj) { for (var prop in obj) this.setAttribute(prop, obj[prop]) }
 
 const newContactMap = new Map();
 const checkOpenChat = (currentUser, currentContact) => {
@@ -42,8 +36,8 @@ const postMessage = (currentUser, currentContact, setter) => {
     }
   );
   checkOpenChat(currentUser, currentContact);
-  setter(prevValue => !prevValue);
   message.value = '';
+  setter(prevValue => !prevValue);
   document.getElementById(currentContact).click();
 }
 
@@ -136,14 +130,6 @@ export default function UserView({ currentUser }) {
     }, 30000)
   }, [timeInterval])
 
-  let navigate = useNavigate();
-
-  const logOut = () => {
-    localStorage.setItem('currentUser', JSON.stringify('default user'));
-    localStorage.setItem('currentContact', JSON.stringify(''));
-    navigate("/");
-  }
-
   document.addEventListener('keydown', (e) => {
     const from = JSON.parse(localStorage.getItem('currentUser'));
     const to = JSON.parse(localStorage.getItem('currentContact'));
@@ -226,18 +212,73 @@ export default function UserView({ currentUser }) {
         })
         reader.addEventListener("load", () => {
           uploaded_image = reader.result;
-          //var img = document.createElement("img");
-          //img.src = uploaded_image;
-          //document.getElementById("display_img").appendChild(img);
         });
         reader.readAsDataURL(this.files[0]);
       })
     }
   })
+  //var img = document.createElement("img");
+  //img.src = uploaded_image;
+  //document.getElementById("display_img").appendChild(img);
+  // document.addEventListener("change", () => {
+  //   const img_input = document.getElementById("picture_input");
+  //   if (img_input) {
+  //     var uploaded_image = "";
+  //     img_input.addEventListener("change", function () {
+  //       const reader = new FileReader();
+  //       document.getElementById("post-btn").addEventListener("click", () => {
+  //         var profile = document.getElementById("profile");
+  //         profile.src = reader.result;
+  //       })
+  //       reader.addEventListener("load", () => {
+  //         uploaded_image = reader.result;
+  //         //var img = document.createElement("img");
+  //         //img.src = uploaded_image;
+  //         //document.getElementById("display_img").appendChild(img);
+  //       });
+  //       reader.readAsDataURL(this.files[0]);
+  //     })
+  //   }
+  // })
 
 
-  const AddVideoMessage = () => {
+  const addFunctionality = () => {
+    document.getElementById('start').onclick = () => {
+      document.getElementById('start').style.display = 'none';
+      document.getElementById('stop').style.display = 'block';
+      var output = document.getElementById('recording-output');
+      var saved = document.getElementById('saved-record');
+      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+        output.innerHTML = '';
+        saved.innerHTML = '';
+        output.appendChild(document.createTextNode('recording...'))
+        document.getElementById('trashCan').style.display = 'none';
+        var mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.start();
+        var chuck = [];
+        mediaRecorder.addEventListener("dataavailable", e => {
+          chuck.push(e.data);
+        });
+        mediaRecorder.addEventListener("stop", () => {
+          var blob = new Blob(chuck);
+          var audioURL = URL.createObjectURL(blob);
+          var audio = new Audio(audioURL);
+          audio.id = 'audio'
+          audio.setAttribute("controls", 1);
+          output.innerHTML = '';
+          output.appendChild(document.createTextNode('saved recording'))
+          document.getElementById('saved-record').appendChild(audio);
+          document.getElementById('trashCan').style.display = 'block';
+        });
+        document.getElementById('stop').onclick = () => {
+          document.getElementById('stop').style.display = 'none';
+          document.getElementById('start').style.display = 'block';
+          mediaRecorder.stop();
+          mediaRecorder.stream.getTracks().forEach(track => track.stop());
+        }
+      })
 
+    }
   }
 
   document.addEventListener("change", () => {
@@ -251,46 +292,26 @@ export default function UserView({ currentUser }) {
     }
   })
 
-  //this function is called when the input loads a video
-  // function renderVideo(file) {
-  //   var reader = new FileReader();
-  //   reader.onload = function (event) {
-  //     var the_url = event.target.result
-  //     $('#data-vid').html("<video width='400' controls><source id='vid-source' src='" + the_url + "' type='video/mp4'></video>")
-  //     $('#name-vid').html(file.name)
-  //     $('#size-vid').html(humanFileSize(file.size, "MB"))
-  //     $('#type-vid').html(file.type)
-
-  //   }
-  //when the file is read it triggers the onload event above.
-  //   reader.readAsDataURL(file);
-  // }
-
-  const AddVoiceMessage = () => {
-
-  document.getElementById("start").onClick = () => {
-    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-      var mediaRecorder = new MediaRecorder(stream);
-      mediaRecorder.start();
-      var chuck = [];
-      mediaRecorder.addEventListener("dataavailable", e => {
-        chuck.push(e.data);
-      });
-      mediaRecorder.addEventListener("stop", e => {
-        var blob = new Blob(chuck);
-        var audioURL = URL.createObjectURL(blob);
-        var audio = new Audio(audioURL);
-        audio.setAttribute("controls", 1);
-        document.getElementById("start").appendChild(audio);
-      });
-      document.getElementById("stop").onClick = () => {
-        mediaRecorder.stop();
+  const postVoiceMessage = (currentUser, currentContact, setter) => {
+    var audioMessage = document.getElementById('audio');
+    if (null === audioMessage) {
+      return;
+    }
+    var messageThis = (new Date).getTime();
+    GetContactMessages(currentUser, currentContact).push(
+      {
+        from: currentUser,
+        type: 'audio',
+        content: audioMessage.src,
+        time: messageThis,
       }
-    })
+    );
+    checkOpenChat(currentUser, currentContact);
+    document.getElementById('recording-output').innerHTML = '';
+    document.getElementById('saved-record').innerHTML = '';
+    setter(prevValue => !prevValue);
+    document.getElementById(currentContact).click();
   }
-}
-
-
 
   return (
     <div className='container'>
@@ -319,7 +340,7 @@ export default function UserView({ currentUser }) {
                   <path d="M9 6h.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 7.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 16H2a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h7zm6 8.73V7.27l-3.5 1.555v4.35l3.5 1.556zM1 8v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1z" />
                   <path d="M9 6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM7 3a2 2 0 1 1 4 0 2 2 0 0 1-4 0z" />
                 </svg></a>
-                <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-mic" viewBox="0 0 16 16" data-bs-toggle="modal" data-bs-target="#addVoice-modal">
+                <a onClick={addFunctionality} data-bs-toggle="modal" data-bs-target="#addVoice-modal"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-mic" viewBox="0 0 16 16">
                   <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
                   <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z" />
                 </svg></a>
@@ -339,69 +360,43 @@ export default function UserView({ currentUser }) {
           </div>
         </div>
       </div>
-      {/* <Link to='/login'><img src='settings.png' /></Link> */}
+      {/* <a href='test.html'>click me</a> */}
       <img src='settings.png' data-bs-toggle="modal" data-bs-target="#settings-modal" />
-
-      {/* adding a new contact */}
-      <div className="modal fade" id="addContact-modal" tabIndex="-1" aria-hidden="true">
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Add new contact</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div id='modal-body' className="modal-body">
-              <input id="newContact" type="text" placeholder='Enter new contact by username'></input>
-              <div id='input-result'></div>
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button id='post-btn' type="button" className="btn btn-primary" onClick={() => {
-                const resultDiv = document.getElementById('input-result');
-                resultDiv.innerHTML = '';
-                var returnValue = AddNewContact(currentUser, document.getElementById('newContact').value, setOpenChatCount);
-                if (returnValue == -1) {
-                  resultDiv.style.color = 'red';
-                  resultDiv.appendChild(document.createTextNode('Invalid contact username'));
-                }
-                if (returnValue == 1) {
-                  resultDiv.style.color = 'red';
-                  resultDiv.appendChild(document.createTextNode('Please enter contact username'));
-                }
-                if (returnValue == 2) {
-                  resultDiv.style.color = 'red';
-                  resultDiv.appendChild(document.createTextNode('Contact already exists in your list'));
-                }
-                if (returnValue == 0) {
-                  resultDiv.style.color = 'green';
-                  resultDiv.appendChild(document.createTextNode('You have successfully added a new contact'));
-                }
-              }}>Add now</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <SettingsModal />
+      {/* adding new contact */}
+      <AddContactModal AddNewContact={AddNewContact} setOpenChatCount={setOpenChatCount} currentUser={currentUser} />
       {/* adding a voice message */}
       <div className="modal fade" id="addVoice-modal" tabIndex="-1" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Add voice message</h5>
+              <h5 className="modal-title">Send voice message</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="record-buttons">
-              <audio id="recorder" muted hidden></audio>
               <div>
-                <button id="start">Record</button>
-                <button id="stop">Stop Recording</button>
-              {/* {AddVoiceMessage} */}
+                <button id="start">Start Recording</button>
+                <button style={{ display: 'none' }} id="stop">Stop Recording</button>
               </div>
-              <span className="saved">Saved Recording</span>
-              <audio id="player" controls></audio>
+              <span id="recording-output" />
+              <div style={{ width: '350px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div id='saved-record' style={{ marginTop: '10px' }} />
+                <svg id='trashCan' style={{ display: 'none' }} xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-trash3" viewBox="0 0 16 16"
+                  onClick={() => {
+                    document.getElementById('recording-output').innerHTML = '';
+                    document.getElementById('saved-record').innerHTML = '';
+                    document.getElementById('trashCan').style.display = 'none';
+                  }}>
+                  <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
+                </svg>
+              </div>
             </div>
             <div className="modal-footer">
-              <button id='post-voice' type="button" className="btn btn-primary" onClick={AddVoiceMessage}>Add now</button>
+              <button id='post-record-btn' type="button" className="btn btn-primary" onClick={() => {
+                postVoiceMessage(currentUser, currentContact, setOpenChatCount)
+                document.getElementById('trashCan').style.display = 'none';
+              }}>Send</button>
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
           </div>
         </div>
@@ -412,7 +407,7 @@ export default function UserView({ currentUser }) {
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Add picture message</h5>
+              <h5 className="modal-title">Send picture</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <input type="file" id="picture_input" accept="image/*"></input>
@@ -428,12 +423,10 @@ export default function UserView({ currentUser }) {
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Add video message</h5>
+              <h5 className="modal-title">Send video</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-
             <input type="file" id="video_input" accept="video/*"></input>
-            {/* <div id="data-vid" class="large-8 columns"></div> */}
             <div className="modal-footer">
               <button id='post-video' type="button" className="btn btn-primary" onClick={AddVideoMessage}>Send now</button>
             </div>
@@ -475,9 +468,3 @@ document.addEventListener("input", () => {
     document.documentElement.style.setProperty('--secondColor', color2);
   }
 });
-
-const resetSettings = () => {
-  document.documentElement.style.setProperty('--firstColor', '#E73C7E');
-  document.documentElement.style.setProperty('--firstColorFaded', '#E73C7EAA');
-  document.documentElement.style.setProperty('--secondColor', '#EE7752');
-}
