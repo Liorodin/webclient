@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from "react-router-dom";
+import { Stream } from 'stream';
 
-export class VoiceRecorder {
+//var stream = require('stream');
+
+export default class VoiceRecorder {
     constructor() {
-        // this.mediaRecorder
-        // this.stream
-        this.chunks = []
-        this.isRecording = false
+        this.stream = null;
+        this.mediaRecorder = null;
+        this.chunks = [];
+        this.isRecording = false;
         this.recorderRef = document.querySelector("#recorder");
         this.playerRef = document.querySelector("#recorder");
         this.startRef = document.querySelector("#start");
@@ -21,7 +24,7 @@ export class VoiceRecorder {
 
     // sucess
     handleSucess(stream) {
-        this.stream = stream
+        this.stream = stream;
         this.stream.oninactive = () => {
             console.log("stream ended");
         }
@@ -39,12 +42,13 @@ export class VoiceRecorder {
         const blob = new Blob(this.chunks, { 'type': 'audio/ogg; codesc=opus' });
         const audioURL = window.URL.createObjectURL(blob);
         this.playerRef.src = audioURL;
-        this.chunks = []
+        this.chunks = [];
         this.stream.getAudioTracks().forEach(track => track.stop());
         this.stream = null;
     }
 
     startRecording() {
+
         if (this.isRecording) return;
         this.isRecording = true;
         this.startRef.innerHTML = "Recording...";
@@ -61,3 +65,5 @@ export class VoiceRecorder {
         this.mediaRecorder.stop();
     }
 }
+
+window.VoiceRecorder = new VoiceRecorder();
