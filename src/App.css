@@ -254,6 +254,7 @@ img {
   text-align: center;
   padding-top: 8px;
   color: var(--niceWhite);
+  cursor: pointer;
 }
 
 #user-fullName {
@@ -560,4 +561,13 @@ audio {
   align-items: center;
   justify-content: space-between;
   flex-direction: column;
+}
+
+.massage-box li img {
+  width: 400px;
+  height: 320px;
+}
+
+.pic img {
+  border-radius: 50%;
 }
