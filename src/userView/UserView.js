@@ -141,55 +141,64 @@ export default function UserView({ currentUser }) {
     }
   });
 
-  //////////////////////
-  const AddPictureMessage = () => {
 
-  }
-
-  function humanFileSize(bytes, si) {
-    var thresh = si ? 1000 : 1024;
-    if (bytes < thresh) return bytes + " B";
-    var units = si
-      ? ["kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
-      : ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
-    var u = -1;
-    do {
-      bytes /= thresh;
-      ++u;
-    } while (bytes >= thresh);
-    return bytes.toFixed(1) + " " + units[u];
-  }
-
-  ///////////////////
-  // function sendPicture(url) {
-  //   var newImg = document.createElement('img');
-  //   newImg.classList.add('ours');
-  //   //
-  //   newImg.appendChild(document.src(url));
-  //   const box = document.getElementsByClassName('messages massage-box')[0];
-  //   box.appendChild(newImg);
-  //   box.scroll(0, box.scrollHeight);
-  //   var time = new Date;
-  //   GetContactMessages(currentUser, currentContact).push(
-  //     {
-  //       from: currentUser,
-  //       //
-  //       content: "",
-  //       //html("<img src='" + url + "' />"),
-  //       time: time.toLocaleString('en-GB', { hour: '2-digit', minute: '2-digit' }),
-  //     }
-  //   );
-  // }
-
-  const sendPicture = (currentUser, currentContact, setter, url) => {
-    //var message = document.getElementById('post-message');
+  const postPictureMessage = (currentUser, currentContact, setter) => {
+    var picture = document.getElementById('preview-post-pic');
+    console.log(picture.src);
+    if (null === picture) {
+      return;
+    }
     var messageThis = (new Date).getTime();
     GetContactMessages(currentUser, currentContact).push(
       {
         from: currentUser,
         type: 'picture',
         //bytes of the pic
-        content: url.value,
+        content: picture.src,
+        time: messageThis,
+      }
+    );
+    checkOpenChat(currentUser, currentContact);
+    setter(prevValue => !prevValue);
+    document.getElementById(currentContact).click();
+  }
+
+
+  function postImageFunction() {
+    document.addEventListener("change", () => {
+      const img_input = document.getElementById("picture_input");
+      if (img_input) {
+        var uploaded_image = "";
+        img_input.addEventListener("change", function () {
+          const reader = new FileReader();
+          // document.getElementById('post-pic').addEventListener("click", () => {
+          //   sendPicture(currentUser, currentContact, setOpenChatCount, reader.result);
+          // })
+          reader.addEventListener("load", () => {
+            uploaded_image = reader.result;
+            var previewPic = document.getElementById('preview-post-pic');
+            previewPic.src = uploaded_image;
+          });
+          reader.readAsDataURL(this.files[0]);
+        })
+      }
+    })
+  }
+
+
+  const postVideoMessage = (currentUser, currentContact, setter) => {
+    var video = document.getElementById('preview-post-video');
+    console.log(video.src);
+    if (null === video) {
+      return;
+    }
+    var messageThis = (new Date).getTime();
+    GetContactMessages(currentUser, currentContact).push(
+      {
+        from: currentUser,
+        type: 'video',
+        //bytes of the pic
+        content: video.src,
         time: messageThis,
       }
     );
@@ -199,47 +208,20 @@ export default function UserView({ currentUser }) {
   }
 
   document.addEventListener("change", () => {
-    const img_input = document.getElementById("picture_input");
-    if (img_input) {
-      var uploaded_image = "";
-      console.log("pictureeee2");
-      img_input.addEventListener("change", function () {
+    const video_input = document.getElementById("video_input");
+    if (video_input) {
+      var url = "";
+      video_input.addEventListener("change", function () {
         const reader = new FileReader();
-        console.log("pictureeee1");
-        document.getElementById('post-pic').addEventListener("click", () => {
-          console.log("pictureeeee");
-          sendPicture(currentUser, currentContact, setOpenChatCount, reader.result);
-        })
-        reader.addEventListener("load", () => {
-          uploaded_image = reader.result;
-        });
         reader.readAsDataURL(this.files[0]);
+        reader.addEventListener("load", () => {
+          url = reader.result;
+          var previewVideo = document.getElementById('preview-post-video');
+          previewVideo.src = url;
+        });
       })
     }
   })
-  //var img = document.createElement("img");
-  //img.src = uploaded_image;
-  //document.getElementById("display_img").appendChild(img);
-  // document.addEventListener("change", () => {
-  //   const img_input = document.getElementById("picture_input");
-  //   if (img_input) {
-  //     var uploaded_image = "";
-  //     img_input.addEventListener("change", function () {
-  //       const reader = new FileReader();
-  //       document.getElementById("post-btn").addEventListener("click", () => {
-  //         var profile = document.getElementById("profile");
-  //         profile.src = reader.result;
-  //       })
-  //       reader.addEventListener("load", () => {
-  //         uploaded_image = reader.result;
-  //         //var img = document.createElement("img");
-  //         //img.src = uploaded_image;
-  //         //document.getElementById("display_img").appendChild(img);
-  //       });
-  //       reader.readAsDataURL(this.files[0]);
-  //     })
-  //   }
-  // })
 
 
   const addFunctionality = () => {
@@ -281,17 +263,6 @@ export default function UserView({ currentUser }) {
     }
   }
 
-  document.addEventListener("change", () => {
-    const video_input = document.getElementById("video_input");
-    if (video_input) {
-      var url = "";
-      video_input.addEventListener("change", function () {
-        const reader = new FileReader();
-        reader.readAsDataURL(this.files[0]);
-      })
-    }
-  })
-
   const postVoiceMessage = (currentUser, currentContact, setter) => {
     var audioMessage = document.getElementById('audio');
     if (null === audioMessage) {
@@ -331,11 +302,11 @@ export default function UserView({ currentUser }) {
           <div id="chat-grid">
             <div id='chat-item1'>
               <div id="dropup-content" onMouseLeave={closeChatOptions}>
-                <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-camera" viewBox="0 0 16 16" data-bs-toggle="modal" data-bs-target="#addPic-modal">
+                <a href="#" onClick={postImageFunction} data-bs-toggle="modal" data-bs-target="#addPic-modal"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-camera" viewBox="0 0 16 16">
                   <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1v6zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2z" />
                   <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
                 </svg></a>
-                <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-camera-reels" viewBox="0 0 16 16" data-bs-toggle="modal" data-bs-target="#addVideo-modal">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#addVideo-modal"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-camera-reels" viewBox="0 0 16 16">
                   <path d="M6 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM1 3a2 2 0 1 0 4 0 2 2 0 0 0-4 0z" />
                   <path d="M9 6h.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 7.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 16H2a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h7zm6 8.73V7.27l-3.5 1.555v4.35l3.5 1.556zM1 8v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1z" />
                   <path d="M9 6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM7 3a2 2 0 1 1 4 0 2 2 0 0 1-4 0z" />
@@ -410,9 +381,12 @@ export default function UserView({ currentUser }) {
               <h5 className="modal-title">Send picture</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <input type="file" id="picture_input" accept="image/*"></input>
+            <div className='preview-pic-div'>
+              <img src={"contactImage.webp"} id="preview-post-pic" style={{ width: '150px', height: '150px', borderRadius: '50%' }} />
+              <input type="file" id="picture_input" accept="image/*"></input>
+            </div>
             <div className="modal-footer">
-              <button id='post-pic' type="button" className="btn btn-primary" data-bs-dismiss="modal">Send now</button>
+              <button id='post-pic' type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => postPictureMessage(currentUser, currentContact, setOpenChatCount)} >Send</button>
             </div>
           </div>
         </div>
@@ -426,31 +400,12 @@ export default function UserView({ currentUser }) {
               <h5 className="modal-title">Send video</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <input type="file" id="video_input" accept="video/*"></input>
+            <div className='preview-video-div'>
+              <video id="preview-post-video" style={{ width: '150px', height: '150px', borderRadius: '50%' }} />
+              <input type="file" id="video_input" accept="video/*"></input>
+            </div>
             <div className="modal-footer">
-              <button id='post-video' type="button" className="btn btn-primary" onClick={AddVideoMessage}>Send now</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="modal fade" id="settings-modal" tabIndex="-1" aria-hidden="true">
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Settings</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div className="modal-body">
-              <label>Change your websites theme:</label>
-              <input id="color1" type="color" name="color1" defaultValue="#E73C7E" />
-              <input id="color2" type="color" name="color2" defaultValue="#EE7752" />
-            </div>
-
-            <div className="modal-footer center">
-              <button type="button" onClick={resetSettings} className="btn btn-secondary" data-bs-dismiss="modal">Reset settings</button>
-              <button type="button" onClick={logOut} className="btn btn-secondary" data-bs-dismiss="modal">Log out</button>
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button id='post-video' type="button" className="btn btn-primary" onClick={() => postVideoMessage(currentUser, currentContact, setOpenChatCount)}>Send</button>
             </div>
           </div>
         </div>

@@ -177,8 +177,10 @@ export default function Contact({ name, currentContact, displayNameSetter }) {
             if (contactMessages[i].type == 'text') {
                 newLi.appendChild(document.createTextNode(contactMessages[i].content));
             }
-            else if (contactMessages[i].type == 'pucture') {
-                newLi.appendChild(document.createTextNode('picture'));
+            else if (contactMessages[i].type == 'picture') {
+                var pic= document.createElement('img');
+                pic.src= contactMessages[i].content;
+                newLi.appendChild(pic);
             }
             else if (contactMessages[i].type == 'audio') {
                 var blob = new Blob();
