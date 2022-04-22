@@ -5,6 +5,7 @@ import ShowHidden from './ShowHidden';
 import Input from './Input';
 import { users } from '../db/users';
 import { contactsList } from '../db/contactsList';
+import { ProfileImageModal } from '../userView/Modals'
 
 {/* <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js">
 </script> */}
@@ -32,12 +33,6 @@ export default function Register() {
         var registerPassword = document.getElementById("Password").value;
         var registerPasswordVerification = document.getElementById("Password Verification").value;
         var registerPicture = document.getElementById("profile").src;
-        var newUser = {
-            username: registerUser,
-            nickname: registerNickname,
-            password: registerPassword,
-            picture: registerPicture,
-        }
         //////////////////////////////////////
         // if the user gives a picture, put adress instead of the 'default'
 
@@ -77,11 +72,17 @@ export default function Register() {
             setError('lettersN');
             return 0;
         }
-        users.push(newUser);
+        users.push({
+            username: registerUser,
+            nickname: registerNickname,
+            password: registerPassword,
+            picture: registerPicture.split('/').at(-1) == 'contactImage.webp' ? 'avatar' : registerPicture,
+        });
         contactsList.push({
-            username: newUser.username,
+            username: registerUser,
             contactsList: [],
         })
+
         return 1;
     }
 
@@ -147,28 +148,6 @@ export default function Register() {
     //         reader.readAsDataURL(this.files[0]);
     //     })
     // }
-
-    document.addEventListener("change", () => {
-        const img_input = document.getElementById("img_input");
-        if (img_input) {
-            var uploaded_image = "";
-            img_input.addEventListener("change", function () {
-                const reader = new FileReader();
-                document.getElementById("post-btn").addEventListener("click" , () => {
-                    var profile = document.getElementById("profile");
-                    profile.src = reader.result;
-                })
-                reader.addEventListener("load", () => {
-                    uploaded_image = reader.result;
-                    //var img = document.createElement("img");
-                    //img.src = uploaded_image;
-                    //document.getElementById("display_img").appendChild(img);
-                });
-                reader.readAsDataURL(this.files[0]);
-           })
-        }
-    })
-
     return (
         <>
             <form action="" className='cube center-form'>
@@ -176,7 +155,7 @@ export default function Register() {
                 <hr></hr>
                 {(error === 'existedUsername') ? (<div className="alert alert-danger">This username is already in use, please choose other name</div>) : ""}
                 {(error === 'passwordLength') ? (<div className="alert alert-danger">This password is too short, please choose password includes at least 4 character and not more than 20</div>) : ""}
-                {(error === 'differentPasswords') ? (<div className="alert alert-danger">The password and the varification password are different</div>) : ""}
+                {(error === 'differentPasswords') ? (<div className="alert alert-danger">The password and the varification password dont match</div>) : ""}
                 {(error === 'numbers') ? (<div className="alert alert-danger">The password should contain numbers too</div>) : ""}
                 {(error === 'lettersP') ? (<div className="alert alert-danger">The password should contain letters too</div>) : ""}
                 {(error === 'lettersU') ? (<div className="alert alert-danger">The username should contain letters too</div>) : ""}
@@ -200,32 +179,7 @@ export default function Register() {
                     </div>
                 </div>
             </form>
-            <div className="modal fade" id="addPicture-modal" tabIndex="-1" aria-hidden="true">
-                <div className="modal-dialog modal-dialog-centered">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title">Add new picture</h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-
-                        {/* <input type="file" id="the-photo-file-field"></input> */}
-                        <input type="file" id="img_input" accept="image/*"></input>
-                        {/* <div id="display_img" ></div> */}
-
-                        {/* <div id="preview"></div>
-                        <div id="data" className="large-8 columns">
-                            <p id="name"></p>
-                            <p id="size"></p>
-                            <p id="type"></p>
-                        </div> */}
-
-                        <div className="modal-footer">
-                            {/* onClick={() => AddNewPicture(setOpenChatCount)} */}
-                            <button id="post-btn" type="button" className="btn btn-primary" data-bs-dismiss="modal">Add now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <ProfileImageModal />
         </>
     )
 }

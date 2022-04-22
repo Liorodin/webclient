@@ -3,7 +3,6 @@ export const users = [
         username: 'shirinB',
         nickname: 'shirin bazis',
         password: 's12345',
-        // put the adress of the pic here
         picture: 'avatar',
     },
 
@@ -11,14 +10,14 @@ export const users = [
         username: 'leonardoR',
         nickname: 'leonardo rodin',
         password: 'l12345',
-        picture: 'default',
+        picture: 'avatar',
     },
 
     {
         username: 'aviS',
         nickname: 'avi sikirov',
         password: 'a12345',
-        picture: 'default',
+        picture: 'avatar',
     },
 
     {
