@@ -153,7 +153,6 @@ export default function UserView({ currentUser }) {
       {
         from: currentUser,
         type: 'picture',
-        //bytes of the pic
         content: picture.src,
         time: messageThis,
       }
@@ -165,24 +164,19 @@ export default function UserView({ currentUser }) {
 
 
   function postImageFunction() {
-    document.addEventListener("change", () => {
-      const img_input = document.getElementById("picture_input");
-      if (img_input) {
-        var uploaded_image = "";
-        img_input.addEventListener("change", function () {
-          const reader = new FileReader();
-          // document.getElementById('post-pic').addEventListener("click", () => {
-          //   sendPicture(currentUser, currentContact, setOpenChatCount, reader.result);
-          // })
-          reader.addEventListener("load", () => {
-            uploaded_image = reader.result;
-            var previewPic = document.getElementById('preview-post-pic');
-            previewPic.src = uploaded_image;
-          });
-          reader.readAsDataURL(this.files[0]);
-        })
-      }
-    })
+    const img_input = document.getElementById("picture_input");
+    if (img_input) {
+      var uploaded_image = "";
+      img_input.addEventListener("change", function () {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+          uploaded_image = reader.result;
+          var previewPic = document.getElementById('preview-post-pic');
+          previewPic.src = uploaded_image;
+        });
+        reader.readAsDataURL(this.files[0]);
+      })
+    }
   }
 
 
@@ -197,7 +191,6 @@ export default function UserView({ currentUser }) {
       {
         from: currentUser,
         type: 'video',
-        //bytes of the pic
         content: video.src,
         time: messageThis,
       }
@@ -207,7 +200,7 @@ export default function UserView({ currentUser }) {
     document.getElementById(currentContact).click();
   }
 
-  document.addEventListener("change", () => {
+  function postImageFunction() {
     const video_input = document.getElementById("video_input");
     if (video_input) {
       var url = "";
@@ -221,7 +214,7 @@ export default function UserView({ currentUser }) {
         });
       })
     }
-  })
+}
 
 
   const addFunctionality = () => {
@@ -367,7 +360,6 @@ export default function UserView({ currentUser }) {
                 postVoiceMessage(currentUser, currentContact, setOpenChatCount)
                 document.getElementById('trashCan').style.display = 'none';
               }}>Send</button>
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
           </div>
         </div>
@@ -382,7 +374,7 @@ export default function UserView({ currentUser }) {
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className='preview-pic-div'>
-              <img src={"contactImage.webp"} id="preview-post-pic" style={{ width: '150px', height: '150px', borderRadius: '50%' }} />
+              <img src={"contactImage.webp"} id="preview-post-pic" style={{ width: '150px', height: '150px' }} />
               <input type="file" id="picture_input" accept="image/*"></input>
             </div>
             <div className="modal-footer">
@@ -401,7 +393,7 @@ export default function UserView({ currentUser }) {
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className='preview-video-div'>
-              <video id="preview-post-video" style={{ width: '150px', height: '150px', borderRadius: '50%' }} />
+              <video id="preview-post-video" style={{ width: '150px', height: '150px' }} type="video/*" />
               <input type="file" id="video_input" accept="video/*"></input>
             </div>
             <div className="modal-footer">
