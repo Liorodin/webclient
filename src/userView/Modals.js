@@ -167,3 +167,46 @@ export function ChangeUserImageModal({ user, setter }) {
         </div>
     )
 }
+
+export function ChangeUserBackgroundModal({ user, setter }) {
+    const background_input = document.getElementById("background_input");
+    if (background_input) {
+        var uploaded_image = "";
+        background_input.addEventListener("change", function () {
+            const reader = new FileReader();
+            document.getElementById("change-btn").addEventListener("click", () => {
+                var wallpaper = document.getElementById("massage-box");
+                console.log(wallpaper.style.backgroundImage);
+                wallpaper.style.backgroundImage = reader.result;
+                setter(prevValue => !prevValue);
+            })
+            // reader.addEventListener("load", () => {
+            //     uploaded_image = reader.result;
+            //     var previewPic = document.getElementById('preview-pic');
+            //     previewPic.src = uploaded_image;
+            // });
+            reader.readAsDataURL(this.files[0]);
+        })
+    }
+    //var currentSrc = user.picture == 'avatar' ? "contactImage.webp" : user.picture;
+    return (
+        <div className="modal fade" id="changeBackground-modal" tabIndex="-1" aria-hidden="true">
+            <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title">Change background picture</h5>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div className='preview-pic-div'>
+                        {/* <img src={currentSrc} id="preview-pic" style={{ width: '150px', height: '150px', borderRadius: '50%' }} /> */}
+                        <input type="file" id="background_input" accept="image/*"></input>
+                    </div>
+                    <div className="modal-footer">
+                        <button id="change-btn" type="button" className="btn btn-primary" data-bs-dismiss="modal">Change</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+

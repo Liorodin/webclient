@@ -2,7 +2,7 @@ import React, { useState, useEffect, createElement } from 'react'
 import Contact, { GetProfilePic, GetContactMessages, GetUser } from './Contact'
 import { contactsList } from '../db/contactsList'
 import { messages } from '../db/messages';
-import { SettingsModal, AddContactModal, ChangeUserImageModal } from './Modals';
+import { SettingsModal, AddContactModal, ChangeUserImageModal, ChangeUserBackgroundModal } from './Modals';
 Element.prototype.setAttributes = function (obj) { for (var prop in obj) this.setAttribute(prop, obj[prop]) }
 
 const newContactMap = new Map();
@@ -305,11 +305,14 @@ export default function UserView({ currentUser }) {
           {getContacts(currentUser, currentContact, setCurrentContact)}
         </div>
       </div>
+
       <div className='contact-side'>
         {contactProfile(currentContact)}
-        <ol className="messages massage-box" id='massage-box'>
+        <ol className="messages massage-box" id='massage-box' data-bs-toggle="modal" data-bs-target="#changeBackground-modal">
           <div id='welcome'><span>Welcome to Shirin's and Leonardo's WebClient</span></div>
         </ol>
+        <ChangeUserBackgroundModal user={currentUser} setter={setCurrentContact} />
+
         <div id='bottom-bar'>
           <div id="chat-grid">
             <div id='chat-item1'>
