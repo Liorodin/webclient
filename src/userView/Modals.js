@@ -5,6 +5,16 @@ import { GetUser } from './Contact';
 export function SettingsModal() {
     let navigate = useNavigate();
 
+    document.addEventListener("input", () => {
+        if (document.getElementById('color1') && document.getElementById('color2')) {
+            var color1 = document.getElementById('color1').value;
+            var color2 = document.getElementById('color2').value;
+            document.documentElement.style.setProperty('--firstColor', color1);
+            document.documentElement.style.setProperty('--firstColorFaded', color1 + "AA");
+            document.documentElement.style.setProperty('--secondColor', color2);
+        }
+    });
+
     const logOut = () => {
         localStorage.setItem('currentUser', JSON.stringify('default user'));
         localStorage.setItem('currentContact', JSON.stringify(''));
@@ -81,10 +91,6 @@ export function AddContactModal({ AddNewContact, currentUser, setOpenChatCount }
             </div>
         </div>
     )
-}
-
-export function ChatFunctions() {
-
 }
 
 export function ProfileImageModal({ sorce = "contactImage.webp" }) {

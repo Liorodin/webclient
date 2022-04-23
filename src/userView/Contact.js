@@ -98,6 +98,49 @@ const getTime = (lastMessage) => {
     }
 }
 
+//shows last message content preview 
+const showPreview = (lastMessage) => {
+    if (lastMessage == null) {
+        return;
+    }
+    if (lastMessage.type == 'text') {
+        return lastMessage.content;
+    }
+    else if (lastMessage.type == 'picture') {
+        <div>
+            <svg style={{ marginRight: '5px' }} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-image" viewBox="0 0 16 16">
+                <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z" />
+            </svg>
+            Photo
+        </div>
+    }
+    else if (lastMessage.type == 'audio') {
+        return (
+            <div>
+                <svg style={{ marginRight: '5px' }} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-mic" viewBox="0 0 16 16">
+                    <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
+                    <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z" />
+                </svg>
+                Audio
+            </div>
+        )
+    }
+    else if (lastMessage.type.startsWith('video/')) {
+        return (
+            <div>
+                <svg style={{ marginRight: '5px' }} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-camera-reels" viewBox="0 0 16 16">
+                    <path d="M6 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM1 3a2 2 0 1 0 4 0 2 2 0 0 0-4 0z" />
+                    <path d="M9 6h.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 7.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 16H2a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h7zm6 8.73V7.27l-3.5 1.555v4.35l3.5 1.556zM1 8v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1z" />
+                    <path d="M9 6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM7 3a2 2 0 1 1 4 0 2 2 0 0 1-4 0z" />
+                </svg>
+                Video
+            </div>
+        )
+    }
+    return 'Error not'
+}
+
 export default function Contact({ name, currentContact, displayNameSetter }) {
     const contact = GetUser(name);
     //gets current logged user
@@ -106,47 +149,6 @@ export default function Contact({ name, currentContact, displayNameSetter }) {
     const contactMessages = GetContactMessages(myUserName, name);
     //state of last message
     const lastMessage = contactMessages.at(-1);
-    //shows last message content preview 
-    const showPreview = () => {
-        if (lastMessage == null) {
-            return;
-        }
-        if (lastMessage.type == 'text') {
-            return lastMessage.content;
-        }
-        else if (lastMessage.type == 'picture') {
-            <div>
-                <svg style={{ marginRight: '5px' }} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-image" viewBox="0 0 16 16">
-                    <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
-                    <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z" />
-                </svg>
-                Photo
-            </div>
-        }
-        else if (lastMessage.type == 'audio') {
-            return (
-                <div>
-                    <svg style={{ marginRight: '5px' }} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-mic" viewBox="0 0 16 16">
-                        <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
-                        <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z" />
-                    </svg>
-                    Audio
-                </div>
-            )
-        }
-        else if (lastMessage.type == 'video') {
-            return (
-                <div>
-                    <svg style={{ marginRight: '5px' }} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-camera-reels" viewBox="0 0 16 16">
-                        <path d="M6 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM1 3a2 2 0 1 0 4 0 2 2 0 0 0-4 0z" />
-                        <path d="M9 6h.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 7.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 16H2a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h7zm6 8.73V7.27l-3.5 1.555v4.35l3.5 1.556zM1 8v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1z" />
-                        <path d="M9 6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM7 3a2 2 0 1 1 4 0 2 2 0 0 1-4 0z" />
-                    </svg>
-                    Video
-                </div>
-            )
-        }
-    }
     //shows chat on display
     const enterContactChat = () => {
         //updates cuurent contact name on display
@@ -179,8 +181,6 @@ export default function Contact({ name, currentContact, displayNameSetter }) {
             else if (contactMessages[i].type == 'picture') {
                 var pic = document.createElement('img');
                 pic.src = contactMessages[i].content;
-                pic.style.width = '200px';
-                pic.style.height = '200px';
                 newLi.appendChild(pic);
             }
             else if (contactMessages[i].type == 'audio') {
@@ -193,20 +193,12 @@ export default function Contact({ name, currentContact, displayNameSetter }) {
             }
             else if (contactMessages[i].type.startsWith('video/')) {
                 var video = document.createElement('video');
-                video.style.width = '200px';
-                video.style.height = '200px';
                 video.controls = true;
-                var source = document.createElement('source');
-                source.src = contactMessages[i].content;
-                source.type = contactMessages[i].type;
-                video.appendChild(source);
+                video.src = contactMessages[i].content;
                 newLi.appendChild(video);
             }
-            newTimeDiv.appendChild(document.createTextNode((new Date(contactMessages[i].time)).toLocaleTimeString('en-GB',
-                {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                })));
+            newTimeDiv.appendChild(document.createTextNode((new Date(contactMessages[i].time))
+                .toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', })));
             newLi.appendChild(newTimeDiv);
             box.appendChild(newLi);
         }
@@ -225,9 +217,9 @@ export default function Contact({ name, currentContact, displayNameSetter }) {
             }}>
             {GetProfilePic(contact)}
             <div className='name'>{contact.nickname}</div>
-            <div className='preview'>{showPreview()}</div>
+            <div className='preview'>{showPreview(lastMessage)}</div>
             <div className='time'>{getTime(lastMessage)}</div>
-            <hr></hr>
+            <hr />
         </div>
     )
 }
