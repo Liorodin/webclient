@@ -2,9 +2,7 @@ import React, { useState, useEffect, createElement } from 'react'
 import Contact, { GetProfilePic, GetContactMessages, GetUser } from './Contact'
 import { contactsList } from '../db/contactsList'
 import { messages } from '../db/messages';
-import { SettingsModal, AddContactModal } from './Modals';
-import $ from 'jquery';
-
+import { SettingsModal, AddContactModal, ChangeUserImageModal } from './Modals';
 Element.prototype.setAttributes = function (obj) { for (var prop in obj) this.setAttribute(prop, obj[prop]) }
 
 const newContactMap = new Map();
@@ -85,66 +83,14 @@ const AddNewContact = (currentUser, newContact, setter) => {
   }
 }
 
-///////////////////
-function changeProfileFunction(user) {
-    const profile_input = document.getElementById("profile_input");
-    if (profile_input) {
-      var uploaded_profile = "";
-      profile_input.addEventListener("change", function () {
-        const reader = new FileReader();
-        document.getElementById("post-profile-btn").addEventListener("click", () => {
-          var new_profile= createElement('img');
-          new_profile.src = reader.result;
-          user.picture = new_profile;
-          //<img id="profile-pic" src={reader.result} data-bs-toggle="modal" data-bs-target="#changeProfile-modal" />;
-          //
-          var profile = document.getElementById("profile-pic");
-          profile.src = reader.result;
-        })
-        var previewPic = document.getElementById('preview-profile');
-        previewPic.addEventListener("change", function () {
-        <img id="profile-pic" src={reader.result} data-bs-toggle="modal" data-bs-target="#changeProfile-modal" />;
-        // reader.addEventListener("load", () => {
-        //   uploaded_profile = reader.result;
-        //   var previewPic = document.getElementById('preview-profile');
-        //  // previewPic.src = uploaded_profile;
-        // });
-        reader.readAsDataURL(this.files[0]);
-      })
-    })
-  }
-}
-
-////////////////
-const userProfile = (name) => {
-  const user = GetUser(name);
+const userProfile = (name, setter) => {
+  const loggedUser = GetUser(name);
   return (
     <div className='user-profile'>
-      {/* <img id="profile-pic" src={GetProfilePic(user)} data-bs-toggle="modal" data-bs-target="#changeProfile-modal" /> */}
-      {GetProfilePic(user)}
-
-      {/* changing profile picture */}
-      <div className="modal fade" id="changeProfile-modal" tabIndex="-1" aria-hidden="true">
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Change profile picture</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div className='preview-profile-div'>
-              {/* <img src={user.picture} id="preview-profile" style={{ width: '150px', height: '150px', borderRadius: '50%' }} /> */}
-              <div className='preview-profile'>{GetProfilePic(user)}</div>
-              <input type="file" id="profile_input" accept="image/*"></input>
-            </div>
-            <div className="modal-footer">
-              <button id="post-profile-btn" type="button" className="btn btn-primary" data-bs-dismiss="modal">Done</button>
-            </div>
-          </div>
-        </div>
+      <div data-bs-toggle="modal" data-bs-target="#addPicture-modal">
+        {GetProfilePic(loggedUser)}
       </div>
-
-      {changeProfileFunction(user)}
-      <div id='user-fullName'>{user.nickname}</div>
+      <div id='user-fullName'>{loggedUser.nickname}</div>
       <div className='new-contact-btn'>
         <svg xmlns="http://www.w3.org/2000/svg"
           onClick={() => {
@@ -157,6 +103,7 @@ const userProfile = (name) => {
           <path fillRule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
         </svg>
       </div>
+      <ChangeUserImageModal user={loggedUser} setter={setter} />
     </div>
   )
 }
@@ -345,7 +292,6 @@ export default function UserView({ currentUser }) {
           mediaRecorder.stream.getTracks().forEach(track => track.stop());
         }
       })
-
     }
   }
 
@@ -353,7 +299,7 @@ export default function UserView({ currentUser }) {
   return (
     <div className='container'>
       <div className='user-side'>
-        <div className='user-side-top'>{userProfile(currentUser)}</div>
+        <div className='user-side-top'>{userProfile(currentUser, setOpenChatCount)}</div>
         <div id='contact-box'>
           {/* <div className='space'></div> */}
           {getContacts(currentUser, currentContact, setCurrentContact)}
