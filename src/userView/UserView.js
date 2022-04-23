@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Contact, { GetProfilePic, GetContactMessages, GetUser } from './Contact'
 import { contactsList } from '../db/contactsList'
 import { messages } from '../db/messages';
-import { SettingsModal, AddContactModal } from './Modals';
-import $ from 'jquery';
-
+import { SettingsModal, AddContactModal, ChangeUserImageModal } from './Modals';
 Element.prototype.setAttributes = function (obj) { for (var prop in obj) this.setAttribute(prop, obj[prop]) }
 
 const newContactMap = new Map();
@@ -85,12 +83,14 @@ const AddNewContact = (currentUser, newContact, setter) => {
   }
 }
 
-const userProfile = (name) => {
-  const user = GetUser(name);
+const userProfile = (name, setter) => {
+  const loggedUser = GetUser(name);
   return (
     <div className='user-profile'>
-      {GetProfilePic(user)}
-      <div id='user-fullName'>{user.nickname}</div>
+      <div data-bs-toggle="modal" data-bs-target="#addPicture-modal">
+        {GetProfilePic(loggedUser)}
+      </div>
+      <div id='user-fullName'>{loggedUser.nickname}</div>
       <div className='new-contact-btn'>
         <svg xmlns="http://www.w3.org/2000/svg"
           onClick={() => {
@@ -103,6 +103,7 @@ const userProfile = (name) => {
           <path fillRule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
         </svg>
       </div>
+      <ChangeUserImageModal user={loggedUser} setter={setter} />
     </div>
   )
 }
@@ -291,7 +292,6 @@ export default function UserView({ currentUser }) {
           mediaRecorder.stream.getTracks().forEach(track => track.stop());
         }
       })
-
     }
   }
 
@@ -299,7 +299,7 @@ export default function UserView({ currentUser }) {
   return (
     <div className='container'>
       <div className='user-side'>
-        <div className='user-side-top'>{userProfile(currentUser)}</div>
+        <div className='user-side-top'>{userProfile(currentUser, setOpenChatCount)}</div>
         <div id='contact-box'>
           {/* <div className='space'></div> */}
           {getContacts(currentUser, currentContact, setCurrentContact)}
