@@ -160,6 +160,57 @@ export default function UserView({ currentUser }) {
       }
     );
     checkOpenChat(currentUser, currentContact);
+    document.getElementById('picture_input').value = '';
+    picture.src = '';
+    picture.style.display = 'none';
+    setter(prevValue => !prevValue);
+    document.getElementById(currentContact).click();
+  }
+
+
+  const postVideoMessage = (currentUser, currentContact, setter) => {
+    var video = document.getElementById('vid-source');
+    if (null === video) {
+      return;
+    }
+    var messageThis = (new Date).getTime();
+    GetContactMessages(currentUser, currentContact).push(
+      {
+        from: currentUser,
+        type: video.type,
+        content: video.src,
+        time: messageThis,
+      }
+    );
+    checkOpenChat(currentUser, currentContact);
+    document.getElementById('video_input').value = '';
+    video.src = '';
+    video.type = '';
+    var previewVideo = document.getElementById('preview-post-video');
+    previewVideo.appendChild(video);
+    previewVideo.style.display = 'none';
+    setter(prevValue => !prevValue);
+    document.getElementById(currentContact).click();
+  }
+
+
+  const postVoiceMessage = (currentUser, currentContact, setter) => {
+    var audioMessage = document.getElementById('audio');
+    if (null === audioMessage) {
+      return;
+    }
+    var messageThis = (new Date).getTime();
+    GetContactMessages(currentUser, currentContact).push(
+      {
+        from: currentUser,
+        type: 'audio',
+        content: audioMessage.src,
+        time: messageThis,
+      }
+    );
+    checkOpenChat(currentUser, currentContact);
+    document.getElementById('recording-output').innerHTML = '';
+    document.getElementById('saved-record').innerHTML = '';
     setter(prevValue => !prevValue);
     document.getElementById(currentContact).click();
   }
@@ -175,6 +226,8 @@ export default function UserView({ currentUser }) {
           uploaded_image = reader.result;
           var previewPic = document.getElementById('preview-post-pic');
           previewPic.src = uploaded_image;
+          previewPic.style.display = 'block';
+
         });
         reader.readAsDataURL(this.files[0]);
       })
@@ -182,45 +235,29 @@ export default function UserView({ currentUser }) {
   }
 
 
-  const postVideoMessage = (currentUser, currentContact, setter) => {
-    var video = document.getElementById('preview-post-video');
-    console.log(video.src);
-    if (null === video) {
-      return;
-    }
-    var messageThis = (new Date).getTime();
-    GetContactMessages(currentUser, currentContact).push(
-      {
-        from: currentUser,
-        type: 'video',
-        //bytes of the pic
-        content: video.src,
-        time: messageThis,
-      }
-    );
-    checkOpenChat(currentUser, currentContact);
-    setter(prevValue => !prevValue);
-    document.getElementById(currentContact).click();
-  }
 
-  document.addEventListener("change", () => {
+  function postVideoFunction() {
     const video_input = document.getElementById("video_input");
     if (video_input) {
       var url = "";
       video_input.addEventListener("change", function () {
         const reader = new FileReader();
-        reader.readAsDataURL(this.files[0]);
         reader.addEventListener("load", () => {
           url = reader.result;
-          var previewVideo = document.getElementById('preview-post-video');
-          previewVideo.src = url;
+          var video = document.getElementById('preview-post-video');
+          var source = document.getElementById('vid-source');
+          source.type = this.files[0].type;
+          source.src = url;
+          video.appendChild(source);
+          video.style.display = 'block';
         });
+        reader.readAsDataURL(this.files[0]);
       })
     }
-  })
+  }
 
 
-  const addFunctionality = () => {
+  const postVoiceFunction = () => {
     document.getElementById('start').onclick = () => {
       document.getElementById('start').style.display = 'none';
       document.getElementById('stop').style.display = 'block';
@@ -258,26 +295,6 @@ export default function UserView({ currentUser }) {
     }
   }
 
-  const postVoiceMessage = (currentUser, currentContact, setter) => {
-    var audioMessage = document.getElementById('audio');
-    if (null === audioMessage) {
-      return;
-    }
-    var messageThis = (new Date).getTime();
-    GetContactMessages(currentUser, currentContact).push(
-      {
-        from: currentUser,
-        type: 'audio',
-        content: audioMessage.src,
-        time: messageThis,
-      }
-    );
-    checkOpenChat(currentUser, currentContact);
-    document.getElementById('recording-output').innerHTML = '';
-    document.getElementById('saved-record').innerHTML = '';
-    setter(prevValue => !prevValue);
-    document.getElementById(currentContact).click();
-  }
 
   return (
     <div className='container'>
@@ -301,12 +318,12 @@ export default function UserView({ currentUser }) {
                   <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1v6zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2z" />
                   <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
                 </svg></a>
-                <a data-bs-toggle="modal" data-bs-target="#addVideo-modal"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-camera-reels" viewBox="0 0 16 16">
+                <a onClick={postVideoFunction} data-bs-toggle="modal" data-bs-target="#addVideo-modal"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-camera-reels" viewBox="0 0 16 16">
                   <path d="M6 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM1 3a2 2 0 1 0 4 0 2 2 0 0 0-4 0z" />
                   <path d="M9 6h.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 7.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 16H2a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h7zm6 8.73V7.27l-3.5 1.555v4.35l3.5 1.556zM1 8v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1z" />
                   <path d="M9 6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM7 3a2 2 0 1 1 4 0 2 2 0 0 1-4 0z" />
                 </svg></a>
-                <a onClick={addFunctionality} data-bs-toggle="modal" data-bs-target="#addVoice-modal"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-mic" viewBox="0 0 16 16">
+                <a onClick={postVoiceFunction} data-bs-toggle="modal" data-bs-target="#addVoice-modal"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-mic" viewBox="0 0 16 16">
                   <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
                   <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z" />
                 </svg></a>
@@ -358,11 +375,10 @@ export default function UserView({ currentUser }) {
               </div>
             </div>
             <div className="modal-footer">
-              <button id='post-record-btn' type="button" className="btn btn-primary" onClick={() => {
+              <button id='post-record-btn' type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => {
                 postVoiceMessage(currentUser, currentContact, setOpenChatCount)
                 document.getElementById('trashCan').style.display = 'none';
               }}>Send</button>
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
           </div>
         </div>
@@ -377,11 +393,12 @@ export default function UserView({ currentUser }) {
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className='preview-pic-div'>
-              <img src={"contactImage.webp"} id="preview-post-pic" style={{ width: '150px', height: '150px', borderRadius: '50%' }} />
+              <img id="preview-post-pic" style={{ width: '200px', height: '200px', display: 'none' }} />
               <input type="file" id="picture_input" accept="image/*"></input>
             </div>
             <div className="modal-footer">
-              <button id='post-pic' type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => postPictureMessage(currentUser, currentContact, setOpenChatCount)} >Send</button>
+              <button id='post-pic' type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() =>
+                postPictureMessage(currentUser, currentContact, setOpenChatCount)} >Send</button>
             </div>
           </div>
         </div>
@@ -395,12 +412,21 @@ export default function UserView({ currentUser }) {
               <h5 className="modal-title">Send video</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div className='preview-video-div'>
-              <video id="preview-post-video" style={{ width: '150px', height: '150px', borderRadius: '50%' }} />
+            <div id='preview-video-div' className="large-8 columns">
+              <video id="preview-post-video" style={{ width: '200px', height: '200px', display: 'none' }} controls>
+                <source id='vid-source' />
+              </video>
               <input type="file" id="video_input" accept="video/*"></input>
             </div>
             <div className="modal-footer">
-              <button id='post-video' type="button" className="btn btn-primary" onClick={() => postVideoMessage(currentUser, currentContact, setOpenChatCount)}>Send</button>
+              <button id='post-video' type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => {
+                postVideoMessage(currentUser, currentContact, setOpenChatCount)
+                // document.getElementById('video_input').value = '';
+                // document.getElementById('vid-source').src = '';
+                // document.getElementById('vid-source').type = '';
+                // var previewVideo = document.getElementById('preview-post-video');
+                // previewVideo.appendChild(document.getElementById('vid-source'));
+              }}>Send</button>
             </div>
           </div>
         </div>
