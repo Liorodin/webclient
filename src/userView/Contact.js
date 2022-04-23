@@ -88,7 +88,6 @@ const getTime = (lastMessage) => {
         return '6 days ago'
     }
     else if (difference < day * 14) {
-        console.log(difference)
         return 'a week ago'
     }
     else if (difference < day * 31) {
@@ -178,8 +177,10 @@ export default function Contact({ name, currentContact, displayNameSetter }) {
                 newLi.appendChild(document.createTextNode(contactMessages[i].content));
             }
             else if (contactMessages[i].type == 'picture') {
-                var pic= document.createElement('img');
-                pic.src= contactMessages[i].content;
+                var pic = document.createElement('img');
+                pic.src = contactMessages[i].content;
+                pic.style.width = '200px';
+                pic.style.height = '200px';
                 newLi.appendChild(pic);
             }
             else if (contactMessages[i].type == 'audio') {
@@ -190,9 +191,15 @@ export default function Contact({ name, currentContact, displayNameSetter }) {
                 audio.src = contactMessages[i].content;
                 newLi.appendChild(audio);
             }
-            else if (contactMessages[i].type == 'video') {
-                var video= document.createElement('video');
-                video.src= contactMessages[i].content;
+            else if (contactMessages[i].type.startsWith('video/')) {
+                var video = document.createElement('video');
+                video.style.width = '200px';
+                video.style.height = '200px';
+                video.controls = true;
+                var source = document.createElement('source');
+                source.src = contactMessages[i].content;
+                source.type = contactMessages[i].type;
+                video.appendChild(source);
                 newLi.appendChild(video);
             }
             newTimeDiv.appendChild(document.createTextNode((new Date(contactMessages[i].time)).toLocaleTimeString('en-GB',

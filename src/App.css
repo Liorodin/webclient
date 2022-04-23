@@ -412,6 +412,7 @@ hr {
   color: black;
   display: block;
   padding: 10px;
+  cursor: pointer;
 }
 
 /* Change color of dropup links on hover */
@@ -551,7 +552,7 @@ audio {
   border-radius: 30px;
 }
 
-.preview-pic-div {
+/* .preview-pic-div {
   margin-top: 20px;
   margin-bottom: 20px;
   width: 100%;
@@ -560,4 +561,4 @@ audio {
   align-items: center;
   justify-content: space-between;
   flex-direction: column;
-}
+} */
