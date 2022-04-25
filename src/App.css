@@ -2,6 +2,7 @@
   --firstColor: #E73C7E;
   --firstColorFaded: #E73C7ECC;
   --secondColor: #EE7752;
+  --secondColorFaded: #EE7752CC;
   --niceWhite: #F9FBFF;
 }
 
@@ -55,10 +56,6 @@ img {
   height: 40px;
 }
 
-/* div .row .mb-3 {
-  position: relative;
-} */
-
 .messages {
   display: flex;
   flex-direction: column;
@@ -73,7 +70,7 @@ img {
 }
 
 .messages li {
-  background: var(--niceWhite);
+  background: var(--secondColorFaded);
   border-radius: 8px;
   padding: 8px;
   margin: 2px 8px 2px 0;
@@ -281,7 +278,7 @@ hr {
   background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
 }
 
-.messages#massage-box {
+#massage-box {
   background-image: url(../public/app.webp);
   background-size: 400px;
   border-style: solid;

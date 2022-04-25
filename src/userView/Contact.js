@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React from 'react'
 import { messages } from '../db/messages';
 import { users } from '../db/users';
 
@@ -6,9 +6,9 @@ export function GetProfilePic(user) {
     switch (user.picture) {
         // case the user gives a picture
         case 'avatar':
-            return <div className="avatar">{user.nickname[0].toUpperCase()}</div>;
+            return <div id="profile-pic" className="avatar" data-bs-toggle="modal" data-bs-target="#changeProfile-modal">{user.nickname[0].toUpperCase()}</div>;
         default:
-            return <img src={user.picture} />;
+            return <img id="profile-pic" src={user.picture} data-bs-toggle="modal" data-bs-target="#changeProfile-modal" />;
     }
 }
 

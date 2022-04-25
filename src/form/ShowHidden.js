@@ -1,4 +1,3 @@
-import React from 'react'
 
 export default function ShowHidden() {
     var flag = 1;

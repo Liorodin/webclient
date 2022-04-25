@@ -7,9 +7,6 @@ import { users } from '../db/users';
 import { contactsList } from '../db/contactsList';
 import { ProfileImageModal } from '../userView/Modals'
 
-{/* <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js">
-</script> */}
-
 
 export default function Register() {
     const [error, setError] = useState("");
@@ -33,10 +30,7 @@ export default function Register() {
         var registerPassword = document.getElementById("Password").value;
         var registerPasswordVerification = document.getElementById("Password Verification").value;
         var registerPicture = document.getElementById("profile").src;
-        //////////////////////////////////////
-        // if the user gives a picture, put adress instead of the 'default'
 
-        var hiddenElements1 = document.getElementsByClassName('hidden1');
         // show the errors in the invalid cases
         for (var j = 0; j < users.length; j++) {
             if (registerUser == users[j].username) {
@@ -86,68 +80,6 @@ export default function Register() {
         return 1;
     }
 
-
-
-    // function humanFileSize(bytes, si) {
-    //     var thresh = si ? 1000 : 1024;
-    //     if (bytes < thresh) return bytes + " B";
-    //     var units = si
-    //         ? ["kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
-    //         : ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
-    //     var u = -1;
-    //     do {
-    //         bytes /= thresh;
-    //         ++u;
-    //     } while (bytes >= thresh);
-    //     return bytes.toFixed(1) + " " + units[u];
-    // }
-
-    //this function is called when the input loads an image
-    // function renderImage(file) {
-    //     var reader = new FileReader();
-    //     reader.onload = function (event) {
-    //         var the_url = event.target.result;
-    //         $("#preview").html("<img src='" + the_url + "' />");
-    //         $("#name").html(file.name);
-    //         $("#size").html(humanFileSize(file.size, "MB"));
-    //         $("#type").html(file.type);
-    //         $("#post-btn").click(function () {
-    //             var img = document.getElementById("profile");
-    //             img.src = the_url;
-    //             //$("#img").src(the_url);
-    //         });
-    //     };
-    //     //when the file is read it triggers the onload event above.
-    //     reader.readAsDataURL(file);
-    // }
-
-    //watch for change on the file field
-    // $(document.body).delegate("#the-photo-file-field", "change", function() {
-    //     console.log("photo file has been chosen");
-    //     //grab the first image in the fileList (there is only one)        
-    //     console.log(this.files[0].size);
-    //     renderImage(this.files[0]);
-    //     //AddNewPicture(this.files[0]);
-    // });
-
-    // const img_input = document.getElementById("img_input");
-    // if (img_input) {
-    //     console.log("hhhh");
-    //     var uploaded_image = "";
-
-    //     img_input.addEventListener("change", function () {
-    //         const reader = new FileReader();
-    //         reader.addEventListener("load", () => {
-    //             uploaded_image = reader.result;
-    //             var img=document.createElement("img");
-    //             img.src= uploaded_image;
-    //             console.log(uploaded_image);
-    //             document.getElementById("display_img").appendChild(img);
-    //             // document.querySelector("#display_img").backgroundImage = 'url';
-    //         });
-    //         reader.readAsDataURL(this.files[0]);
-    //     })
-    // }
     return (
         <>
             <form action="" className='cube center-form'>

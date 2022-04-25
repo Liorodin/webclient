@@ -12,7 +12,6 @@ export default function Login({ setCurrentUser }) {
         ResetHidden();
         // if you managed to login
         if (ShowHidden()) {
-            // window.location.href = "avi.html";
             var userName = document.getElementById('Username').value;
             var password = document.getElementById('Password').value;
             users.map(user => {

@@ -23,10 +23,26 @@ export function SettingsModal() {
         document.documentElement.style.setProperty('--firstColor', '#E73C7E');
         document.documentElement.style.setProperty('--firstColorFaded', '#E73C7EAA');
         document.documentElement.style.setProperty('--secondColor', '#EE7752');
+        document.documentElement.style.setProperty('--secondColorFaded', '#EE7752CC');
+        document.getElementById("massage-box").style.backgroundImage = "url('app.webp')";
+        document.getElementById('background_input').value = '';
+
     }
+
+    const background_input = document.getElementById("background_input");
+    if (background_input) {
+        background_input.addEventListener("change", function () {
+            const reader = new FileReader();
+            reader.addEventListener("load", () => {
+                document.getElementById("massage-box").style.backgroundImage = "url(" + reader.result + ")";
+            });
+            reader.readAsDataURL(this.files[0]);
+        })
+    }
+
     return (
         <div className="modal fade" id="settings-modal" tabIndex="-1" aria-hidden="true">
-            <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-dialog modal-dialog-centered modal-lg">
                 <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title">Settings</h5>
@@ -38,10 +54,15 @@ export function SettingsModal() {
                         <input id="color2" type="color" name="color2" defaultValue="#EE7752" />
                     </div>
 
+                    <div className="modal-background">
+                        <label>Change your chats background:</label>
+                        <input type="file" id="background_input" accept="image/*"></input>
+                    </div>
+
                     <div className="modal-footer center">
                         <button type="button" onClick={resetSettings} className="btn btn-secondary" data-bs-dismiss="modal">Reset settings</button>
                         <button type="button" onClick={logOut} className="btn btn-secondary" data-bs-dismiss="modal">Log out</button>
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Save</button>
                     </div>
                 </div>
             </div>
