@@ -1,6 +1,5 @@
 import React from 'react'
 import { useNavigate } from "react-router-dom";
-import { GetUser } from './Contact';
 
 export function SettingsModal() {
     let navigate = useNavigate();
@@ -142,6 +141,7 @@ export function ChangeUserImageModal({ user, setter }) {
             const reader = new FileReader();
             document.getElementById("post-img-btn").addEventListener("click", () => {
                 user.picture = reader.result;
+                img_input.value = '';
                 setter(prevValue => !prevValue);
             })
             reader.addEventListener("load", () => {

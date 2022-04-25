@@ -263,11 +263,6 @@ img {
   color: rgb(54, 52, 52);
 }
 
-/* .space {
-  background-color: grey;
-  height: 20px;
-} */
-
 .contact {
   height: 75px;
   margin-bottom: 0.5px;
@@ -356,7 +351,10 @@ hr {
   cursor: pointer;
 }
 
-#chat {
+#chat,
+#post-photo,
+#retake-photo,
+#stop-record-video {
   display: none;
 }
 
@@ -558,18 +556,23 @@ audio {
   flex-direction: column;
 }
 
-.massage-box li img,
-.preview-pic-div img {
-  width: 400px;
-  height: 320px;
-}
-
 .massage-box li video,
-#preview-video-div video {
-  width: 400px;
-  height: 320px;
+.massage-box li img,
+#preview-video-div video,
+.preview-pic-div img,
+#camera-canvas,
+#camera-mode,
+#camera-zone video {
+  width: 360px;
+  height: 270px;
 }
 
-.pic img {
+video .pic img {
   border-radius: 50%;
+}
+
+.flex-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
