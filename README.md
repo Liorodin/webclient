@@ -1,12 +1,15 @@
-# Getting Started with Create React App
+# Shirin and Leonardo's Webclient
+Shirin Bazis 211492970\
+Leonardo Rodin 207377151
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Instructions:
 
-## Available Scripts
+In the project directory, you should:
 
-In the project directory, you can run:
+### `1. Run npm install`
 
-### `npm start`
+
+### `2. Run npm start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
@@ -14,57 +17,40 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### `3. Log in`
 
-### `npm run build`
+Log in with the following details:\
+Username: hemiL\
+Password: h12345
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### `4. Start chatting!`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+In the left side of the screen you can see your contact list, with your recent messages and their time.\
+On the top of the contact list, you can see your nickname ("hemi hemi hemi") and your profile photo.\
+If you click on a certain contact, you can see your chat with him on the right side of the screen.\
+You can switch between the contacts and see differend kinds of recent messages such as: picture, video, record and text in both English and Hebrew ;)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+In addition, we have *bonus* featers as described below:
+- You can change your profile photo by clicking on it.
+- You can both take a picture of yourself and record a video of yourself on live, by clicking on the camera icon and send it!
+- You can click on the settings icon on the bottom left corner of the screen and then you have several options:
+   1. Change the 2 color theme of the website.
+   2. Change the chat's background by picking another picture on your PC.
+   3. Reset to the website's default settings.
+   4. Log out to the Log in page.
+ 
+ ### `Available users list:`
+ 
+ 1. shirinB     s12345
+ 2. leonardoR   l12345
+ 3. aviS        a12345
+ 4. kehatS      k12345
+ 5. noamC       n12345
+ 6. hemiL       h12345
+ 
+ 
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
