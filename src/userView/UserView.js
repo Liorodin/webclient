@@ -2,8 +2,7 @@ import React, { useState, useEffect, createElement } from 'react'
 import Contact, { GetProfilePic, GetContactMessages, GetUser } from './Contact'
 import { contactsList } from '../db/contactsList'
 import { messages } from '../db/messages';
-import { SettingsModal, AddContactModal, ChangeUserImageModal, ChangeUserBackgroundModal } from './Modals';
-Element.prototype.setAttributes = function (obj) { for (var prop in obj) this.setAttribute(prop, obj[prop]) }
+import { SettingsModal, AddContactModal, ChangeUserImageModal } from './Modals';
 
 const newContactMap = new Map();
 const checkOpenChat = (currentUser, currentContact) => {
@@ -21,7 +20,7 @@ const checkOpenChat = (currentUser, currentContact) => {
   }
 }
 
-const postMessage = (currentUser, currentContact, setter) => {
+const postTextMessage = (currentUser, currentContact, setter) => {
   var message = document.getElementById('post-message');
   if (message.value.length == 0) {
     return;
@@ -39,6 +38,142 @@ const postMessage = (currentUser, currentContact, setter) => {
   message.value = '';
   setter(prevValue => !prevValue);
   document.getElementById(currentContact).click();
+}
+
+const postPictureMessage = (currentUser, currentContact, setter) => {
+  var picture = document.getElementById('preview-post-pic');
+  if (null === picture) {
+    return;
+  }
+  var messageThis = (new Date).getTime();
+  GetContactMessages(currentUser, currentContact).push(
+    {
+      from: currentUser,
+      type: 'picture',
+      content: picture.src,
+      time: messageThis,
+    }
+  );
+  checkOpenChat(currentUser, currentContact);
+  document.getElementById('picture_input').value = '';
+  picture.src = '';
+  picture.style.display = 'none';
+  setter(prevValue => !prevValue);
+  document.getElementById(currentContact).click();
+}
+
+const postVideoMessage = (currentUser, currentContact, setter) => {
+  var video = document.getElementById('preview-post-video');
+  if (null === video) {
+    return;
+  }
+  var messageThis = (new Date).getTime();
+  GetContactMessages(currentUser, currentContact).push(
+    {
+      from: currentUser,
+      type: video.type,
+      content: video.src,
+      time: messageThis,
+    }
+  );
+  checkOpenChat(currentUser, currentContact);
+  setter(prevValue => !prevValue);
+  video.style.display = 'none';
+  document.getElementById("video_input").value = '';
+  document.getElementById(currentContact).click();
+}
+
+const postVoiceMessage = (currentUser, currentContact, setter) => {
+  var audioMessage = document.getElementById('audio');
+  if (null === audioMessage) {
+    return;
+  }
+  var messageThis = (new Date).getTime();
+  GetContactMessages(currentUser, currentContact).push(
+    {
+      from: currentUser,
+      type: 'audio',
+      content: audioMessage.src,
+      time: messageThis,
+    }
+  );
+  checkOpenChat(currentUser, currentContact);
+  document.getElementById('recording-output').innerHTML = '';
+  document.getElementById('saved-record').innerHTML = '';
+  setter(prevValue => !prevValue);
+  document.getElementById(currentContact).click();
+}
+
+function postImageFunction() {
+  const img_input = document.getElementById("picture_input");
+  if (img_input) {
+    var uploaded_image = "";
+    img_input.addEventListener("change", function () {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        uploaded_image = reader.result;
+        var previewPic = document.getElementById('preview-post-pic');
+        previewPic.src = uploaded_image;
+        previewPic.style.display = 'block';
+
+      });
+      reader.readAsDataURL(this.files[0]);
+    })
+  }
+}
+
+function postVideoFunction() {
+  const video_input = document.getElementById("video_input");
+  if (video_input) {
+    video_input.addEventListener("change", function () {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        var video = document.getElementById('preview-post-video');
+        video.type = this.files[0].type;
+        video.src = reader.result;
+        video.style.display = 'block';
+      });
+      reader.readAsDataURL(this.files[0]);
+    })
+  }
+}
+
+const postVoiceFunction = () => {
+  document.getElementById('start').onclick = () => {
+    document.getElementById('start').style.display = 'none';
+    document.getElementById('stop').style.display = 'block';
+    var output = document.getElementById('recording-output');
+    var saved = document.getElementById('saved-record');
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+      output.innerHTML = '';
+      saved.innerHTML = '';
+      output.appendChild(document.createTextNode('recording...'))
+      document.getElementById('trashCan').style.display = 'none';
+      var mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.start();
+      var chuck = [];
+      mediaRecorder.addEventListener("dataavailable", e => {
+        chuck.push(e.data);
+      });
+      mediaRecorder.addEventListener("stop", () => {
+        var blob = new Blob(chuck);
+        var audioURL = URL.createObjectURL(blob);
+        var audio = new Audio(audioURL);
+        audio.id = 'audio'
+        audio.setAttribute("controls", 1);
+        output.innerHTML = '';
+        output.appendChild(document.createTextNode('saved recording'))
+        document.getElementById('saved-record').appendChild(audio);
+        document.getElementById('trashCan').style.display = 'block';
+      });
+      document.getElementById('stop').onclick = () => {
+        document.getElementById('stop').style.display = 'none';
+        document.getElementById('start').style.display = 'block';
+        mediaRecorder.stop();
+        mediaRecorder.stream.getTracks().forEach(track => track.stop());
+      }
+    })
+  }
 }
 
 const getContacts = (currentUser, currentContact, displayNameSetter) => {
@@ -140,161 +275,10 @@ export default function UserView({ currentUser }) {
       return;
     }
     if (e.key === 'Enter' && window.location.href.split('/').at(-1) == 'chatview' && to != '') {
-      postMessage(from, to, setOpenChatCount)
+      postTextMessage(from, to, setOpenChatCount)
+      setOpenChatCount(prevValue => !prevValue)
     }
   });
-
-
-  const postPictureMessage = (currentUser, currentContact, setter) => {
-    var picture = document.getElementById('preview-post-pic');
-    if (null === picture) {
-      return;
-    }
-    var messageThis = (new Date).getTime();
-    GetContactMessages(currentUser, currentContact).push(
-      {
-        from: currentUser,
-        type: 'picture',
-        content: picture.src,
-        time: messageThis,
-      }
-    );
-    checkOpenChat(currentUser, currentContact);
-    document.getElementById('picture_input').value = '';
-    picture.src = '';
-    picture.style.display = 'none';
-    setter(prevValue => !prevValue);
-    document.getElementById(currentContact).click();
-  }
-
-
-  const postVideoMessage = (currentUser, currentContact, setter) => {
-    var video = document.getElementById('vid-source');
-    if (null === video) {
-      return;
-    }
-    var messageThis = (new Date).getTime();
-    GetContactMessages(currentUser, currentContact).push(
-      {
-        from: currentUser,
-        type: video.type,
-        content: video.src,
-        time: messageThis,
-      }
-    );
-    checkOpenChat(currentUser, currentContact);
-    document.getElementById('video_input').value = '';
-    video.src = '';
-    video.type = '';
-    var previewVideo = document.getElementById('preview-post-video');
-    previewVideo.appendChild(video);
-    previewVideo.style.display = 'none';
-    setter(prevValue => !prevValue);
-    document.getElementById(currentContact).click();
-  }
-
-
-  const postVoiceMessage = (currentUser, currentContact, setter) => {
-    var audioMessage = document.getElementById('audio');
-    if (null === audioMessage) {
-      return;
-    }
-    var messageThis = (new Date).getTime();
-    GetContactMessages(currentUser, currentContact).push(
-      {
-        from: currentUser,
-        type: 'audio',
-        content: audioMessage.src,
-        time: messageThis,
-      }
-    );
-    checkOpenChat(currentUser, currentContact);
-    document.getElementById('recording-output').innerHTML = '';
-    document.getElementById('saved-record').innerHTML = '';
-    setter(prevValue => !prevValue);
-    document.getElementById(currentContact).click();
-  }
-
-
-  function postImageFunction() {
-    const img_input = document.getElementById("picture_input");
-    if (img_input) {
-      var uploaded_image = "";
-      img_input.addEventListener("change", function () {
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-          uploaded_image = reader.result;
-          var previewPic = document.getElementById('preview-post-pic');
-          previewPic.src = uploaded_image;
-          previewPic.style.display = 'block';
-
-        });
-        reader.readAsDataURL(this.files[0]);
-      })
-    }
-  }
-
-
-
-  function postVideoFunction() {
-    const video_input = document.getElementById("video_input");
-    if (video_input) {
-      var url = "";
-      video_input.addEventListener("change", function () {
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-          url = reader.result;
-          var video = document.getElementById('preview-post-video');
-          var source = document.getElementById('vid-source');
-          source.type = this.files[0].type;
-          source.src = url;
-          video.appendChild(source);
-          video.style.display = 'block';
-        });
-        reader.readAsDataURL(this.files[0]);
-      })
-    }
-  }
-
-
-  const postVoiceFunction = () => {
-    document.getElementById('start').onclick = () => {
-      document.getElementById('start').style.display = 'none';
-      document.getElementById('stop').style.display = 'block';
-      var output = document.getElementById('recording-output');
-      var saved = document.getElementById('saved-record');
-      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-        output.innerHTML = '';
-        saved.innerHTML = '';
-        output.appendChild(document.createTextNode('recording...'))
-        document.getElementById('trashCan').style.display = 'none';
-        var mediaRecorder = new MediaRecorder(stream);
-        mediaRecorder.start();
-        var chuck = [];
-        mediaRecorder.addEventListener("dataavailable", e => {
-          chuck.push(e.data);
-        });
-        mediaRecorder.addEventListener("stop", () => {
-          var blob = new Blob(chuck);
-          var audioURL = URL.createObjectURL(blob);
-          var audio = new Audio(audioURL);
-          audio.id = 'audio'
-          audio.setAttribute("controls", 1);
-          output.innerHTML = '';
-          output.appendChild(document.createTextNode('saved recording'))
-          document.getElementById('saved-record').appendChild(audio);
-          document.getElementById('trashCan').style.display = 'block';
-        });
-        document.getElementById('stop').onclick = () => {
-          document.getElementById('stop').style.display = 'none';
-          document.getElementById('start').style.display = 'block';
-          mediaRecorder.stop();
-          mediaRecorder.stream.getTracks().forEach(track => track.stop());
-        }
-      })
-    }
-  }
-
 
   return (
     <div className='container'>
@@ -308,11 +292,9 @@ export default function UserView({ currentUser }) {
 
       <div className='contact-side'>
         {contactProfile(currentContact)}
-        <ol className="messages massage-box" id='massage-box' data-bs-toggle="modal" data-bs-target="#changeBackground-modal">
+        <ol className="messages massage-box" id='massage-box'>
           <div id='welcome'><span>Welcome to Shirin's and Leonardo's WebClient</span></div>
         </ol>
-        <ChangeUserBackgroundModal user={currentUser} setter={setCurrentContact} />
-
         <div id='bottom-bar'>
           <div id="chat-grid">
             <div id='chat-item1'>
@@ -339,7 +321,7 @@ export default function UserView({ currentUser }) {
               <input id='post-message' className='message-input grid2' type="text" placeholder="Type a message..." />
             </div>
             <div id='chat-item3'>
-              <svg xmlns="http://www.w3.org/2000/svg" onClick={() => postMessage(currentUser, currentContact, setOpenChatCount)} width="25" height="25" fill="currentColor" className="bi bi-send" viewBox="0 0 16 16">
+              <svg xmlns="http://www.w3.org/2000/svg" onClick={() => postTextMessage(currentUser, currentContact, setOpenChatCount)} width="25" height="25" fill="currentColor" className="bi bi-send" viewBox="0 0 16 16">
                 <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z" />
               </svg>
             </div>
@@ -347,10 +329,7 @@ export default function UserView({ currentUser }) {
         </div>
       </div>
 
-
-
-      {/* <a href='test.html'>click me</a> */}
-      <img src='settings.png' data-bs-toggle="modal" data-bs-target="#settings-modal" />
+      <img src='settings.png' style={{ cursor: 'pointer' }}  data-bs-toggle="modal" data-bs-target="#settings-modal" />
       <SettingsModal />
       {/* adding new contact */}
       <AddContactModal AddNewContact={AddNewContact} setOpenChatCount={setOpenChatCount} currentUser={currentUser} />
@@ -389,7 +368,6 @@ export default function UserView({ currentUser }) {
           </div>
         </div>
       </div>
-
       {/* adding a picture */}
       <div className="modal fade" id="addPic-modal" tabIndex="-1" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
@@ -399,7 +377,7 @@ export default function UserView({ currentUser }) {
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className='preview-pic-div'>
-              <img id="preview-post-pic" style={{ width: '200px', height: '200px', display: 'none' }} />
+              <img id="preview-post-pic" style={{ display: 'none' }} />
               <input type="file" id="picture_input" accept="image/*"></input>
             </div>
             <div className="modal-footer">
@@ -409,7 +387,6 @@ export default function UserView({ currentUser }) {
           </div>
         </div>
       </div>
-
       {/* adding a video */}
       <div className="modal fade" id="addVideo-modal" tabIndex="-1" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
@@ -419,19 +396,13 @@ export default function UserView({ currentUser }) {
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div id='preview-video-div' className="large-8 columns">
-              <video id="preview-post-video" style={{ width: '200px', height: '200px', display: 'none' }} controls>
-                <source id='vid-source' />
+              <video id="preview-post-video" style={{ display: 'none' }} controls>
               </video>
               <input type="file" id="video_input" accept="video/*"></input>
             </div>
             <div className="modal-footer">
               <button id='post-video' type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => {
                 postVideoMessage(currentUser, currentContact, setOpenChatCount)
-                // document.getElementById('video_input').value = '';
-                // document.getElementById('vid-source').src = '';
-                // document.getElementById('vid-source').type = '';
-                // var previewVideo = document.getElementById('preview-post-video');
-                // previewVideo.appendChild(document.getElementById('vid-source'));
               }}>Send</button>
             </div>
           </div>
@@ -440,13 +411,3 @@ export default function UserView({ currentUser }) {
     </div>
   )
 }
-
-document.addEventListener("input", () => {
-  if (document.getElementById('color1') && document.getElementById('color2')) {
-    var color1 = document.getElementById('color1').value;
-    var color2 = document.getElementById('color2').value;
-    document.documentElement.style.setProperty('--firstColor', color1);
-    document.documentElement.style.setProperty('--firstColorFaded', color1 + "AA");
-    document.documentElement.style.setProperty('--secondColor', color2);
-  }
-});
