@@ -117,7 +117,9 @@ const postCaptureMessage = (currentUser, currentContact, setter) => {
       time: messageThis,
     }
   );
-  document.getElementById('camera-zone').removeChild(newVideo);
+  if (newVideo) {
+    document.getElementById('camera-zone').removeChild(newVideo);
+  }
   checkOpenChat(currentUser, currentContact);
   setter(prevValue => !prevValue);
   document.getElementById(currentContact).click();
