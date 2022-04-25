@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createElement } from 'react'
+import React, { useState, useEffect } from 'react'
 import Contact, { GetProfilePic, GetContactMessages, GetUser } from './Contact'
 import { contactsList } from '../db/contactsList'
 import { messages } from '../db/messages';
@@ -115,7 +115,7 @@ const postCaptureMessage = (currentUser, currentContact, setter) => {
   GetContactMessages(currentUser, currentContact).push(
     {
       from: currentUser,
-      type: newVideo ? 'video/mp4' : 'picture',
+      type: newVideo ? 'video/webm' : 'picture',
       content: newVideo ? newVideo.src : canvas.toDataURL(),
       time: messageThis,
     }

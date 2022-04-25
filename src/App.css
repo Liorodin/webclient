@@ -190,15 +190,14 @@ img {
 }
 
 #contact-profile {
-  font-weight: bold;
-  padding-left: 20px;
-  background-color: var(--niceWhite);
-  width: 100%;
-  border-radius: 10px 10px 0 0;
-  border-style: solid;
-  border-color: var(--firstColor);
   display: flex;
   align-items: center;
+  font-weight: bold;
+  border-style: solid;
+  width: 100%;
+  background-color: var(--niceWhite);
+  border-radius: 10px 10px 0 0;
+  border-color: var(--firstColor);
 }
 
 #contact-profile .pic {
@@ -251,6 +250,9 @@ img {
   text-align: center;
   padding-top: 8px;
   color: var(--niceWhite);
+}
+
+.user-profile .avatar {
   cursor: pointer;
 }
 
@@ -573,5 +575,3 @@ video .pic img {
   flex-direction: column;
   align-items: center;
 }
-
-

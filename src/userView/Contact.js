@@ -6,9 +6,9 @@ export function GetProfilePic(user) {
     switch (user.picture) {
         // case the user gives a picture
         case 'avatar':
-            return <div id="profile-pic" className="avatar" data-bs-toggle="modal" data-bs-target="#changeProfile-modal">{user.nickname[0].toUpperCase()}</div>;
+            return <div id="profile-pic" className="avatar">{user.nickname[0].toUpperCase()}</div>;
         default:
-            return <img id="profile-pic" src={user.picture} data-bs-toggle="modal" data-bs-target="#changeProfile-modal" />;
+            return <img id="profile-pic" src={user.picture} />;
     }
 }
 
