@@ -43,7 +43,7 @@ export const messages = [
         contacts: ['hemiL', 'kehatS'],
         list: [
             { from: 'hemiL', type: 'text', content: 'בוטלה ההרצאה במתקדם 2 היום', time: 1650833983304 },
-            { from: 'kehatS', type: 'text', content: 'לאאאאאאאאאאאאא :(', time: 1650833983304 }
+            { from: 'kehatS', type: 'text', content: ':( לאאאאאאאאאאאא', time: 1650833983304 }
         ],
     },
 
@@ -59,9 +59,9 @@ export const messages = [
     {
         contacts: ['hemiL', 'aviS'],
         list: [
-            { from: 'hemiL', type: 'video/mp4', content: 'algo.mp4', time: 1650061953118 },
-            { from: 'hemiL', type: 'text', content: 'הרצאה באלגו משנה שעברה קח שיהיה לך', time: 1650061953118 },
-            { from: 'aviS', type: 'audio', content: 'voice.txt', time: 1650061953118 }
+            { from: 'aviS', type: 'video/mp4', content: 'algo.mp4', time: 1650061953118 },
+            { from: 'aviS', type: 'text', content: 'הרצאה באלגו משנה שעברה קח שיהיה לך', time: 1650061953118 },
+            { from: 'hemiL', type: 'audio', content: 'voice.txt', time: 1650061953118 }
         ],
     },
 ];
