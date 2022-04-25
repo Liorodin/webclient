@@ -54,7 +54,6 @@ const postPictureMessage = (currentUser, currentContact, setter) => {
       time: messageTime,
     }
   );
-  console.log(picture.src)
   checkOpenChat(currentUser, currentContact);
   document.getElementById('picture_input').value = '';
   picture.src = '';
@@ -68,6 +67,7 @@ const postVideoMessage = (currentUser, currentContact, setter) => {
   if (null === video) {
     return;
   }
+  video.pause();
   var messageTime = (new Date).getTime();
   GetContactMessages(currentUser, currentContact).push(
     {
@@ -77,8 +77,6 @@ const postVideoMessage = (currentUser, currentContact, setter) => {
       time: messageTime,
     }
   );
-  console.log(video.type)
-  console.log(video.src)
   checkOpenChat(currentUser, currentContact);
   setter(prevValue => !prevValue);
   video.style.display = 'none';
@@ -100,7 +98,6 @@ const postVoiceMessage = (currentUser, currentContact, setter) => {
       time: messageTime,
     }
   );
-  console.log(audioMessage.src)
   checkOpenChat(currentUser, currentContact);
   document.getElementById('recording-output').innerHTML = '';
   document.getElementById('saved-record').innerHTML = '';
@@ -175,7 +172,11 @@ const postCaptureFunction = () => {
         })
       }
       document.getElementById('addCamera-modal').addEventListener('hidden.bs.modal', () => {
-        stream.getTracks().forEach(track => track.stop())
+        stream.getTracks().forEach(track => track.stop());
+        var tempVid = document.getElementById('new-capture-video')
+        if (tempVid) {
+          document.getElementById('camera-zone').removeChild(tempVid);
+        }
       })
     })
   }
