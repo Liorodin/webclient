@@ -33,4 +33,11 @@ export const users = [
         password: 'n12345',
         picture: 'avatar',
     },
+
+    {
+        username: 'hemiL',
+        nickname: 'hemi hemi hemi',
+        password: 'h12345',
+        picture: 'avatar',
+    }
 ];

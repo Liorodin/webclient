@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, createElement } from 'react'
 import Contact, { GetProfilePic, GetContactMessages, GetUser } from './Contact'
 import { contactsList } from '../db/contactsList'
 import { messages } from '../db/messages';
@@ -289,6 +289,7 @@ export default function UserView({ currentUser }) {
           {getContacts(currentUser, currentContact, setCurrentContact)}
         </div>
       </div>
+
       <div className='contact-side'>
         {contactProfile(currentContact)}
         <ol className="messages massage-box" id='massage-box'>
@@ -327,8 +328,8 @@ export default function UserView({ currentUser }) {
           </div>
         </div>
       </div>
-      {/* <a href='test.html'>click me</a> */}
-      <img src='settings.png' data-bs-toggle="modal" data-bs-target="#settings-modal" />
+
+      <img src='settings.png' style={{ cursor: 'pointer' }}  data-bs-toggle="modal" data-bs-target="#settings-modal" />
       <SettingsModal />
       {/* adding new contact */}
       <AddContactModal AddNewContact={AddNewContact} setOpenChatCount={setOpenChatCount} currentUser={currentUser} />

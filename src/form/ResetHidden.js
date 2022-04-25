@@ -1,4 +1,3 @@
-import React from 'react'
 
 export default function ResetHidden () {
     var hiddenElements = document.getElementsByClassName('hidden');
