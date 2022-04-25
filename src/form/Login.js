@@ -42,4 +42,3 @@ export default function Login({ setCurrentUser }) {
         </form>
     )
 }
-

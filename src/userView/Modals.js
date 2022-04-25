@@ -188,6 +188,11 @@ export function ChangeUserImageModal({ user, setter }) {
                         <input type="file" id="img_input" accept="image/*"></input>
                     </div>
                     <div className="modal-footer">
+                        <button id="reset-dflt" type="button" className="btn btn-primary" data-bs-dismiss="modal"
+                            onClick={() => {
+                                user.picture = 'avatar';
+                                setter(prevValue => !prevValue);
+                            }}>Reset</button>
                         <button id="post-img-btn" type="button" className="btn btn-primary" data-bs-dismiss="modal">Done</button>
                     </div>
                 </div>

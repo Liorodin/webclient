@@ -11,13 +11,11 @@ import { ProfileImageModal } from '../userView/Modals'
 export default function Register() {
     const [error, setError] = useState("");
     let navigate = useNavigate();
-
     const register = (event) => {
         event.preventDefault();
         ResetHidden();
         if (ShowHidden()) {
             if (newRegister()) {
-                console.log("Welcome new user!")
                 navigate("/");
             }
         }
