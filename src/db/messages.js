@@ -59,8 +59,8 @@ export const messages = [
     {
         contacts: ['hemiL', 'aviS'],
         list: [
-            { from: 'noamC', type: 'video/mp4', content: 'systems.mp4', time: 1650061953118 },
-            { from: 'noamC', type: 'text', content: 'ההרצאה השלישית של מערכות קח שיהיה לך', time: 1650061953118 },
+            { from: 'noamC', type: 'video/mp4', content: 'algo.mp4', time: 1650061953118 },
+            { from: 'noamC', type: 'text', content: 'הרצאה באלגו משנה שעברה קח שיהיה לך', time: 1650061953118 },
             { from: 'hemiL', type: 'audio', content: 'voice.txt', time: 1650061953118 }
         ],
     },
