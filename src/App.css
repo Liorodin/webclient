@@ -190,15 +190,14 @@ img {
 }
 
 #contact-profile {
-  font-weight: bold;
-  padding-left: 20px;
-  background-color: var(--niceWhite);
-  width: 100%;
-  border-radius: 10px 10px 0 0;
-  border-style: solid;
-  border-color: var(--firstColor);
   display: flex;
   align-items: center;
+  font-weight: bold;
+  border-style: solid;
+  width: 100%;
+  background-color: var(--niceWhite);
+  border-radius: 10px 10px 0 0;
+  border-color: var(--firstColor);
 }
 
 #contact-profile .pic {
@@ -251,6 +250,9 @@ img {
   text-align: center;
   padding-top: 8px;
   color: var(--niceWhite);
+}
+
+.user-profile .avatar {
   cursor: pointer;
 }
 
@@ -348,7 +350,10 @@ hr {
   cursor: pointer;
 }
 
-#chat {
+#chat,
+#post-photo,
+#retake-photo,
+#stop-record-video {
   display: none;
 }
 
@@ -550,18 +555,23 @@ audio {
   flex-direction: column;
 }
 
-.massage-box li img,
-.preview-pic-div img {
-  width: 400px;
-  height: 320px;
-}
-
 .massage-box li video,
-#preview-video-div video {
-  width: 400px;
-  height: 320px;
+.massage-box li img,
+#preview-video-div video,
+.preview-pic-div img,
+#camera-canvas,
+#camera-mode,
+#camera-zone video {
+  width: 360px;
+  height: 270px;
 }
 
-.pic img {
+video .pic img {
   border-radius: 50%;
+}
+
+.flex-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
