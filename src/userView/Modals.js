@@ -9,8 +9,9 @@ export function SettingsModal() {
             var color1 = document.getElementById('color1').value;
             var color2 = document.getElementById('color2').value;
             document.documentElement.style.setProperty('--firstColor', color1);
-            document.documentElement.style.setProperty('--firstColorFaded', color1 + "AA");
+            document.documentElement.style.setProperty('--firstColorFaded', color1 + "CC");
             document.documentElement.style.setProperty('--secondColor', color2);
+            document.documentElement.style.setProperty('--secondColorFaded', color2 + "CC");
         }
     });
 
@@ -48,17 +49,17 @@ export function SettingsModal() {
                         <h5 className="modal-title">Settings</h5>
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div className="modal-body">
-                        <label>Change your websites theme:</label>
-                        <input id="color1" type="color" name="color1" defaultValue="#E73C7E" />
-                        <input id="color2" type="color" name="color2" defaultValue="#EE7752" />
+                    <div >
+                        <div className="modal-body">
+                            <label>Change your websites theme:</label>
+                            <input id="color1" type="color" name="color1" defaultValue="#E73C7E" />
+                            <input id="color2" type="color" name="color2" defaultValue="#EE7752" />
+                        </div>
+                        <div className="modal-body modal-background">
+                            <label>Change chat's background:</label>
+                            <input type="file" id="background_input" accept="image/*"></input>
+                        </div>
                     </div>
-
-                    <div className="modal-background">
-                        <label>Change your chats background:</label>
-                        <input type="file" id="background_input" accept="image/*"></input>
-                    </div>
-
                     <div className="modal-footer center">
                         <button type="button" onClick={resetSettings} className="btn btn-secondary" data-bs-dismiss="modal">Reset settings</button>
                         <button type="button" onClick={logOut} className="btn btn-secondary" data-bs-dismiss="modal">Log out</button>

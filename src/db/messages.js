@@ -34,7 +34,7 @@ export const messages = [
     {
         contacts: ['hemiL', 'noamC'],
         list: [
-            { from: 'leonardoR', type: 'text', content: 'Hello lecturer', time: 1650061953118 },
+            { from: 'noamC', type: 'text', content: 'Hello lecturer', time: 1650061953118 },
             { from: 'hemiL', type: 'text', content: 'Hello to you too :)', time: 1650061953118 }
         ],
     },
@@ -51,7 +51,7 @@ export const messages = [
         contacts: ['hemiL', 'leonardoR'],
         list: [
             { from: 'hemiL', type: 'picture', content: 'profile-person.jpg', time: 1650833993304 },
-            { from: 'aviS', type: 'text', content: 'Who is it?', time: 1650833993304 },
+            { from: 'leonardoR', type: 'text', content: 'Who is it?', time: 1650833993304 },
             { from: 'hemiL', type: 'text', content: 'Idk', time: 1650833993304 },
         ],
     },
@@ -59,9 +59,9 @@ export const messages = [
     {
         contacts: ['hemiL', 'aviS'],
         list: [
-            { from: 'noamC', type: 'video/mp4', content: 'algo.mp4', time: 1650061953118 },
-            { from: 'noamC', type: 'text', content: 'הרצאה באלגו משנה שעברה קח שיהיה לך', time: 1650061953118 },
-            { from: 'hemiL', type: 'audio', content: 'voice.txt', time: 1650061953118 }
+            { from: 'hemiL', type: 'video/mp4', content: 'algo.mp4', time: 1650061953118 },
+            { from: 'hemiL', type: 'text', content: 'הרצאה באלגו משנה שעברה קח שיהיה לך', time: 1650061953118 },
+            { from: 'aviS', type: 'audio', content: 'voice.txt', time: 1650061953118 }
         ],
     },
 ];

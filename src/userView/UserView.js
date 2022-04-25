@@ -108,6 +108,79 @@ const postVoiceMessage = (currentUser, currentContact, setter) => {
   document.getElementById(currentContact).click();
 }
 
+const postCaptureMessage = (currentUser, currentContact, setter) => {
+  var messageThis = (new Date).getTime();
+  var canvas = document.getElementById('camera-canvas');
+  var newVideo = document.getElementById('new-capture-video');
+  GetContactMessages(currentUser, currentContact).push(
+    {
+      from: currentUser,
+      type: newVideo ? 'video/mp4' : 'picture',
+      content: newVideo ? newVideo.src : canvas.toDataURL(),
+      time: messageThis,
+    }
+  );
+  document.getElementById('camera-zone').removeChild(newVideo);
+  checkOpenChat(currentUser, currentContact);
+  setter(prevValue => !prevValue);
+  document.getElementById(currentContact).click();
+}
+
+const postCaptureFunction = () => {
+  var parts = [];
+  var canvas = document.getElementById('camera-canvas');
+  var video = document.getElementById('camera-mode');
+  video.style.display = 'block';
+  canvas.style.display = 'none';
+  document.getElementById('retake-btn').style.display = 'none';
+  document.getElementById('post-capture').style.display = 'none';
+  document.getElementById('snap-photo').style.display = 'block';
+  document.getElementById('record-video').style.display = 'block';
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+      video.volume = 0;
+      video.srcObject = stream;
+      video.play();
+      document.getElementById('snap-photo').onclick = () => {
+        document.getElementById('record-video').style.display = 'none';
+        document.getElementById('snap-photo').style.display = 'none';
+        document.getElementById('retake-btn').style.display = 'block';
+        document.getElementById('post-capture').style.display = 'block';
+        canvas.getContext('2d').drawImage(video, 0, 0, 400, 300);;
+        video.style.display = 'none';
+        canvas.style.display = 'block';
+      }
+      document.getElementById('record-video').onclick = () => {
+        document.getElementById('record-video').style.display = 'none';
+        document.getElementById('snap-photo').style.display = 'none';
+        document.getElementById('stop-record-video').style.display = 'block';
+        var mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.start(1000);
+        mediaRecorder.ondataavailable = (e) => { parts.push(e.data) }
+      }
+      document.getElementById('stop-record-video').onclick = () => {
+        document.getElementById('stop-record-video').style.display = 'none';
+        document.getElementById('post-capture').style.display = 'block';
+        document.getElementById('retake-btn').style.display = 'block';
+        const blob = new Blob(parts, { type: 'video/webm' });
+        const url = URL.createObjectURL(blob);
+        var newVideo = document.createElement('video');
+        newVideo.controls = true;
+        newVideo.src = url;
+        newVideo.id = 'new-capture-video';
+        video.style.display = 'none';
+        document.getElementById('camera-zone').appendChild(newVideo);
+        document.getElementById('retake-btn').addEventListener('click', () => {
+          document.getElementById('camera-zone').removeChild(newVideo);
+        })
+      }
+      document.getElementById('addCamera-modal').addEventListener('hidden.bs.modal', () => {
+        stream.getTracks().forEach(track => track.stop())
+      })
+    })
+  }
+}
+
 function postImageFunction() {
   const img_input = document.getElementById("picture_input");
   if (img_input) {
@@ -280,7 +353,6 @@ export default function UserView({ currentUser }) {
         return;
       }
       postTextMessage(from, to, setOpenChatCount)
-      // setOpenChatCount(prevValue => !prevValue)
     }
   });
 
@@ -293,7 +365,6 @@ export default function UserView({ currentUser }) {
           {getContacts(currentUser, currentContact, setCurrentContact)}
         </div>
       </div>
-
       <div className='contact-side'>
         {contactProfile(currentContact)}
         <ol className="messages massage-box" id='massage-box'>
@@ -303,7 +374,7 @@ export default function UserView({ currentUser }) {
           <div id="chat-grid">
             <div id='chat-item1'>
               <div id="dropup-content" onMouseLeave={closeChatOptions}>
-                <a onClick={enterCameraMode} data-bs-toggle="modal" data-bs-target="#addCamera-modal">
+                <a onClick={postCaptureFunction} data-bs-toggle="modal" data-bs-target="#addCamera-modal">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-camera" viewBox="0 0 16 16">
                     <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1v6zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2z" />
                     <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
@@ -338,8 +409,7 @@ export default function UserView({ currentUser }) {
           </div>
         </div>
       </div>
-
-      <img src='settings.png' style={{ cursor: 'pointer' }}  data-bs-toggle="modal" data-bs-target="#settings-modal" />
+      <img src='settings.png' style={{ cursor: 'pointer' }} data-bs-toggle="modal" data-bs-target="#settings-modal" />
       <SettingsModal />
       {/* adding new contact */}
       <AddContactModal AddNewContact={AddNewContact} setOpenChatCount={setOpenChatCount} currentUser={currentUser} />
@@ -418,6 +488,7 @@ export default function UserView({ currentUser }) {
           </div>
         </div>
       </div>
+      {/* creating a photo video */}
       <div className="modal fade" id="addCamera-modal" tabIndex="-1" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
@@ -430,7 +501,7 @@ export default function UserView({ currentUser }) {
               <canvas id='camera-canvas' width={400} height={300}></canvas>
             </div>
             <div className="modal-footer">
-              <button id='retake-btn' type="button" className="btn btn-primary" onClick={enterCameraMode}>Retake</button>
+              <button id='retake-btn' type="button" className="btn btn-primary" onClick={postCaptureFunction}>Retake</button>
               <button id='stop-record-video' type="button" className="btn btn-primary" >Stop recording</button>
               <button id='record-video' type="button" className="btn btn-primary">Record</button>
               <button id='snap-photo' type="button" className="btn btn-primary">Capture</button>
@@ -443,78 +514,4 @@ export default function UserView({ currentUser }) {
       </div>
     </div>
   )
-}
-
-const postCaptureMessage = (currentUser, currentContact, setter) => {
-  var messageThis = (new Date).getTime();
-  var canvas = document.getElementById('camera-canvas');
-  var newVideo = document.getElementById('new-capture-video');
-  GetContactMessages(currentUser, currentContact).push(
-    {
-      from: currentUser,
-      type: newVideo ? 'video/mp4' : 'picture',
-      content: newVideo ? newVideo.src : canvas.toDataURL(),
-      time: messageThis,
-    }
-  );
-  document.getElementById('camera-zone').removeChild(newVideo);
-  checkOpenChat(currentUser, currentContact);
-  setter(prevValue => !prevValue);
-  document.getElementById(currentContact).click();
-}
-
-
-const enterCameraMode = () => {
-  var parts = [];
-  var canvas = document.getElementById('camera-canvas');
-  var video = document.getElementById('camera-mode');
-  video.style.display = 'block';
-  canvas.style.display = 'none';
-  document.getElementById('retake-btn').style.display = 'none';
-  document.getElementById('post-capture').style.display = 'none';
-  document.getElementById('snap-photo').style.display = 'block';
-  document.getElementById('record-video').style.display = 'block';
-  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
-      video.volume = 0;
-      video.srcObject = stream;
-      video.play();
-      document.getElementById('snap-photo').onclick = () => {
-        document.getElementById('record-video').style.display = 'none';
-        document.getElementById('snap-photo').style.display = 'none';
-        document.getElementById('retake-btn').style.display = 'block';
-        document.getElementById('post-capture').style.display = 'block';
-        canvas.getContext('2d').drawImage(video, 0, 0, 400, 300);;
-        video.style.display = 'none';
-        canvas.style.display = 'block';
-      }
-      document.getElementById('record-video').onclick = () => {
-        document.getElementById('record-video').style.display = 'none';
-        document.getElementById('snap-photo').style.display = 'none';
-        document.getElementById('stop-record-video').style.display = 'block';
-        var mediaRecorder = new MediaRecorder(stream);
-        mediaRecorder.start(1000);
-        mediaRecorder.ondataavailable = (e) => { parts.push(e.data) }
-      }
-      document.getElementById('stop-record-video').onclick = () => {
-        document.getElementById('stop-record-video').style.display = 'none';
-        document.getElementById('post-capture').style.display = 'block';
-        document.getElementById('retake-btn').style.display = 'block';
-        const blob = new Blob(parts, { type: 'video/webm' });
-        const url = URL.createObjectURL(blob);
-        var newVideo = document.createElement('video');
-        newVideo.controls = true;
-        newVideo.src = url;
-        newVideo.id = 'new-capture-video';
-        video.style.display = 'none';
-        document.getElementById('camera-zone').appendChild(newVideo);
-        document.getElementById('retake-btn').addEventListener('click', () => {
-          document.getElementById('camera-zone').removeChild(newVideo);
-        })
-      }
-      document.getElementById('addCamera-modal').addEventListener('hidden.bs.modal', () => {
-        stream.getTracks().forEach(track => track.stop())
-      })
-    })
-  }
 }
