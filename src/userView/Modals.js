@@ -63,7 +63,6 @@ export function SettingsModal() {
                     <div className="modal-footer center">
                         <button type="button" onClick={resetSettings} className="btn btn-secondary" data-bs-dismiss="modal">Reset settings</button>
                         <button type="button" onClick={logOut} className="btn btn-secondary" data-bs-dismiss="modal">Log out</button>
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Save</button>
                     </div>
                 </div>
             </div>
