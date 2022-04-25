@@ -156,19 +156,19 @@ export function ProfileImageModal({ sorce = "contactImage.webp" }) {
 }
 
 export function ChangeUserImageModal({ user, setter }) {
-    const img_input = document.getElementById("img_input");
+    const img_input = document.getElementById("user-img_input");
     if (img_input) {
         var uploaded_image = "";
         img_input.addEventListener("change", function () {
             const reader = new FileReader();
-            document.getElementById("post-img-btn").addEventListener("click", () => {
+            document.getElementById("user-post-img-btn").addEventListener("click", () => {
                 user.picture = reader.result;
                 img_input.value = '';
                 setter(prevValue => !prevValue);
             })
             reader.addEventListener("load", () => {
                 uploaded_image = reader.result;
-                var previewPic = document.getElementById('preview-pic');
+                var previewPic = document.getElementById('user-preview-pic');
                 previewPic.src = uploaded_image;
             });
             reader.readAsDataURL(this.files[0]);
@@ -184,8 +184,8 @@ export function ChangeUserImageModal({ user, setter }) {
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div className='preview-pic-div'>
-                        <img src={currentSrc} id="preview-pic" style={{ width: '150px', height: '150px', borderRadius: '50%' }} />
-                        <input type="file" id="img_input" accept="image/*"></input>
+                        <img src={currentSrc} id="user-preview-pic" style={{ width: '150px', height: '150px', borderRadius: '50%' }} />
+                        <input type="file" id="user-img_input" accept="image/*"></input>
                     </div>
                     <div className="modal-footer">
                         <button id="reset-dflt" type="button" className="btn btn-primary" data-bs-dismiss="modal"
@@ -193,7 +193,7 @@ export function ChangeUserImageModal({ user, setter }) {
                                 user.picture = 'avatar';
                                 setter(prevValue => !prevValue);
                             }}>Reset</button>
-                        <button id="post-img-btn" type="button" className="btn btn-primary" data-bs-dismiss="modal">Done</button>
+                        <button id="user-post-img-btn" type="button" className="btn btn-primary" data-bs-dismiss="modal">Done</button>
                     </div>
                 </div>
             </div>
