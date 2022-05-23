@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import ResetHidden from './ResetHidden';
 import ShowHidden from './ShowHidden';
 import Input from './Input';
-import { users } from '../db/users';
+import axios from 'axios';
+
 import { contactsList } from '../db/contactsList';
 import { ProfileImageModal } from '../userView/Modals'
 
@@ -11,7 +12,7 @@ import { ProfileImageModal } from '../userView/Modals'
 export default function Register() {
     const [error, setError] = useState("");
     let navigate = useNavigate();
-    const register = (event) => {
+    const register = async (event) => {
         event.preventDefault();
         ResetHidden();
         if (ShowHidden()) {
@@ -22,7 +23,7 @@ export default function Register() {
     }
 
     /*adds a new user to the list of all the users*/
-    function newRegister() {
+    const newRegister = async () => {
         var registerUser = document.getElementById("Username").value;
         var registerNickname = document.getElementById("Nickname").value;
         var registerPassword = document.getElementById("Password").value;
@@ -30,12 +31,6 @@ export default function Register() {
         var registerPicture = document.getElementById("profile").src;
 
         // show the errors in the invalid cases
-        for (var j = 0; j < users.length; j++) {
-            if (registerUser == users[j].username) {
-                setError('existedUsername');
-                return 0;
-            }
-        }
         if (registerPassword.length < 4 || registerPassword.length > 20) {
             setError('passwordLength');
             return 0;
@@ -64,16 +59,28 @@ export default function Register() {
             setError('lettersN');
             return 0;
         }
-        users.push({
-            username: registerUser,
-            nickname: registerNickname,
-            password: registerPassword,
-            picture: registerPicture.split('/').at(-1) == 'contactImage.webp' ? 'avatar' : registerPicture,
-        });
-        contactsList.push({
-            username: registerUser,
-            contactsList: [],
-        })
+        const res = await axios(
+            {
+                method: 'post',
+                url: 'https://localhost:7290/api/Users/Register',
+                headers: {
+                    'content-Type': 'application/json',
+                },
+                data:
+                {
+                    username: registerUser,
+                    nickname: registerNickname,
+                    password: registerPassword,
+                    Picture: registerPicture.split('/').at(-1) == 'contactImage.webp' ? 'avatar' : registerPicture,
+                }
+            });
+        if (res.data != 200) {
+            return 0;
+        }
+        // contactsList.push({
+        //     username: registerUser,
+        //     contactsList: [],
+        // })
 
         return 1;
     }
