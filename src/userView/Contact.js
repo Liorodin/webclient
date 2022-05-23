@@ -1,23 +1,41 @@
 import React from 'react'
 import { messages } from '../db/messages';
 import { users } from '../db/users';
+import axios from 'axios';
 
 export function GetProfilePic(user) {
-    switch (user.picture) {
-        // case the user gives a picture
-        case 'avatar':
-            return <div id="profile-pic" className="avatar">{user.nickname[0].toUpperCase()}</div>;
-        default:
-            return <img id="profile-pic" src={user.picture} />;
+    if (user.picture && user.picture != 'avatar') {
+        return <img id="profile-pic" src={user.picture} />;
     }
+    return <div id="profile-pic" className="avatar">{user.nickname ? user.nickname[0].toUpperCase() : user.name[0].toUpperCase()}</div>;
 }
 
-export function GetContactMessages(firstName, secondName) {
-    for (var i = 0; i < messages.length; i++) {
-        if (messages[i].contacts.includes(firstName) && messages[i].contacts.includes(secondName)) {
-            return messages[i].list;
-        }
-    }
+export function GetContactMessages(contactName) {
+    if(contactName==undefined) return [];
+    const token = JSON.parse(localStorage.getItem("userToken"));
+    axios(
+        {
+            method: 'get',
+            url: `https://localhost:7290/api/contacts/${contactName}/messages`,
+            headers: {
+                'content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+        }).then(res => {
+            console.log(res.data)
+            for (var i = 0; i < res.data.length; i++) {
+                console.log(res.data)
+                  //  if (messages[i].contacts.includes(firstName) && messages[i].contacts.includes(secondName)) {
+                 //       return messages[i].list;
+                  //  }
+                }
+        });
+    // console.log(res);
+    // for (var i = 0; i < messages.length; i++) {
+    //     if (messages[i].contacts.includes(firstName) && messages[i].contacts.includes(secondName)) {
+    //         return messages[i].list;
+    //     }
+    // }
     return [];
 }
 
@@ -142,20 +160,20 @@ const showPreview = (lastMessage) => {
     }
 }
 
-export default function Contact({ name, currentContact, displayNameSetter }) {
-    const contact = GetUser(name);
+export default function Contact({ user, currentContact, displayNameSetter }) {
+    //const contact = GetUser(name);
     //gets current logged user
     const myUserName = JSON.parse(localStorage.getItem('currentUser'));
     //gets the message list between current contact and logged user
-    const contactMessages = GetContactMessages(myUserName, name);
+    const contactMessages = GetContactMessages(user.id);
     //state of last message
     const lastMessage = contactMessages.at(-1);
     //shows chat on display
     const enterContactChat = () => {
         //updates cuurent contact name on display
-        displayNameSetter(contact.username);
+        displayNameSetter(user);
         //updates current contact
-        localStorage.setItem('currentContact', JSON.stringify(name));
+        localStorage.setItem('currentContact', JSON.stringify(user.id));
         //inserts chat
         const box = document.getElementById('massage-box');
         box.innerHTML = '';
@@ -206,7 +224,7 @@ export default function Contact({ name, currentContact, displayNameSetter }) {
         box.scroll(0, box.scrollHeight);
     }
     return (
-        <div id={contact.username} className='contact person'
+        <div id={user.id} className='contact person'
             onClick={() => {
                 //checks if nobody is on display
                 if (currentContact == '') {
@@ -214,10 +232,10 @@ export default function Contact({ name, currentContact, displayNameSetter }) {
                     document.getElementById('chat-grid').style.display = 'grid';
                 }
                 //updates current contact on display
-                enterContactChat(name, contact, displayNameSetter)
+                enterContactChat(user.id, user, displayNameSetter)
             }}>
-            {GetProfilePic(contact)}
-            <div className='name'>{contact.nickname}</div>
+            {GetProfilePic(user)}
+            <div className='name'>{user.name}</div>
             <div className='preview'>{showPreview(lastMessage)}</div>
             <div className='time'>{getTime(lastMessage)}</div>
             <hr />

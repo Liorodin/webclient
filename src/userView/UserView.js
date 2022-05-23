@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
+import axios from 'axios';
 import Contact, { GetProfilePic, GetContactMessages, GetUser } from './Contact'
 import { contactsList } from '../db/contactsList'
 import { messages } from '../db/messages';
@@ -256,19 +257,17 @@ const postVoiceFunction = () => {
   }
 }
 
-const getContacts = (currentUser, currentContact, displayNameSetter) => {
+const getContacts = (userContacts, currentContact, displayNameSetter) => {
+  const loggedUsername = JSON.parse(localStorage.getItem("currentUser"));
   const list = [];
-  for (var i in contactsList) {
-    if (contactsList[i].username == currentUser) {
-      for (var j = 0; j < contactsList[i].contactsList.length; j++) {
-        list.push(<Contact key={j} name={contactsList[i].contactsList[j]} displayNameSetter={displayNameSetter} currentContact={currentContact} />);
-      }
-      break;
-    }
+  if (userContacts == null) return;
+  for (var i in userContacts) {
+    list.push(<Contact key={i} user={userContacts[i]} displayNameSetter={displayNameSetter} currentContact={currentContact} />);
   }
+
   list.sort((contact1, contact2) => {
-    var message1 = GetContactMessages(contact1.props.name, currentUser).at(-1);
-    var message2 = GetContactMessages(contact2.props.name, currentUser).at(-1);
+    var message1 = GetContactMessages(contact1.props.name, loggedUsername).at(-1);
+    var message2 = GetContactMessages(contact2.props.name, loggedUsername).at(-1);
     if (message1 && message2) {
       if (message1.time - message2.time > 0) {
         return -1
@@ -312,14 +311,15 @@ const AddNewContact = (currentUser, newContact, setter) => {
   }
 }
 
-const userProfile = (name, setter) => {
-  const loggedUser = GetUser(name);
+const userProfile = (user, setter) => {
+  //const loggedUser = GetUser(name);
+  if (user == null) return;
   return (
     <div className='user-profile'>
       <div data-bs-toggle="modal" data-bs-target="#addPicture-modal">
-        {GetProfilePic(loggedUser)}
+        {GetProfilePic(user)}
       </div>
-      <div id='user-fullName'>{loggedUser.nickname}</div>
+      <div id='user-fullName'>{user.nickname}</div>
       <div className='new-contact-btn'>
         <svg xmlns="http://www.w3.org/2000/svg"
           onClick={() => {
@@ -332,19 +332,18 @@ const userProfile = (name, setter) => {
           <path fillRule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
         </svg>
       </div>
-      <ChangeUserImageModal user={loggedUser} setter={setter} />
+      <ChangeUserImageModal user={user} setter={setter} />
     </div>
   )
 }
 
-const contactProfile = (name) => {
-  const user = GetUser(name);
+const contactProfile = (user) => {
   return (
     <div id='contact-profile'>
       <div className='pic'>
-        {name != '' ? GetProfilePic(user) : ''}
+        {user != '' ? GetProfilePic(user) : ''}
       </div>
-      {name != '' ? user.nickname : ''}
+      {user != '' ? user.name : ''}
     </div>
   )
 }
@@ -353,14 +352,46 @@ const getChatOptions = () => document.getElementById('dropup-content').style.dis
 const closeChatOptions = () => document.getElementById('dropup-content').style.display = 'none';
 
 export default function UserView({ currentUser }) {
-  const [currentContact, setCurrentContact] = useState('');
-  const [openChatCount, setOpenChatCount] = useState(0);
+  const [loggedUser, setLoggedUser] = useState(null);
+  const [userContacts, setUserContacts] = useState(null);
   const [timeInterval, setTimeInterval] = useState(0);
   useEffect(() => {
-    setInterval(() => {
-      setOpenChatCount(prevValue => !prevValue);
-    }, 30000)
+    const loggedUsername = JSON.parse(localStorage.getItem("currentUser"));
+    const getUserData = async () => {
+      await axios(
+        {
+          method: 'post',
+          url: 'https://localhost:7290/api/Users/User',
+          headers: {
+            'content-Type': 'application/json',
+          },
+          params: {
+            username: loggedUsername,
+          },
+        }).then(res => setLoggedUser(res.data));
+    }
+    getUserData();
+    getUserContacts();
+    // useEffect(() => {
+    //   setInterval(() => {
+    //     setOpenChatCount(prevValue => !prevValue);
+    //   }, 30000)
   }, [timeInterval])
+  const [currentContact, setCurrentContact] = useState('');
+  const [openChatCount, setOpenChatCount] = useState(0);
+
+  const getUserContacts = async () => {
+    const token = JSON.parse(localStorage.getItem("userToken"));
+    await axios(
+      {
+        method: 'get',
+        url: 'https://localhost:7290/api/Contacts',
+        headers: {
+          'content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+      }).then(res => setUserContacts(res.data))
+  }
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && window.location.href.split('/').at(-1) == 'chatview') {
@@ -376,10 +407,10 @@ export default function UserView({ currentUser }) {
   return (
     <div className='container'>
       <div className='user-side'>
-        <div className='user-side-top'>{userProfile(currentUser, setOpenChatCount)}</div>
+        <div className='user-side-top'>{userProfile(loggedUser, setOpenChatCount)}</div>
         <div id='contact-box'>
           {/* <div className='space'></div> */}
-          {getContacts(currentUser, currentContact, setCurrentContact)}
+          {getContacts(userContacts, currentContact, setCurrentContact)}
         </div>
       </div>
       <div className='contact-side'>
@@ -419,7 +450,7 @@ export default function UserView({ currentUser }) {
               <input id='post-message' className='message-input grid2' type="text" placeholder="Type a message..." />
             </div>
             <div id='chat-item3'>
-              <svg xmlns="http://www.w3.org/2000/svg" onClick={() => postTextMessage(currentUser, currentContact, setOpenChatCount)} width="25" height="25" fill="currentColor" className="bi bi-send" viewBox="0 0 16 16">
+              <svg xmlns="http://www.w3.org/2000/svg" onClick={() => postTextMessage( JSON.parse(localStorage.getItem('currentUser')), JSON.parse(localStorage.getItem('currentContact')), setOpenChatCount)} width="25" height="25" fill="currentColor" className="bi bi-send" viewBox="0 0 16 16">
                 <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z" />
               </svg>
             </div>
