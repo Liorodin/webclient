@@ -285,30 +285,32 @@ const getContacts = (userContacts, currentContact, displayNameSetter) => {
 /* Adds a new contact to user's contact list.
 *  Returns 1 if input is empty, -1 if it's a non valid username, 2 if the contact already exists, 0 otherwise
 */
-const AddNewContact = (currentUser, newContact, setter) => {
-  if (!newContact) {
+const AddNewContact = async (contactInfo) => {
+  if (!(contactInfo.id && contactInfo.name && contactInfo.server)) {
     return 1;
   }
-  //checks if the username doesn't exist in the database or its himself
-  if (GetUser(newContact).username == 'not found' || GetUser(newContact).username == currentUser) {
-    return -1;
-  }
-  for (var i = 0; i < contactsList.length; i++) {
-    if (contactsList[i].username == currentUser) {
-      if (contactsList[i].contactsList.includes(newContact)) {
-        return 2;
+  const token = JSON.parse(localStorage.getItem("userToken"));
+  const res = await axios(
+    {
+      method: 'post',
+      url: `https://localhost:7290/api/contacts/`,
+      headers: {
+        'content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      data:
+      {
+        id: contactInfo.id,
+        name: contactInfo.name,
+        server: contactInfo.server,
       }
-      contactsList[i].contactsList.push(newContact);
-      messages.push({
-        contacts: [newContact, currentUser],
-        list: [],
-      })
-      setter(prevValue => !prevValue);
-      document.getElementById('newContact').value = '';
-      newContactMap.set(newContact, 0);
-      return 0;
-    }
-  }
+    }).catch(res => 2);
+  document.getElementById('newContact').value = '';
+  document.getElementById('newContactName').value = '';
+  document.getElementById('newContactServer').value = '';
+  if (res == 2) return 2;
+  if (res.status == 201) return 0;
+  return -1;
 }
 
 const userProfile = (user, setter) => {
@@ -355,6 +357,7 @@ export default function UserView({ currentUser }) {
   const [loggedUser, setLoggedUser] = useState(null);
   const [userContacts, setUserContacts] = useState(null);
   const [timeInterval, setTimeInterval] = useState(0);
+  const [openChatCount, setOpenChatCount] = useState(0);
   useEffect(() => {
     const loggedUsername = JSON.parse(localStorage.getItem("currentUser"));
     const getUserData = async () => {
@@ -372,13 +375,14 @@ export default function UserView({ currentUser }) {
     }
     getUserData();
     getUserContacts();
-    // useEffect(() => {
-    //   setInterval(() => {
-    //     setOpenChatCount(prevValue => !prevValue);
-    //   }, 30000)
-  }, [timeInterval])
+  }, [openChatCount])
+
+  useEffect(() => {
+    setInterval(() => {
+      setOpenChatCount(prevValue => !prevValue);
+    }, 30000)
+  }, [])
   const [currentContact, setCurrentContact] = useState('');
-  const [openChatCount, setOpenChatCount] = useState(0);
 
   const getUserContacts = async () => {
     const token = JSON.parse(localStorage.getItem("userToken"));
@@ -450,7 +454,7 @@ export default function UserView({ currentUser }) {
               <input id='post-message' className='message-input grid2' type="text" placeholder="Type a message..." />
             </div>
             <div id='chat-item3'>
-              <svg xmlns="http://www.w3.org/2000/svg" onClick={() => postTextMessage( JSON.parse(localStorage.getItem('currentUser')), JSON.parse(localStorage.getItem('currentContact')), setOpenChatCount)} width="25" height="25" fill="currentColor" className="bi bi-send" viewBox="0 0 16 16">
+              <svg xmlns="http://www.w3.org/2000/svg" onClick={() => postTextMessage(JSON.parse(localStorage.getItem('currentUser')), JSON.parse(localStorage.getItem('currentContact')), setOpenChatCount)} width="25" height="25" fill="currentColor" className="bi bi-send" viewBox="0 0 16 16">
                 <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z" />
               </svg>
             </div>
@@ -460,7 +464,7 @@ export default function UserView({ currentUser }) {
       <img src='settings.png' style={{ cursor: 'pointer' }} data-bs-toggle="modal" data-bs-target="#settings-modal" />
       <SettingsModal />
       {/* adding new contact */}
-      <AddContactModal AddNewContact={AddNewContact} setOpenChatCount={setOpenChatCount} currentUser={currentUser} />
+      <AddContactModal AddNewContact={AddNewContact} setOpenChatCount={setOpenChatCount} />
       {/* adding a voice message */}
       <div className="modal fade" id="addVoice-modal" tabIndex="-1" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">

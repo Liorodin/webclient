@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 
 export function SettingsModal() {
@@ -70,17 +70,25 @@ export function SettingsModal() {
     )
 }
 
-export function AddContactModal({ AddNewContact, currentUser, setOpenChatCount }) {
+export function AddContactModal({ AddNewContact, setOpenChatCount }) {
+    const modalRef = useRef(null);
+    useEffect(() => {
+        modalRef.current.addEventListener('hidden.bs.modal', () => {
+            document.getElementById('input-result').innerText = '';
+        })
+    }, [modalRef])
     return (
-        <div className="modal fade" id="addContact-modal" tabIndex="-1" aria-hidden="true">
+        <div ref={modalRef} className="modal fade" id="addContact-modal" tabIndex="-1" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title">Add new contact</h5>
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div id='modal-body' className="modal-body">
-                        <input id="newContact" type="text" placeholder='Enter new contact by username'></input>
+                    <div id='modal-body' className="modal-body add-contact">
+                        <input id="newContact" className='addContactInput' type="text" placeholder='Enter contact username'></input>
+                        <input id="newContactName" className='addContactInput' type="text" placeholder='Enter contact name'></input>
+                        <input id="newContactServer" className='addContactInput' type="text" placeholder='Enter contact server'></input>
                         <div id='input-result'></div>
                     </div>
                     <div className="modal-footer">
@@ -88,23 +96,30 @@ export function AddContactModal({ AddNewContact, currentUser, setOpenChatCount }
                         <button id='add-contact-btn' type="button" className="btn btn-primary" onClick={() => {
                             const resultDiv = document.getElementById('input-result');
                             resultDiv.innerHTML = '';
-                            var returnValue = AddNewContact(currentUser, document.getElementById('newContact').value, setOpenChatCount);
-                            if (returnValue == -1) {
-                                resultDiv.style.color = 'red';
-                                resultDiv.appendChild(document.createTextNode('Invalid contact username'));
+                            const contactInfo = {
+                                id: document.getElementById('newContact').value,
+                                name: document.getElementById('newContactName').value,
+                                server: document.getElementById('newContactServer').value,
                             }
-                            if (returnValue == 1) {
-                                resultDiv.style.color = 'red';
-                                resultDiv.appendChild(document.createTextNode('Please enter contact username'));
-                            }
-                            if (returnValue == 2) {
-                                resultDiv.style.color = 'red';
-                                resultDiv.appendChild(document.createTextNode('Contact already exists in your list'));
-                            }
-                            if (returnValue == 0) {
-                                resultDiv.style.color = 'green';
-                                resultDiv.appendChild(document.createTextNode('You have successfully added a new contact'));
-                            }
+                            AddNewContact(contactInfo).then(res => {
+                                if (res == -1) {
+                                    resultDiv.style.color = 'red';
+                                    resultDiv.appendChild(document.createTextNode('Invalid contact username'));
+                                }
+                                if (res == 1) {
+                                    resultDiv.style.color = 'red';
+                                    resultDiv.appendChild(document.createTextNode('All fields must be filled'));
+                                }
+                                if (res == 2) {
+                                    resultDiv.style.color = 'red';
+                                    resultDiv.appendChild(document.createTextNode('Contact already exists in your list'));
+                                }
+                                if (res == 0) {
+                                    resultDiv.style.color = 'green';
+                                    resultDiv.appendChild(document.createTextNode('You have successfully added a new contact'));
+                                    setOpenChatCount(prev => !prev);
+                                }
+                            });
                         }}>Add now</button>
                     </div>
                 </div>
