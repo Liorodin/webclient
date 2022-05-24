@@ -260,25 +260,25 @@ const postVoiceFunction = () => {
 const getContacts = (userContacts, currentContact, displayNameSetter) => {
   const loggedUsername = JSON.parse(localStorage.getItem("currentUser"));
   const list = [];
-  if (userContacts == null) return;
+  if (userContacts == null || typeof userContacts == 'string') return;
   for (var i in userContacts) {
     list.push(<Contact key={i} user={userContacts[i]} displayNameSetter={displayNameSetter} currentContact={currentContact} />);
   }
 
-  list.sort((contact1, contact2) => {
-    var message1 = GetContactMessages(contact1.props.name, loggedUsername).at(-1);
-    var message2 = GetContactMessages(contact2.props.name, loggedUsername).at(-1);
-    if (message1 && message2) {
-      if (message1.time - message2.time > 0) {
-        return -1
-      }
-      else if (message1.time - message2.time < 0) {
-        return 1
-      }
-      return 0
-    }
-    return -1
-  })
+  // list.sort((contact1, contact2) => {
+  //   var message1 = GetContactMessages(contact1.props.name, loggedUsername).at(-1);
+  //   var message2 = GetContactMessages(contact2.props.name, loggedUsername).at(-1);
+  //   if (message1 && message2) {
+  //     if (message1.time - message2.time > 0) {
+  //       return -1
+  //     }
+  //     else if (message1.time - message2.time < 0) {
+  //       return 1
+  //     }
+  //     return 0
+  //   }
+  //   return -1
+  // })
   return list;
 }
 
