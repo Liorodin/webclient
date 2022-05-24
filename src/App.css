@@ -389,10 +389,6 @@ hr {
   margin: 5px;
 }
 
-#newContact {
-  width: 100%;
-}
-
 .contact-add-btn:hover,
 .btn:focus {
   color: var(--niceWhite);
@@ -583,4 +579,15 @@ video .pic img {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.add-contact{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.addContactInput{
+  width: 80%;
+  margin-bottom: 12px;
 }
