@@ -213,12 +213,13 @@ const printMessagesOnScreen = (chat) => {
 }
 
 export default function Contact({ user, currentContact, displayNameSetter }) {
+    const [getChat, setGetChat] = useState(0);
     const [chat, setChat] = useState(null);
     useEffect(() => {
         GetContactMessages2(user.id).then(res => {
             setChat(res);
         });
-    }, [])
+    }, [getChat])
     const [lastMessage, setLastMessage] = useState(null);
     const lastMessageTime = useRef(null);
     const lastMessageContent = useRef(null);
@@ -260,6 +261,7 @@ export default function Contact({ user, currentContact, displayNameSetter }) {
                     document.getElementById('welcome').style.display = 'none';
                     document.getElementById('chat-grid').style.display = 'grid';
                 }
+                setGetChat(prev => !prev);
                 //updates current contact on display
                 enterContactChat(user.id, user, displayNameSetter)
             }}>
