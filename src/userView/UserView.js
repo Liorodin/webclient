@@ -299,7 +299,6 @@ const AddNewContact = async (contactInfo) => {
 }
 
 const userProfile = (user, setter) => {
-  //const loggedUser = GetUser(name);
   if (user == null) return;
   return (
     <div className='user-profile'>
@@ -357,7 +356,7 @@ export default function UserView({ currentUser }) {
       .build();
     setConnection(newConnection);
   }, []);
-
+  
   useEffect(() => {
     if (connection) {
       connection.start()
@@ -420,11 +419,10 @@ export default function UserView({ currentUser }) {
       }).catch(res => 2);
     if (res == 2) return 2;
 
+    //signal r
     const chatMessage = {
       content: message
     };
-    //signal r
-
     if (connection._connectionStarted) {
       try {
         connection.invoke('SendMessage', chatMessage);
@@ -433,12 +431,11 @@ export default function UserView({ currentUser }) {
         console.log(e);
       }
     }
-
-    //checkOpenChat(currentUser, currentContact);
     setter(prevValue => !prevValue);
     document.getElementById(currentContact).click();
     return;
   }
+  
 
   useEffect(() => {
     const loggedUsername = JSON.parse(localStorage.getItem("currentUser"));
@@ -494,7 +491,6 @@ export default function UserView({ currentUser }) {
       <div className='user-side'>
         <div className='user-side-top'>{userProfile(loggedUser, setOpenChatCount)}</div>
         <div id='contact-box'>
-          {/* <div className='space'></div> */}
           {getContacts(userContacts, currentContact, setCurrentContact)}
         </div>
       </div>
