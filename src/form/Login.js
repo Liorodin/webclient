@@ -27,8 +27,11 @@ export default function Login({ setCurrentUser }) {
                         password: userPassword
                     }
                 }).catch(res => {
-                    //-------------------------check error here
+                    //check if the server isn't connected
                     console.log(res);
+                    if (res == "Error: Network Error") {
+                        setError('network');
+                    }
                     return 2;
                 });
             if (res.status && res.status == 200) {
@@ -38,7 +41,8 @@ export default function Login({ setCurrentUser }) {
                 navigate("/chatview");
             }
             else {
-                setError('wrong');
+                if (error != 'network') 
+                    setError('wrong');
             }
             document.getElementById("myForm").reset();
         }
@@ -48,7 +52,10 @@ export default function Login({ setCurrentUser }) {
         <form id="myForm" className='cube center-form'>
             <h1>Shirin's and Leonardo's WebClient</h1>
             <hr></hr>
+            <div className="alert alert-danger">Can't reach server</div>
             {(error === 'wrong') ? (<div className="alert alert-danger">Wrong password or username</div>) : ""}
+            {(error === 'network') ? (<div className="alert alert-danger">Can't reach server</div>) : ""}
+            
             <Input inputName="Username" inputType="text" text='Username' />
             <Input inputName="Password" inputType="password" text='Password' />
             <div>
