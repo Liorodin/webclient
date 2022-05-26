@@ -212,17 +212,13 @@ const printMessagesOnScreen = (chat) => {
 
 }
 
-export default function Contact({ user, currentContact, displayNameSetter }) {
-    const [getChat, setGetChat] = useState(0);
-    const [chat, setChat] = useState(null);
+export default function Contact({ user, currentContact, displayNameSetter, chatUpdate }) {
     useEffect(() => {
         GetContactMessages2(user.id).then(res => {
-            setChat(res);
+            setChat(res)
         });
-        if (JSON.parse(localStorage.getItem('currentContact')) == user.id) {
-            console.log('hi')
-        }
-    }, [getChat])
+    }, [chatUpdate])
+    const [chat, setChat] = useState(null);
     const [lastMessage, setLastMessage] = useState(null);
     const lastMessageTime = useRef(null);
     useEffect(() => {
@@ -239,23 +235,15 @@ export default function Contact({ user, currentContact, displayNameSetter }) {
     useEffect(() => {
         if (chat == null) return;
         setLastMessage(chat.at(-1));
+        if (user.id == JSON.parse(localStorage.getItem('currentContact'))) {
+            enterContactChat(user.id, user, displayNameSetter)
+        }
     }, [chat])
     useEffect(() => {
         if (lastMessage == null) return;
         lastMessageContent.current.innerHTML = lastMessage.content;
         lastMessageTime.current.innerHTML = getTime(lastMessage);
     })
-    //const contact = GetUser(name);
-    //gets current logged user
-    const myUserName = JSON.parse(localStorage.getItem('currentUser'));
-    //gets the message list between current contact and logged user
-    var contactMessages = null;
-    // GetContactMessages2(user.id).then(res => {
-    //     contactMessages = res
-    // });
-    //state of last message
-    //console.log("contact messages are: " + chat)
-    //console.log(GetContactMessages(myUserName, user.id))
     //shows chat on display
     const enterContactChat = () => {
         //updates cuurent contact name on display
@@ -274,7 +262,6 @@ export default function Contact({ user, currentContact, displayNameSetter }) {
                     document.getElementById('welcome').style.display = 'none';
                     document.getElementById('chat-grid').style.display = 'grid';
                 }
-                setGetChat(prev => !prev);
                 enterContactChat(user.id, user, displayNameSetter)
             }}>
             {GetProfilePic(user)}
