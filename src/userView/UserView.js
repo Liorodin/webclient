@@ -9,219 +9,219 @@ import { HubConnectionBuilder } from '@microsoft/signalr';
 
 
 const postPictureMessage = (currentUser, currentContact, setter) => {
-//   var picture = document.getElementById('preview-post-pic');
-//   if (null === picture) {
-//     return;
-//   }
-//   var messageTime = (new Date).getTime();
-//   GetContactMessages(currentUser, currentContact).push(
-//     {
-//       from: currentUser,
-//       type: 'picture',
-//       content: picture.src,
-//       time: messageTime,
-//     }
-//   );
-//   checkOpenChat(currentUser, currentContact);
-//   document.getElementById('picture_input').value = '';
-//   picture.src = '';
-//   picture.style.display = 'none';
-//   setter(prevValue => !prevValue);
-//   document.getElementById(currentContact).click();
+  //   var picture = document.getElementById('preview-post-pic');
+  //   if (null === picture) {
+  //     return;
+  //   }
+  //   var messageTime = (new Date).getTime();
+  //   GetContactMessages(currentUser, currentContact).push(
+  //     {
+  //       from: currentUser,
+  //       type: 'picture',
+  //       content: picture.src,
+  //       time: messageTime,
+  //     }
+  //   );
+  //   checkOpenChat(currentUser, currentContact);
+  //   document.getElementById('picture_input').value = '';
+  //   picture.src = '';
+  //   picture.style.display = 'none';
+  //   setter(prevValue => !prevValue);
+  //   document.getElementById(currentContact).click();
 }
 
 const postVideoMessage = (currentUser, currentContact, setter) => {
-//   var video = document.getElementById('preview-post-video');
-//   if (null === video) {
-//     return;
-//   }
-//   video.pause();
-//   var messageTime = (new Date).getTime();
-//   GetContactMessages(currentUser, currentContact).push(
-//     {
-//       from: currentUser,
-//       type: video.type,
-//       content: video.src,
-//       time: messageTime,
-//     }
-//   );
-//   checkOpenChat(currentUser, currentContact);
-//   setter(prevValue => !prevValue);
-//   video.style.display = 'none';
-//   document.getElementById("video_input").value = '';
-//   document.getElementById(currentContact).click();
+  //   var video = document.getElementById('preview-post-video');
+  //   if (null === video) {
+  //     return;
+  //   }
+  //   video.pause();
+  //   var messageTime = (new Date).getTime();
+  //   GetContactMessages(currentUser, currentContact).push(
+  //     {
+  //       from: currentUser,
+  //       type: video.type,
+  //       content: video.src,
+  //       time: messageTime,
+  //     }
+  //   );
+  //   checkOpenChat(currentUser, currentContact);
+  //   setter(prevValue => !prevValue);
+  //   video.style.display = 'none';
+  //   document.getElementById("video_input").value = '';
+  //   document.getElementById(currentContact).click();
 }
 
 const postVoiceMessage = (currentUser, currentContact, setter) => {
-//   var audioMessage = document.getElementById('audio');
-//   if (null === audioMessage) {
-//     return;
-//   }
-//   var messageTime = (new Date).getTime();
-//   GetContactMessages(currentUser, currentContact).push(
-//     {
-//       from: currentUser,
-//       type: 'audio',
-//       content: audioMessage.src,
-//       time: messageTime,
-//     }
-//   );
-//   checkOpenChat(currentUser, currentContact);
-//   document.getElementById('recording-output').innerHTML = '';
-//   document.getElementById('saved-record').innerHTML = '';
-//   setter(prevValue => !prevValue);
-//   document.getElementById(currentContact).click();
+  //   var audioMessage = document.getElementById('audio');
+  //   if (null === audioMessage) {
+  //     return;
+  //   }
+  //   var messageTime = (new Date).getTime();
+  //   GetContactMessages(currentUser, currentContact).push(
+  //     {
+  //       from: currentUser,
+  //       type: 'audio',
+  //       content: audioMessage.src,
+  //       time: messageTime,
+  //     }
+  //   );
+  //   checkOpenChat(currentUser, currentContact);
+  //   document.getElementById('recording-output').innerHTML = '';
+  //   document.getElementById('saved-record').innerHTML = '';
+  //   setter(prevValue => !prevValue);
+  //   document.getElementById(currentContact).click();
 }
 
 const postCaptureMessage = (currentUser, currentContact, setter) => {
-//   var messageThis = (new Date).getTime();
-//   var canvas = document.getElementById('camera-canvas');
-//   var newVideo = document.getElementById('new-capture-video');
-//   GetContactMessages(currentUser, currentContact).push(
-//     {
-//       from: currentUser,
-//       type: newVideo ? 'video/webm' : 'picture',
-//       content: newVideo ? newVideo.src : canvas.toDataURL(),
-//       time: messageThis,
-//     }
-//   );
-//   if (newVideo) {
-//     document.getElementById('camera-zone').removeChild(newVideo);
-//   }
-//   checkOpenChat(currentUser, currentContact);
-//   setter(prevValue => !prevValue);
-//   document.getElementById(currentContact).click();
+  //   var messageThis = (new Date).getTime();
+  //   var canvas = document.getElementById('camera-canvas');
+  //   var newVideo = document.getElementById('new-capture-video');
+  //   GetContactMessages(currentUser, currentContact).push(
+  //     {
+  //       from: currentUser,
+  //       type: newVideo ? 'video/webm' : 'picture',
+  //       content: newVideo ? newVideo.src : canvas.toDataURL(),
+  //       time: messageThis,
+  //     }
+  //   );
+  //   if (newVideo) {
+  //     document.getElementById('camera-zone').removeChild(newVideo);
+  //   }
+  //   checkOpenChat(currentUser, currentContact);
+  //   setter(prevValue => !prevValue);
+  //   document.getElementById(currentContact).click();
 }
 
 const postCaptureFunction = () => {
-//   var parts = [];
-//   var canvas = document.getElementById('camera-canvas');
-//   var video = document.getElementById('camera-mode');
-//   video.style.display = 'block';
-//   canvas.style.display = 'none';
-//   document.getElementById('retake-btn').style.display = 'none';
-//   document.getElementById('post-capture').style.display = 'none';
-//   document.getElementById('snap-photo').style.display = 'block';
-//   document.getElementById('record-video').style.display = 'block';
-//   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-//     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
-//       video.volume = 0;
-//       video.srcObject = stream;
-//       video.play();
-//       document.getElementById('snap-photo').onclick = () => {
-//         document.getElementById('record-video').style.display = 'none';
-//         document.getElementById('snap-photo').style.display = 'none';
-//         document.getElementById('retake-btn').style.display = 'block';
-//         document.getElementById('post-capture').style.display = 'block';
-//         canvas.getContext('2d').drawImage(video, 0, 0, 400, 300);;
-//         video.style.display = 'none';
-//         canvas.style.display = 'block';
-//       }
-//       document.getElementById('record-video').onclick = () => {
-//         document.getElementById('record-video').style.display = 'none';
-//         document.getElementById('snap-photo').style.display = 'none';
-//         document.getElementById('stop-record-video').style.display = 'block';
-//         var mediaRecorder = new MediaRecorder(stream);
-//         mediaRecorder.start(1000);
-//         mediaRecorder.ondataavailable = (e) => { parts.push(e.data) }
-//       }
-//       document.getElementById('stop-record-video').onclick = () => {
-//         document.getElementById('stop-record-video').style.display = 'none';
-//         document.getElementById('post-capture').style.display = 'block';
-//         document.getElementById('retake-btn').style.display = 'block';
-//         const blob = new Blob(parts, { type: 'video/webm' });
-//         const url = URL.createObjectURL(blob);
-//         var newVideo = document.createElement('video');
-//         newVideo.controls = true;
-//         newVideo.src = url;
-//         newVideo.id = 'new-capture-video';
-//         video.style.display = 'none';
-//         document.getElementById('camera-zone').appendChild(newVideo);
-//         document.getElementById('retake-btn').addEventListener('click', () => {
-//           document.getElementById('camera-zone').removeChild(newVideo);
-//         })
-//       }
-//       document.getElementById('addCamera-modal').addEventListener('hidden.bs.modal', () => {
-//         stream.getTracks().forEach(track => track.stop());
-//         var tempVid = document.getElementById('new-capture-video')
-//         if (tempVid) {
-//           document.getElementById('camera-zone').removeChild(tempVid);
-//         }
-//       })
-//     })
-//   }
+  //   var parts = [];
+  //   var canvas = document.getElementById('camera-canvas');
+  //   var video = document.getElementById('camera-mode');
+  //   video.style.display = 'block';
+  //   canvas.style.display = 'none';
+  //   document.getElementById('retake-btn').style.display = 'none';
+  //   document.getElementById('post-capture').style.display = 'none';
+  //   document.getElementById('snap-photo').style.display = 'block';
+  //   document.getElementById('record-video').style.display = 'block';
+  //   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+  //     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+  //       video.volume = 0;
+  //       video.srcObject = stream;
+  //       video.play();
+  //       document.getElementById('snap-photo').onclick = () => {
+  //         document.getElementById('record-video').style.display = 'none';
+  //         document.getElementById('snap-photo').style.display = 'none';
+  //         document.getElementById('retake-btn').style.display = 'block';
+  //         document.getElementById('post-capture').style.display = 'block';
+  //         canvas.getContext('2d').drawImage(video, 0, 0, 400, 300);;
+  //         video.style.display = 'none';
+  //         canvas.style.display = 'block';
+  //       }
+  //       document.getElementById('record-video').onclick = () => {
+  //         document.getElementById('record-video').style.display = 'none';
+  //         document.getElementById('snap-photo').style.display = 'none';
+  //         document.getElementById('stop-record-video').style.display = 'block';
+  //         var mediaRecorder = new MediaRecorder(stream);
+  //         mediaRecorder.start(1000);
+  //         mediaRecorder.ondataavailable = (e) => { parts.push(e.data) }
+  //       }
+  //       document.getElementById('stop-record-video').onclick = () => {
+  //         document.getElementById('stop-record-video').style.display = 'none';
+  //         document.getElementById('post-capture').style.display = 'block';
+  //         document.getElementById('retake-btn').style.display = 'block';
+  //         const blob = new Blob(parts, { type: 'video/webm' });
+  //         const url = URL.createObjectURL(blob);
+  //         var newVideo = document.createElement('video');
+  //         newVideo.controls = true;
+  //         newVideo.src = url;
+  //         newVideo.id = 'new-capture-video';
+  //         video.style.display = 'none';
+  //         document.getElementById('camera-zone').appendChild(newVideo);
+  //         document.getElementById('retake-btn').addEventListener('click', () => {
+  //           document.getElementById('camera-zone').removeChild(newVideo);
+  //         })
+  //       }
+  //       document.getElementById('addCamera-modal').addEventListener('hidden.bs.modal', () => {
+  //         stream.getTracks().forEach(track => track.stop());
+  //         var tempVid = document.getElementById('new-capture-video')
+  //         if (tempVid) {
+  //           document.getElementById('camera-zone').removeChild(tempVid);
+  //         }
+  //       })
+  //     })
+  //   }
 }
 
 function postImageFunction() {
-//   const img_input = document.getElementById("picture_input");
-//   if (img_input) {
-//     var uploaded_image = "";
-//     img_input.addEventListener("change", function () {
-//       const reader = new FileReader();
-//       reader.addEventListener("load", () => {
-//         uploaded_image = reader.result;
-//         var previewPic = document.getElementById('preview-post-pic');
-//         previewPic.src = uploaded_image;
-//         previewPic.style.display = 'block';
+  //   const img_input = document.getElementById("picture_input");
+  //   if (img_input) {
+  //     var uploaded_image = "";
+  //     img_input.addEventListener("change", function () {
+  //       const reader = new FileReader();
+  //       reader.addEventListener("load", () => {
+  //         uploaded_image = reader.result;
+  //         var previewPic = document.getElementById('preview-post-pic');
+  //         previewPic.src = uploaded_image;
+  //         previewPic.style.display = 'block';
 
-//       });
-//       reader.readAsDataURL(this.files[0]);
-//     })
-//   }
+  //       });
+  //       reader.readAsDataURL(this.files[0]);
+  //     })
+  //   }
 }
 
 function postVideoFunction() {
-//   const video_input = document.getElementById("video_input");
-//   if (video_input) {
-//     video_input.addEventListener("change", function () {
-//       const reader = new FileReader();
-//       reader.addEventListener("load", () => {
-//         var video = document.getElementById('preview-post-video');
-//         video.type = this.files[0].type;
-//         video.src = reader.result;
-//         video.style.display = 'block';
-//       });
-//       reader.readAsDataURL(this.files[0]);
-//     })
-//   }
+  //   const video_input = document.getElementById("video_input");
+  //   if (video_input) {
+  //     video_input.addEventListener("change", function () {
+  //       const reader = new FileReader();
+  //       reader.addEventListener("load", () => {
+  //         var video = document.getElementById('preview-post-video');
+  //         video.type = this.files[0].type;
+  //         video.src = reader.result;
+  //         video.style.display = 'block';
+  //       });
+  //       reader.readAsDataURL(this.files[0]);
+  //     })
+  //   }
 }
 
 const postVoiceFunction = () => {
-//   document.getElementById('start').onclick = () => {
-//     document.getElementById('start').style.display = 'none';
-//     document.getElementById('stop').style.display = 'block';
-//     var output = document.getElementById('recording-output');
-//     var saved = document.getElementById('saved-record');
-//     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-//       output.innerHTML = '';
-//       saved.innerHTML = '';
-//       output.appendChild(document.createTextNode('recording...'))
-//       document.getElementById('trashCan').style.display = 'none';
-//       var mediaRecorder = new MediaRecorder(stream);
-//       mediaRecorder.start();
-//       var chuck = [];
-//       mediaRecorder.addEventListener("dataavailable", e => {
-//         chuck.push(e.data);
-//       });
-//       mediaRecorder.addEventListener("stop", () => {
-//         var blob = new Blob(chuck);
-//         var audioURL = URL.createObjectURL(blob);
-//         var audio = new Audio(audioURL);
-//         audio.id = 'audio'
-//         audio.setAttribute("controls", 1);
-//         output.innerHTML = '';
-//         output.appendChild(document.createTextNode('saved recording'))
-//         document.getElementById('saved-record').appendChild(audio);
-//         document.getElementById('trashCan').style.display = 'block';
-//       });
-//       document.getElementById('stop').onclick = () => {
-//         document.getElementById('stop').style.display = 'none';
-//         document.getElementById('start').style.display = 'block';
-//         mediaRecorder.stop();
-//         mediaRecorder.stream.getTracks().forEach(track => track.stop());
-//       }
-//     })
-//   }
+  //   document.getElementById('start').onclick = () => {
+  //     document.getElementById('start').style.display = 'none';
+  //     document.getElementById('stop').style.display = 'block';
+  //     var output = document.getElementById('recording-output');
+  //     var saved = document.getElementById('saved-record');
+  //     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+  //       output.innerHTML = '';
+  //       saved.innerHTML = '';
+  //       output.appendChild(document.createTextNode('recording...'))
+  //       document.getElementById('trashCan').style.display = 'none';
+  //       var mediaRecorder = new MediaRecorder(stream);
+  //       mediaRecorder.start();
+  //       var chuck = [];
+  //       mediaRecorder.addEventListener("dataavailable", e => {
+  //         chuck.push(e.data);
+  //       });
+  //       mediaRecorder.addEventListener("stop", () => {
+  //         var blob = new Blob(chuck);
+  //         var audioURL = URL.createObjectURL(blob);
+  //         var audio = new Audio(audioURL);
+  //         audio.id = 'audio'
+  //         audio.setAttribute("controls", 1);
+  //         output.innerHTML = '';
+  //         output.appendChild(document.createTextNode('saved recording'))
+  //         document.getElementById('saved-record').appendChild(audio);
+  //         document.getElementById('trashCan').style.display = 'block';
+  //       });
+  //       document.getElementById('stop').onclick = () => {
+  //         document.getElementById('stop').style.display = 'none';
+  //         document.getElementById('start').style.display = 'block';
+  //         mediaRecorder.stop();
+  //         mediaRecorder.stream.getTracks().forEach(track => track.stop());
+  //       }
+  //     })
+  //   }
 }
 
 const getContacts = (userContacts, currentContact, displayNameSetter) => {
@@ -266,7 +266,7 @@ const AddNewContact = async (contactInfo) => {
       },
       data:
       {
-        from:  JSON.parse(localStorage.getItem("currentUser")),
+        from: JSON.parse(localStorage.getItem("currentUser")),
         to: contactInfo.id,
         server: 'localhost:7290',
       }
@@ -298,7 +298,6 @@ const AddNewContact = async (contactInfo) => {
 }
 
 const userProfile = (user, setter) => {
-  //const loggedUser = GetUser(name);
   if (user == null) return;
   return (
     <div className='user-profile'>
@@ -342,125 +341,124 @@ export default function UserView({ currentUser }) {
   const [userContacts, setUserContacts] = useState(null);
   const [timeInterval, setTimeInterval] = useState(0);
   const [openChatCount, setOpenChatCount] = useState(0);
-//signal r
-  const [ connection, setConnection ] = useState(null);
-  const [ chat, setChat ] = useState([]);
+  //signal r
+  const [connection, setConnection] = useState(null);
+  const [chat, setChat] = useState([]);
   const latestChat = useRef(null);
 
   latestChat.current = chat;
 
-useEffect(() => {
-  const newConnection = new HubConnectionBuilder()
+  useEffect(() => {
+    const newConnection = new HubConnectionBuilder()
       .withUrl('https://localhost:7290/hubs/chathub')
       .withAutomaticReconnect()
       .build();
 
-  setConnection(newConnection);
-}, []);
+    setConnection(newConnection);
+  }, []);
 
-useEffect(() => {
-  if (connection) {
-    connection.start()
-          .then(result => {
-              console.log('Connected!');
+  useEffect(() => {
+    if (connection) {
+      connection.start()
+        .then(result => {
+          console.log('Connected!');
 
-              connection.on('ReceiveMessage', message => {
-                  const updatedChat = [...latestChat.current];
-                  console.log(updatedChat);
-                  updatedChat.push(message);
-                  console.log(updatedChat);
-                  setChat(updatedChat);
-              });
-          })
-          .catch(e => console.log('connection failed: ', e));
-  }
-}, [connection]);
+          connection.on('ReceiveMessage', message => {
+            const updatedChat = [...latestChat.current];
+            console.log(updatedChat);
+            updatedChat.push(message);
+            console.log(updatedChat);
+            setChat(updatedChat);
+          });
+        })
+        .catch(e => console.log('connection failed: ', e));
+    }
+  }, []);
 
-const newContactMap = new Map();
-const checkOpenChat = (currentUser, currentContact) => {
-  if (newContactMap.get(currentContact) != 0) {
-    return;
-  }
-  for (var i = 0; i < contactsList.length; i++) {
-    if (contactsList[i].username == currentContact) {
-      if (!contactsList[i].contactsList.includes(currentUser)) {
-        contactsList[i].contactsList.push(currentUser);
-        newContactMap.set(currentContact, 1);
-      }
+  const newContactMap = new Map();
+  const checkOpenChat = (currentUser, currentContact) => {
+    if (newContactMap.get(currentContact) != 0) {
       return;
     }
-  }
-}
-
-
-////////////////////////////////
-
-const postTextMessage = async (currentUser, currentContact, setter) => {
-  var readMessage = document.getElementById('post-message');
-  if (readMessage.value.length == 0) {
-    return;
-  }
-  const message = readMessage.value;
-  readMessage.value = '';
-  var contactServer; 
-  userContacts.forEach(uc => {
-    if (uc.id == currentContact) {
-      contactServer = uc.server;
+    for (var i = 0; i < contactsList.length; i++) {
+      if (contactsList[i].username == currentContact) {
+        if (!contactsList[i].contactsList.includes(currentUser)) {
+          contactsList[i].contactsList.push(currentUser);
+          newContactMap.set(currentContact, 1);
+        }
+        return;
+      }
     }
-  });
-  if (!(currentUser && currentContact && contactServer)) {
-    return 1;
   }
-  const transfer = await axios(
-    {
-      method: 'post',
-      url: `https://${contactServer}/api/transfer`,
-      headers: {
-        'content-Type': 'application/json',
-      },
-      data:
-      {
-        from:  JSON.parse(localStorage.getItem("currentUser")),
-        to: currentContact,
-        content: message,
-      }
-    }).catch(transfer => 2);
-  if (transfer == 2) return 2;
-  const token = JSON.parse(localStorage.getItem("userToken"));
-  const res = await axios(
-    {
 
-      method: 'post',
-      url: `https://localhost:7290/api/contacts/${currentContact}/messages`,
-      headers: {
-        'content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
-      },
-      data:
-      {
-        content: message,
+  const postTextMessage = async (currentUser, currentContact, setter) => {
+    var readMessage = document.getElementById('post-message');
+    if (readMessage.value.length == 0) {
+      return;
+    }
+    const message = readMessage.value;
+    readMessage.value = '';
+    var contactServer;
+    userContacts.forEach(uc => {
+      if (uc.id == currentContact) {
+        contactServer = uc.server;
       }
-    }).catch(res => 2);
-  if (res == 2) return 2;
+    });
+    if (!(currentUser && currentContact && contactServer)) {
+      return 1;
+    }
+    const transfer = await axios(
+      {
+        method: 'post',
+        url: `https://${contactServer}/api/transfer`,
+        headers: {
+          'content-Type': 'application/json',
+        },
+        data:
+        {
+          from: JSON.parse(localStorage.getItem("currentUser")),
+          to: currentContact,
+          content: message,
+        }
+      }).catch(transfer => 2);
+    if (transfer == 2) return 2;
+    const token = JSON.parse(localStorage.getItem("userToken"));
+    const res = await axios(
+      {
 
-  const chatMessage = {
-    content: message.value
-  };
+        method: 'post',
+        url: `https://localhost:7290/api/contacts/${currentContact}/messages`,
+        headers: {
+          'content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        data:
+        {
+          content: message,
+        }
+      }).catch(res => 2);
+    if (res == 2) return 2;
+
     //signal r
-    if (connection.connectionStarted) {
+    const chatMessage = {
+      content: message
+    };
+    if (connection._connectionStarted) {
+      console.log("yes");
       try {
         connection.invoke('SendMessage', chatMessage);
       }
-      catch(e) {
-          console.log(e);
+      catch (e) {
+        console.log(e);
       }
+    }
+    else {
+      alert('No connection to server yet.');
+    }
+    setter(prevValue => !prevValue);
+    document.getElementById(currentContact).click();
+    return;
   }
-
-  //checkOpenChat(currentUser, currentContact);
-  setter(prevValue => !prevValue);
-  document.getElementById(currentContact).click();
-  return;
-}
 
 
 
@@ -519,7 +517,6 @@ const postTextMessage = async (currentUser, currentContact, setter) => {
       <div className='user-side'>
         <div className='user-side-top'>{userProfile(loggedUser, setOpenChatCount)}</div>
         <div id='contact-box'>
-          {/* <div className='space'></div> */}
           {getContacts(userContacts, currentContact, setCurrentContact)}
         </div>
       </div>
