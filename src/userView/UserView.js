@@ -367,14 +367,15 @@ useEffect(() => {
 
               connection.on('ReceiveMessage', message => {
                   const updatedChat = [...latestChat.current];
+                  console.log(updatedChat);
                   updatedChat.push(message);
-              
+                  console.log(updatedChat);
                   setChat(updatedChat);
               });
           })
           .catch(e => console.log('connection failed: ', e));
   }
-}, []);
+}, [connection]);
 
 const newContactMap = new Map();
 const checkOpenChat = (currentUser, currentContact) => {
@@ -425,7 +426,6 @@ const postTextMessage = async (currentUser, currentContact, setter) => {
     }).catch(transfer => 2);
   if (transfer == 2) return 2;
   const token = JSON.parse(localStorage.getItem("userToken"));
-  console.log(currentContact);
   const res = await axios(
     {
 
@@ -440,18 +440,20 @@ const postTextMessage = async (currentUser, currentContact, setter) => {
         content: message.value,
       }
     }).catch(res => 2);
-    console.log(res);
   if (res == 2) return 2;
 
+  const chatMessage = {
+    content: message.value
+  };
     //signal r
-  //   if (connection.connectionStarted) {
-  //     try {
-  //       connection.invoke('post-message', tempMessage);
-  //     }
-  //     catch(e) {
-  //         console.log(e);
-  //     }
-  // }
+    if (connection.connectionStarted) {
+      try {
+        connection.invoke('SendMessage', chatMessage);
+      }
+      catch(e) {
+          console.log(e);
+      }
+  }
 
   //checkOpenChat(currentUser, currentContact);
   message.value = '';
