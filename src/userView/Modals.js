@@ -18,6 +18,7 @@ export function SettingsModal() {
     const logOut = () => {
         localStorage.setItem('currentUser', JSON.stringify('default user'));
         localStorage.setItem('currentContact', JSON.stringify(''));
+        localStorage.setItem('userToken', JSON.stringify(''));
         navigate("/");
     }
     const resetSettings = () => {
