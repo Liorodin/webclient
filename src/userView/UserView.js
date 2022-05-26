@@ -239,7 +239,6 @@ const getContacts = (userContacts, currentContact, displayNameSetter, chat) => {
     if (date2 == NaN) {
       date2 = 0;
     }
-    //console.log(Date.parse(date1) - Date.parse(date2))
     if (date1 - date2 > 0) {
       return -1
     }

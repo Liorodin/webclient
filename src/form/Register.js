@@ -15,7 +15,6 @@ export default function Register() {
         ResetHidden();
         if (ShowHidden()) {
             newRegister().then(res => {
-                console.log(res);
                 if (res == 1) {
                     navigate("/");
                 }
@@ -75,19 +74,14 @@ export default function Register() {
                     Picture: registerPicture.split('/').at(-1) == 'contactImage.webp' ? 'avatar' : registerPicture,
                 }
             }).catch(res => {
-                console.log(res.status);
                 //error case
                 if (res == "Error: Request failed with status code 400") {
-                    console.log("existedUsername");
                     setError('existedUsername');
                 }
                 else if (res == "Error: Network Error") {
-                    console.log("network");
                     setError('network');
                 }
                 else {
-                    console.log(res);
-                    console.log("error");
                     setError('error');
                 }
                 return 2;
