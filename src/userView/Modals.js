@@ -2,8 +2,22 @@ import React, { useRef, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 
 export function SettingsModal() {
-    let navigate = useNavigate();
+    const modalRef = useRef(null);
+    const background_input = document.getElementById("background_input");
 
+    const changeColor = () => {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+            document.getElementById("massage-box").style.backgroundImage = "url(" + reader.result + ")";
+        });
+        reader.readAsDataURL(this.files[0]);
+    }
+
+    if (background_input) {
+        background_input.addEventListener("change", changeColor);
+    }
+
+    let navigate = useNavigate();
     document.addEventListener("input", () => {
         if (document.getElementById('color1') && document.getElementById('color2')) {
             var color1 = document.getElementById('color1').value;
@@ -28,22 +42,10 @@ export function SettingsModal() {
         document.documentElement.style.setProperty('--secondColorFaded', '#EE7752CC');
         document.getElementById("massage-box").style.backgroundImage = "url('app.webp')";
         document.getElementById('background_input').value = '';
-
-    }
-
-    const background_input = document.getElementById("background_input");
-    if (background_input) {
-        background_input.addEventListener("change", function () {
-            const reader = new FileReader();
-            reader.addEventListener("load", () => {
-                document.getElementById("massage-box").style.backgroundImage = "url(" + reader.result + ")";
-            });
-            reader.readAsDataURL(this.files[0]);
-        })
     }
 
     return (
-        <div className="modal fade" id="settings-modal" tabIndex="-1" aria-hidden="true">
+        <div ref={modalRef} className="modal fade" id="settings-modal" tabIndex="-1" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered modal-lg">
                 <div className="modal-content">
                     <div className="modal-header">
