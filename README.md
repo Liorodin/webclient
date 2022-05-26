@@ -35,21 +35,20 @@ After you register with other new users, you can add them as new contacts of the
 ### `6. Start chatting!`
 
 In the left side of the screen you can see your contact list, with your recent messages and their time.\
-On the top of the contact list, you can see your nickname ("hemi hemi hemi") and your profile photo.\
+On the top of the contact list, you can see your nickname and your profile photo.\
 If you click on a certain contact, you can see your chat with him on the right side of the screen.\
-You can switch between the contacts and see differend kinds of recent messages such as: picture, video, record and text in both English and Hebrew ;)\
+You can switch between the contacts and see the recent messages between you and them.\
 *Epecially for ex2: you can see the messages in the moment they had just been sent, between 2 different online users.
 
 In addition, we have *bonus* featers as described below:
 - You can change your profile photo by clicking on it.
-- You can both take a picture of yourself and record a video of yourself on live, by clicking on the camera icon and send it!
 - You can click on the settings icon on the bottom left corner of the screen and then you have several options:
    1. Change the 2 color theme of the website.
    2. Change the chat's background by picking another picture on your PC.
    3. Reset to the website's default settings.
    4. Log out to the Log in page.
  
- 
+ * Due to current exercise instructions, certain events are not supported in this exercise (such as different types of messages, and our bonus features of changing profile photo and wallpaper)
 
 
 
