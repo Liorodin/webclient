@@ -222,6 +222,16 @@ export default function Contact({ user, currentContact, displayNameSetter }) {
     }, [getChat])
     const [lastMessage, setLastMessage] = useState(null);
     const lastMessageTime = useRef(null);
+    useEffect(() => {
+        if (lastMessage == null) return;
+        if ((Date.now() - Date.parse(lastMessage.created)) > 50) return;
+        if (currentContact == '') {
+            document.getElementById('welcome').style.display = 'none';
+            document.getElementById('chat-grid').style.display = 'grid';
+        }
+        //updates current contact on display
+        enterContactChat(user.id, user, displayNameSetter)
+    }, [lastMessage])
     const lastMessageContent = useRef(null);
     useEffect(() => {
         if (chat == null) return;
@@ -262,7 +272,6 @@ export default function Contact({ user, currentContact, displayNameSetter }) {
                     document.getElementById('chat-grid').style.display = 'grid';
                 }
                 setGetChat(prev => !prev);
-                //updates current contact on display
                 enterContactChat(user.id, user, displayNameSetter)
             }}>
             {GetProfilePic(user)}
@@ -272,5 +281,4 @@ export default function Contact({ user, currentContact, displayNameSetter }) {
             <hr />
         </div>
     )
-
 }
