@@ -224,28 +224,27 @@ const postVoiceFunction = () => {
   //   }
 }
 
-const getContacts = (userContacts, currentContact, displayNameSetter) => {
+const getContacts = (userContacts, currentContact, displayNameSetter, chat) => {
   const loggedUsername = JSON.parse(localStorage.getItem("currentUser"));
   const list = [];
   if (userContacts == null || typeof userContacts == 'string') return;
   for (var i in userContacts) {
-    list.push(<Contact key={i} user={userContacts[i]} displayNameSetter={displayNameSetter} currentContact={currentContact} />);
+    list.push(<Contact key={i} user={userContacts[i]} displayNameSetter={displayNameSetter} currentContact={currentContact} chatUpdate={chat} />);
   }
 
   list.sort((contact1, contact2) => {
-    console.log(contact1.props.user.Last);
-    // var message1 = GetContactMessages(contact1.props.name, loggedUsername).at(-1);
-    // var message2 = GetContactMessages(contact2.props.name, loggedUsername).at(-1);
-    // if (message1 && message2) {
-    //   if (message1.time - message2.time > 0) {
-    //     return -1
-    //   }
-    //   else if (message1.time - message2.time < 0) {
-    //     return 1
-    //   }
-    //   return 0
-    // }
-    // return -1
+    var date1 = contact1.props.user.lastdate;
+    var date2 = contact2.props.user.lastdate;
+    if (date1 && date2) {
+      if (Date.parse(date1) - Date.parse(date2) > 0) {
+        return -1
+      }
+      else if (Date.parse(date1) - Date.parse(date2) < 0) {
+        return 1
+      }
+      return 0
+    }
+    return -1
   })
   return list;
 }
@@ -421,9 +420,9 @@ export default function UserView({ currentUser }) {
     if (res == 2) return 2;
 
     const chatMessage = {
-      content: message
+      content: message,
+      From: currentUser,
     };
-    //signal r
 
     if (connection._connectionStarted) {
       try {
@@ -434,7 +433,6 @@ export default function UserView({ currentUser }) {
       }
     }
 
-    //checkOpenChat(currentUser, currentContact);
     setter(prevValue => !prevValue);
     document.getElementById(currentContact).click();
     return;
@@ -461,7 +459,7 @@ export default function UserView({ currentUser }) {
   useEffect(() => {
     setInterval(() => {
       setOpenChatCount(prevValue => !prevValue);
-    }, 30000)
+    }, 40000)
   }, [])
   const [currentContact, setCurrentContact] = useState('');
 
@@ -478,16 +476,16 @@ export default function UserView({ currentUser }) {
       }).then(res => setUserContacts(res.data))
   }
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && window.location.href.split('/').at(-1) == 'chatview') {
-      const from = JSON.parse(localStorage.getItem('currentUser'));
-      const to = JSON.parse(localStorage.getItem('currentContact'));
-      if (!(from && to)) {
-        return;
-      }
-      postTextMessage(from, to, setOpenChatCount)
-    }
-  });
+  // document.addEventListener('keydown', (e) => {
+  //   if (e.key === 'Enter' && window.location.href.split('/').at(-1) == 'chatview') {
+  //     const from = JSON.parse(localStorage.getItem('currentUser'));
+  //     const to = JSON.parse(localStorage.getItem('currentContact'));
+  //     if (!(from && to)) {
+  //       return;
+  //     }
+  //     postTextMessage(from, to, setOpenChatCount)
+  //   }
+  // });
 
   return (
     <div className='container'>
@@ -495,7 +493,7 @@ export default function UserView({ currentUser }) {
         <div className='user-side-top'>{userProfile(loggedUser, setOpenChatCount)}</div>
         <div id='contact-box'>
           {/* <div className='space'></div> */}
-          {getContacts(userContacts, currentContact, setCurrentContact)}
+          {getContacts(userContacts, currentContact, setCurrentContact, chat)}
         </div>
       </div>
       <div className='contact-side'>
