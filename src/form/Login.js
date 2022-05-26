@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Input from './Input';
 import axios from 'axios';
-
 import ResetHidden from './ResetHidden';
 import ShowHidden from './ShowHidden';
 
@@ -27,38 +26,23 @@ export default function Login({ setCurrentUser }) {
                         username: userName,
                         password: userPassword
                     }
+                }).catch(res => {
+                    //-------------------------check error here
+                    console.log(res);
+                    return 2;
                 });
-            if(res.status == 200) {
+            if (res.status && res.status == 200) {
                 localStorage.setItem('currentUser', JSON.stringify(userName));
                 localStorage.setItem('userToken', JSON.stringify(res.data));
                 setCurrentUser(userName);
                 navigate("/chatview");
             }
-            else{
+            else {
                 setError('wrong');
             }
             document.getElementById("myForm").reset();
         }
     }
-    // const login = () => {
-    //     ResetHidden();
-    //     // if you managed to login
-    //     if (ShowHidden()) {
-    //         var userName = document.getElementById('Username').value;
-    //         var password = document.getElementById('Password').value;
-    //         users.map(user => {
-    //             if (user.username == userName && user.password == password) {
-    //                 localStorage.setItem('currentUser', JSON.stringify(userName));
-    //                 setCurrentUser(userName);
-    //                 navigate("/chatview");
-    //             }
-    //             else {
-    //                 setError('wrong');
-    //             }
-    //         })
-    //         document.getElementById("myForm").reset();
-    //     }
-    // }
 
     return (
         <form id="myForm" className='cube center-form'>
