@@ -28,7 +28,6 @@ export default function Login({ setCurrentUser }) {
                     }
                 }).catch(res => {
                     //check if the server isn't connected
-                    console.log(res);
                     if (res == "Error: Network Error") {
                         setError('network');
                     }

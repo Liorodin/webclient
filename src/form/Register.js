@@ -15,11 +15,9 @@ export default function Register() {
         ResetHidden();
         if (ShowHidden()) {
             newRegister().then(res => {
-                if (res) {
+                console.log(res);
+                if (res == 1) {
                     navigate("/");
-                }
-                else{
-                    //add error here
                 }
             });
         }
@@ -76,10 +74,25 @@ export default function Register() {
                     password: registerPassword,
                     Picture: registerPicture.split('/').at(-1) == 'contactImage.webp' ? 'avatar' : registerPicture,
                 }
-            }).catch(res => 2);
-        if (!(res && res.status == 200)) {
-            return 0;
-        }
+            }).catch(res => {
+                console.log(res.status);
+                //error case
+                if (res == "Error: Request failed with status code 400") {
+                    console.log("existedUsername");
+                    setError('existedUsername');
+                }
+                else if (res == "Error: Network Error") {
+                    console.log("network");
+                    setError('network');
+                }
+                else {
+                    console.log(res);
+                    console.log("error");
+                    setError('error');
+                }
+                return 2;
+            });
+        if (res == 2) { return 0; }
         return 1;
     }
 
@@ -95,6 +108,8 @@ export default function Register() {
                 {(error === 'lettersP') ? (<div className="alert alert-danger">The password should contain letters too</div>) : ""}
                 {(error === 'lettersU') ? (<div className="alert alert-danger">The username should contain letters too</div>) : ""}
                 {(error === 'lettersN') ? (<div className="alert alert-danger">The nickname should contain letters too</div>) : ""}
+                {(error === 'network') ? (<div className="alert alert-danger">Can't reach server</div>) : ""}
+                {(error === 'error') ? (<div className="alert alert-danger">Can't register</div>) : ""}
 
                 <div className='register'>
                     <div>
