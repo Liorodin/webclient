@@ -232,20 +232,21 @@ const getContacts = (userContacts, currentContact, displayNameSetter) => {
     list.push(<Contact key={i} user={userContacts[i]} displayNameSetter={displayNameSetter} currentContact={currentContact} />);
   }
 
-  // list.sort((contact1, contact2) => {
-  //   var message1 = GetContactMessages(contact1.props.name, loggedUsername).at(-1);
-  //   var message2 = GetContactMessages(contact2.props.name, loggedUsername).at(-1);
-  //   if (message1 && message2) {
-  //     if (message1.time - message2.time > 0) {
-  //       return -1
-  //     }
-  //     else if (message1.time - message2.time < 0) {
-  //       return 1
-  //     }
-  //     return 0
-  //   }
-  //   return -1
-  // })
+  list.sort((contact1, contact2) => {
+    console.log(contact1.props.user.Last);
+    // var message1 = GetContactMessages(contact1.props.name, loggedUsername).at(-1);
+    // var message2 = GetContactMessages(contact2.props.name, loggedUsername).at(-1);
+    // if (message1 && message2) {
+    //   if (message1.time - message2.time > 0) {
+    //     return -1
+    //   }
+    //   else if (message1.time - message2.time < 0) {
+    //     return 1
+    //   }
+    //   return 0
+    // }
+    // return -1
+  })
   return list;
 }
 
@@ -353,43 +354,22 @@ export default function UserView({ currentUser }) {
       .withUrl('https://localhost:7290/hubs/chathub')
       .withAutomaticReconnect()
       .build();
-
     setConnection(newConnection);
   }, []);
-
+  
   useEffect(() => {
     if (connection) {
       connection.start()
         .then(result => {
-          console.log('Connected!');
-
           connection.on('ReceiveMessage', message => {
             const updatedChat = [...latestChat.current];
-            console.log(updatedChat);
             updatedChat.push(message);
-            console.log(updatedChat);
             setChat(updatedChat);
           });
         })
         .catch(e => console.log('connection failed: ', e));
     }
-  }, []);
-
-  const newContactMap = new Map();
-  const checkOpenChat = (currentUser, currentContact) => {
-    if (newContactMap.get(currentContact) != 0) {
-      return;
-    }
-    for (var i = 0; i < contactsList.length; i++) {
-      if (contactsList[i].username == currentContact) {
-        if (!contactsList[i].contactsList.includes(currentUser)) {
-          contactsList[i].contactsList.push(currentUser);
-          newContactMap.set(currentContact, 1);
-        }
-        return;
-      }
-    }
-  }
+  }, [connection]);
 
   const postTextMessage = async (currentUser, currentContact, setter) => {
     var readMessage = document.getElementById('post-message');
@@ -399,6 +379,7 @@ export default function UserView({ currentUser }) {
     const message = readMessage.value;
     readMessage.value = '';
     var contactServer;
+    if (!(userContacts)) return;
     userContacts.forEach(uc => {
       if (uc.id == currentContact) {
         contactServer = uc.server;
@@ -425,7 +406,6 @@ export default function UserView({ currentUser }) {
     const token = JSON.parse(localStorage.getItem("userToken"));
     const res = await axios(
       {
-
         method: 'post',
         url: `https://localhost:7290/api/contacts/${currentContact}/messages`,
         headers: {
@@ -444,7 +424,6 @@ export default function UserView({ currentUser }) {
       content: message
     };
     if (connection._connectionStarted) {
-      console.log("yes");
       try {
         connection.invoke('SendMessage', chatMessage);
       }
@@ -452,15 +431,11 @@ export default function UserView({ currentUser }) {
         console.log(e);
       }
     }
-    else {
-      alert('No connection to server yet.');
-    }
     setter(prevValue => !prevValue);
     document.getElementById(currentContact).click();
     return;
   }
-
-
+  
 
   useEffect(() => {
     const loggedUsername = JSON.parse(localStorage.getItem("currentUser"));
@@ -480,7 +455,6 @@ export default function UserView({ currentUser }) {
     getUserData();
     getUserContacts();
   }, [openChatCount])
-
   useEffect(() => {
     setInterval(() => {
       setOpenChatCount(prevValue => !prevValue);

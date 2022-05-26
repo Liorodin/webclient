@@ -4,8 +4,6 @@ import ResetHidden from './ResetHidden';
 import ShowHidden from './ShowHidden';
 import Input from './Input';
 import axios from 'axios';
-
-import { contactsList } from '../db/contactsList';
 import { ProfileImageModal } from '../userView/Modals'
 
 
@@ -16,9 +14,14 @@ export default function Register() {
         event.preventDefault();
         ResetHidden();
         if (ShowHidden()) {
-            if (newRegister()) {
-                navigate("/");
-            }
+            newRegister().then(res => {
+                if (res) {
+                    navigate("/");
+                }
+                else{
+                    //add error here
+                }
+            });
         }
     }
 
@@ -73,15 +76,10 @@ export default function Register() {
                     password: registerPassword,
                     Picture: registerPicture.split('/').at(-1) == 'contactImage.webp' ? 'avatar' : registerPicture,
                 }
-            });
-        if (res.data != 200) {
+            }).catch(res => 2);
+        if (!(res.data && res.data == 200)) {
             return 0;
         }
-        // contactsList.push({
-        //     username: registerUser,
-        //     contactsList: [],
-        // })
-
         return 1;
     }
 

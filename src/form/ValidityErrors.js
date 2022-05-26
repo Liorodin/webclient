@@ -7,6 +7,8 @@ export function GetError({ inputName }) {
             return 'Please enter a Password'
         case 'Nickname':
             return 'Please enter a Nickname'
+        case 'Password Verification':
+            return 'Please enter a Password Verification'
         default:
             return 'Missing content'
     }
