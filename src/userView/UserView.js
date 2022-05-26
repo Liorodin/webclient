@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios';
-import Contact, { GetProfilePic, GetContactMessages, GetUser } from './Contact'
-import { contactsList } from '../db/contactsList'
-import { messages } from '../db/messages';
+import Contact, { GetProfilePic } from './Contact'
 import { SettingsModal, AddContactModal, ChangeUserImageModal } from './Modals';
 import { HubConnectionBuilder } from '@microsoft/signalr';
 

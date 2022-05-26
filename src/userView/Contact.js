@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { messages } from '../db/messages';
-import { users } from '../db/users';
 import axios from 'axios';
 
 export function GetProfilePic(user) {
@@ -10,16 +8,7 @@ export function GetProfilePic(user) {
     return <div id="profile-pic" className="avatar">{user.nickname ? user.nickname[0].toUpperCase() : user.name[0].toUpperCase()}</div>;
 }
 
-export function GetContactMessages(firstName, secondName) {
-    for (var i = 0; i < messages.length; i++) {
-        if (messages[i].contacts.includes(firstName) && messages[i].contacts.includes(secondName)) {
-            return messages[i].list;
-        }
-    }
-    return [];
-}
-
-async function GetContactMessages2(contactName) {
+async function GetContactMessages(contactName) {
     if (contactName == undefined) return [];
     const token = JSON.parse(localStorage.getItem("userToken"));
     const list = [];
@@ -37,21 +26,6 @@ async function GetContactMessages2(contactName) {
             }
         });
     return list;
-}
-
-/*returns the username */
-export function GetUser(userName) {
-    for (var i = 0; i < users.length; i++) {
-        if (users[i].username == userName) {
-            return users[i];
-        }
-    }
-    return {
-        username: 'not found',
-        nickname: 'not found',
-        password: null,
-        picture: 'default',
-    }
 }
 
 const getTime = (lastMessage) => {
@@ -214,7 +188,7 @@ const printMessagesOnScreen = (chat) => {
 
 export default function Contact({ user, currentContact, displayNameSetter, chatUpdate }) {
     useEffect(() => {
-        GetContactMessages2(user.id).then(res => {
+        GetContactMessages(user.id).then(res => {
             setChat(res)
         });
     }, [chatUpdate])

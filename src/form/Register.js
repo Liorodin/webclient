@@ -77,7 +77,7 @@ export default function Register() {
                     Picture: registerPicture.split('/').at(-1) == 'contactImage.webp' ? 'avatar' : registerPicture,
                 }
             }).catch(res => 2);
-        if (!(res.data && res.data == 200)) {
+        if (!(res && res.status == 200)) {
             return 0;
         }
         return 1;
