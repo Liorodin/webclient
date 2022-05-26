@@ -219,6 +219,9 @@ export default function Contact({ user, currentContact, displayNameSetter }) {
         GetContactMessages2(user.id).then(res => {
             setChat(res);
         });
+        if (JSON.parse(localStorage.getItem('currentContact')) == user.id) {
+            console.log('hi')
+        }
     }, [getChat])
     const [lastMessage, setLastMessage] = useState(null);
     const lastMessageTime = useRef(null);
