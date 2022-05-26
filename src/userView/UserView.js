@@ -233,16 +233,20 @@ const getContacts = (userContacts, currentContact, displayNameSetter, chat) => {
   }
 
   list.sort((contact1, contact2) => {
-    var date1 = contact1.props.user.lastdate;
-    var date2 = contact2.props.user.lastdate;
-    if (date1 && date2) {
-      if (Date.parse(date1) - Date.parse(date2) > 0) {
-        return -1
-      }
-      else if (Date.parse(date1) - Date.parse(date2) < 0) {
-        return 1
-      }
-      return 0
+    var date1 = Date.parse(contact1.props.user.lastdate);
+    var date2 = Date.parse(contact2.props.user.lastdate);
+    if (date1 == NaN) {
+      date1 = 0;
+    }
+    if (date2 == NaN) {
+      date2 = 0;
+    }
+    //console.log(Date.parse(date1) - Date.parse(date2))
+    if (date1 - date2 > 0) {
+      return -1
+    }
+    else if (date1 - date2 < 0) {
+      return 1
     }
     return -1
   })
