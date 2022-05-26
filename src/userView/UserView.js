@@ -339,9 +339,7 @@ const closeChatOptions = () => document.getElementById('dropup-content').style.d
 export default function UserView({ currentUser }) {
   const [loggedUser, setLoggedUser] = useState(null);
   const [userContacts, setUserContacts] = useState(null);
-  const [timeInterval, setTimeInterval] = useState(0);
   const [openChatCount, setOpenChatCount] = useState(0);
-  //signal r
   const [connection, setConnection] = useState(null);
   const [chat, setChat] = useState([]);
   const latestChat = useRef(null);
@@ -355,7 +353,7 @@ export default function UserView({ currentUser }) {
       .build();
     setConnection(newConnection);
   }, []);
-  
+
   useEffect(() => {
     if (connection) {
       connection.start()
@@ -418,7 +416,6 @@ export default function UserView({ currentUser }) {
       }).catch(res => 2);
     if (res == 2) return 2;
 
-    //signal r
     const chatMessage = {
       content: message,
       From: currentUser,
@@ -435,7 +432,6 @@ export default function UserView({ currentUser }) {
     document.getElementById(currentContact).click();
     return;
   }
-  
 
   useEffect(() => {
     const loggedUsername = JSON.parse(localStorage.getItem("currentUser"));
@@ -456,6 +452,7 @@ export default function UserView({ currentUser }) {
     getUserContacts();
   }, [openChatCount])
   useEffect(() => {
+    localStorage.setItem('currentContact', JSON.stringify(''));
     setInterval(() => {
       setOpenChatCount(prevValue => !prevValue);
     }, 40000)
