@@ -277,7 +277,7 @@ const AddNewContact = async (contactInfo) => {
   const res = await axios(
     {
       method: 'post',
-      url: `https://localhost:7290/api/contacts/`,
+      url: `https://localhost:7290/api/contacts`,
       headers: {
         'content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
@@ -342,7 +342,6 @@ export default function UserView({ currentUser }) {
   const [userContacts, setUserContacts] = useState(null);
   const [timeInterval, setTimeInterval] = useState(0);
   const [openChatCount, setOpenChatCount] = useState(0);
-
 //signal r
   const [ connection, setConnection ] = useState(null);
   const [ chat, setChat ] = useState([]);
@@ -396,10 +395,12 @@ const checkOpenChat = (currentUser, currentContact) => {
 ////////////////////////////////
 
 const postTextMessage = async (currentUser, currentContact, setter) => {
-  var message = document.getElementById('post-message');
-  if (message.value.length == 0) {
+  var readMessage = document.getElementById('post-message');
+  if (readMessage.value.length == 0) {
     return;
   }
+  const message = readMessage.value;
+  readMessage.value = '';
   var contactServer; 
   userContacts.forEach(uc => {
     if (uc.id == currentContact) {
@@ -420,12 +421,11 @@ const postTextMessage = async (currentUser, currentContact, setter) => {
       {
         from:  JSON.parse(localStorage.getItem("currentUser")),
         to: currentContact,
-        content: message.value,
+        content: message,
       }
     }).catch(transfer => 2);
   if (transfer == 2) return 2;
   const token = JSON.parse(localStorage.getItem("userToken"));
-  console.log(currentContact);
   const res = await axios(
     {
 
@@ -437,10 +437,9 @@ const postTextMessage = async (currentUser, currentContact, setter) => {
       },
       data:
       {
-        content: message.value,
+        content: message,
       }
     }).catch(res => 2);
-    console.log(res);
   if (res == 2) return 2;
 
     //signal r
@@ -454,7 +453,6 @@ const postTextMessage = async (currentUser, currentContact, setter) => {
   // }
 
   //checkOpenChat(currentUser, currentContact);
-  message.value = '';
   setter(prevValue => !prevValue);
   document.getElementById(currentContact).click();
   return;
