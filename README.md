@@ -46,7 +46,7 @@ In addition, we have *bonus* featers as described below:
    1. Change the 2 color theme of the website.
    2. Change the chat's background by picking another picture on your PC.
    3. Reset to the website's default settings.
-   4. Log out to the Log in page.
+   4. Log out.
  
  * Due to current exercise instructions, certain events are not supported in this exercise (such as different types of messages, and our bonus features of changing profile photo and wallpaper)
 
