@@ -4,8 +4,6 @@ import Contact, { GetProfilePic } from './Contact'
 import { SettingsModal, AddContactModal, ChangeUserImageModal } from './Modals';
 import { HubConnectionBuilder } from '@microsoft/signalr';
 
-
-
 const postPictureMessage = (currentUser, currentContact, setter) => {
   //   var picture = document.getElementById('preview-post-pic');
   //   if (null === picture) {
@@ -343,6 +341,9 @@ export default function UserView({ currentUser }) {
   const [openChatCount, setOpenChatCount] = useState(0);
   const [connection, setConnection] = useState(null);
   const [chat, setChat] = useState([]);
+  useEffect(() => {
+    setOpenChatCount(prev => !prev);
+  }, [chat]);
   const latestChat = useRef(null);
 
   latestChat.current = chat;
