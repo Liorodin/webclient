@@ -49,7 +49,7 @@ In addition, we have *bonus* featers as described below:
    4. Log out.
  
  * Due to current exercise instructions, certain events we have made on Exercise 1 are not supported in this exercise\
-   (such as different types of messages, and our bonus features of changing profile photo).
+   (Such as different types of messages, and our bonus features of changing profile photo).
 
 
 
