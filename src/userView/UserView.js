@@ -474,16 +474,16 @@ export default function UserView({ currentUser }) {
       }).then(res => setUserContacts(res.data))
   }
 
-  // document.addEventListener('keydown', (e) => {
-  //   if (e.key === 'Enter' && window.location.href.split('/').at(-1) == 'chatview') {
-  //     const from = JSON.parse(localStorage.getItem('currentUser'));
-  //     const to = JSON.parse(localStorage.getItem('currentContact'));
-  //     if (!(from && to)) {
-  //       return;
-  //     }
-  //     postTextMessage(from, to, setOpenChatCount)
-  //   }
-  // });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && window.location.href.split('/').at(-1) == 'chatview') {
+      const from = JSON.parse(localStorage.getItem('currentUser'));
+      const to = JSON.parse(localStorage.getItem('currentContact'));
+      if (!(from && to)) {
+        return;
+      }
+      postTextMessage(from, to, setOpenChatCount)
+    }
+  });
 
   return (
     <div className='container'>
@@ -497,7 +497,7 @@ export default function UserView({ currentUser }) {
       <div className='contact-side'>
         {contactProfile(currentContact)}
         <ol className="messages massage-box" id='massage-box'>
-          <div id='welcome'><span>Welcome to Shirin's and Leonardo's WebClient</span></div>
+          <div id='welcome'><span>Welcome to our WebClient</span></div>
         </ol>
         <div id='bottom-bar'>
           <div id="chat-grid">

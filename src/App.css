@@ -581,13 +581,13 @@ video .pic img {
   align-items: center;
 }
 
-.add-contact{
+.add-contact {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.addContactInput{
+.addContactInput {
   width: 80%;
   margin-bottom: 12px;
 }
