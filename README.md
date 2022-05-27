@@ -48,6 +48,9 @@ In addition, we have *bonus* featers as described below:
    3. Reset to the website's default settings.
    4. Log out.
  
- * Due to current exercise instructions, certain events are not supported in this exercise
+ * Due to current exercise instructions, certain events we have made on Exercise 1 are not supported in this exercise\
+   (such as different types of messages, and our bonus features of changing profile photo).
+
+
 
 
