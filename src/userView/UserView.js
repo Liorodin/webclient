@@ -497,7 +497,7 @@ export default function UserView({ currentUser }) {
       <div className='contact-side'>
         {contactProfile(currentContact)}
         <ol className="messages massage-box" id='massage-box'>
-          <div id='welcome'><span>Welcome to Shirin's and Leonardo's WebClient</span></div>
+          <div id='welcome'><span>Welcome to our WebClient</span></div>
         </ol>
         <div id='bottom-bar'>
           <div id="chat-grid">
