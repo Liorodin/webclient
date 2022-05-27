@@ -21,15 +21,15 @@ You may also see any lint errors in the console.
 
 ### `3. Register`
 
-Register with a new username and password.
+Add new users to the database.
 
 ### `4. Log in`
 
-Log in to your new user.
+Log in with one of your new users.
 
 ### `5. Add new contacts`
 
-After you register with other new users, you can add them as new contacts of the first user you have registered\
+After you register with other new users, you can add them as new contacts\
 (by clicking the +contact icon on the top of the contact list).
 
 ### `6. Start chatting!`
