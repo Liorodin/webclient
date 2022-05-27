@@ -29,7 +29,7 @@ Log in with one of your new users.
 
 ### `5. Add new contacts`
 
-After you register with other new users, you can add them as new contacts\
+After you registered with other new users, you can add them as new contacts\
 (by clicking the +contact icon on the top of the contact list).
 
 ### `6. Start chatting!`
