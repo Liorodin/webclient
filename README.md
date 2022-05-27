@@ -38,7 +38,7 @@ In the left side of the screen you can see your contact list, with your recent m
 On the top of the contact list, you can see your nickname and your profile photo.\
 If you click on a certain contact, you can see your chat with him on the right side of the screen.\
 You can switch between the contacts and see the recent messages between you and them.\
-*Epecially for ex2: you can see the messages in the moment they had just been sent, between 2 different online users.
+*Epecially for ex2:* you can see the messages in the moment they had just been sent, between 2 different online users.
 
 In addition, we have *bonus* featers as described below:
 - You can change your profile photo by clicking on it.
@@ -48,8 +48,6 @@ In addition, we have *bonus* featers as described below:
    3. Reset to the website's default settings.
    4. Log out.
  
- * Due to current exercise instructions, certain events are not supported in this exercise (such as different types of messages, and our bonus features of changing profile photo)
-
-
+ * Due to current exercise instructions, certain events are not supported in this exercise
 
 
