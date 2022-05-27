@@ -3,31 +3,32 @@ import { useNavigate } from "react-router-dom";
 
 export function SettingsModal() {
     const modalRef = useRef(null);
-    const background_input = document.getElementById("background_input");
-
-    const changeColor = () => {
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-            document.getElementById("massage-box").style.backgroundImage = "url(" + reader.result + ")";
-        });
-        reader.readAsDataURL(this.files[0]);
-    }
-
-    if (background_input) {
-        background_input.addEventListener("change", changeColor);
-    }
-
-    let navigate = useNavigate();
-    document.addEventListener("input", () => {
-        if (document.getElementById('color1') && document.getElementById('color2')) {
+    const color1Ref = useRef(null);
+    const color2Ref = useRef(null);
+    useEffect(() => {
+        color1Ref.current.value = getComputedStyle(document.documentElement).getPropertyValue('--firstColor').substring(1);
+        color2Ref.current.value = getComputedStyle(document.documentElement).getPropertyValue('--secondColor').substring(1);
+        document.getElementById("background_input").addEventListener("change", function () {
+            const reader = new FileReader();
+            reader.addEventListener("load", () => {
+                document.getElementById("massage-box").style.backgroundImage = "url(" + reader.result + ")";
+            });
+            reader.readAsDataURL(this.files[0]);
+        })
+        modalRef.current.addEventListener('hidden.bs.modal', () => {
+            document.getElementById('background_input').value = '';
+        })
+        document.addEventListener("input", () => {
             var color1 = document.getElementById('color1').value;
             var color2 = document.getElementById('color2').value;
             document.documentElement.style.setProperty('--firstColor', color1);
             document.documentElement.style.setProperty('--firstColorFaded', color1 + "CC");
             document.documentElement.style.setProperty('--secondColor', color2);
             document.documentElement.style.setProperty('--secondColorFaded', color2 + "CC");
-        }
-    });
+        });
+    }, [modalRef])
+
+    let navigate = useNavigate();
 
     const logOut = () => {
         localStorage.setItem('currentUser', JSON.stringify('default user'));
@@ -35,13 +36,15 @@ export function SettingsModal() {
         localStorage.setItem('userToken', JSON.stringify(''));
         navigate("/");
     }
+
     const resetSettings = () => {
         document.documentElement.style.setProperty('--firstColor', '#E73C7E');
         document.documentElement.style.setProperty('--firstColorFaded', '#E73C7EAA');
         document.documentElement.style.setProperty('--secondColor', '#EE7752');
         document.documentElement.style.setProperty('--secondColorFaded', '#EE7752CC');
+        color1Ref.current.value = getComputedStyle(document.documentElement).getPropertyValue('--firstColor');
+        color2Ref.current.value = getComputedStyle(document.documentElement).getPropertyValue('--secondColor');
         document.getElementById("massage-box").style.backgroundImage = "url('app.webp')";
-        document.getElementById('background_input').value = '';
     }
 
     return (
@@ -55,8 +58,8 @@ export function SettingsModal() {
                     <div >
                         <div className="modal-body">
                             <label>Change your websites theme:</label>
-                            <input id="color1" type="color" name="color1" defaultValue="#E73C7E" />
-                            <input id="color2" type="color" name="color2" defaultValue="#EE7752" />
+                            <input ref={color1Ref} id="color1" type="color" name="color1" />
+                            <input ref={color2Ref} id="color2" type="color" name="color2" />
                         </div>
                         <div className="modal-body modal-background">
                             <label>Change chat's background:</label>

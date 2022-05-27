@@ -474,16 +474,16 @@ export default function UserView({ currentUser }) {
       }).then(res => setUserContacts(res.data))
   }
 
-  // document.addEventListener('keydown', (e) => {
-  //   if (e.key === 'Enter' && window.location.href.split('/').at(-1) == 'chatview') {
-  //     const from = JSON.parse(localStorage.getItem('currentUser'));
-  //     const to = JSON.parse(localStorage.getItem('currentContact'));
-  //     if (!(from && to)) {
-  //       return;
-  //     }
-  //     postTextMessage(from, to, setOpenChatCount)
-  //   }
-  // });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && window.location.href.split('/').at(-1) == 'chatview') {
+      const from = JSON.parse(localStorage.getItem('currentUser'));
+      const to = JSON.parse(localStorage.getItem('currentContact'));
+      if (!(from && to)) {
+        return;
+      }
+      postTextMessage(from, to, setOpenChatCount)
+    }
+  });
 
   return (
     <div className='container'>
