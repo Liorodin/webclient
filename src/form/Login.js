@@ -48,7 +48,7 @@ export default function Login({ setCurrentUser }) {
 
     return (
         <form id="myForm" className='cube center-form'>
-            <h1>Shirin's and Leonardo's WebClient</h1>
+            <h1>Our WebClient</h1>
             <hr></hr>
             {(error === 'wrong') ? (<div className="alert alert-danger">Wrong password or username</div>) : ""}
             {(error === 'network') ? (<div className="alert alert-danger">Can't reach server</div>) : ""}
