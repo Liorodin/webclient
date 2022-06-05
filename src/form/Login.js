@@ -17,7 +17,7 @@ export default function Login({ setCurrentUser }) {
             const res = await axios(
                 {
                     method: 'post',
-                    url: 'https://localhost:7290/api/Users/Login',
+                    url: 'http://localhost:7290/api/Users/Login',
                     headers: {
                         'content-Type': 'application/json',
                     },

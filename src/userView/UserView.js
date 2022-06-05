@@ -259,7 +259,7 @@ const AddNewContact = async (contactInfo) => {
   const invitation = await axios(
     {
       method: 'post',
-      url: `https:///${contactInfo.server}/api/invitations/`,
+      url: `http:///${contactInfo.server}/api/invitations/`,
       headers: {
         'content-Type': 'application/json',
       },
@@ -276,7 +276,7 @@ const AddNewContact = async (contactInfo) => {
   const res = await axios(
     {
       method: 'post',
-      url: `https://localhost:7290/api/contacts`,
+      url: `http://localhost:7290/api/contacts`,
       headers: {
         'content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
@@ -350,7 +350,7 @@ export default function UserView({ currentUser }) {
 
   useEffect(() => {
     const newConnection = new HubConnectionBuilder()
-      .withUrl('https://localhost:7290/hubs/chathub')
+      .withUrl('http://localhost:7290/hubs/chathub')
       .withAutomaticReconnect()
       .build();
     setConnection(newConnection);
@@ -390,7 +390,7 @@ export default function UserView({ currentUser }) {
     const transfer = await axios(
       {
         method: 'post',
-        url: `https://${contactServer}/api/transfer`,
+        url: `http://${contactServer}/api/transfer`,
         headers: {
           'content-Type': 'application/json',
         },
@@ -406,7 +406,7 @@ export default function UserView({ currentUser }) {
     const res = await axios(
       {
         method: 'post',
-        url: `https://localhost:7290/api/contacts/${currentContact}/messages`,
+        url: `http://localhost:7290/api/contacts/${currentContact}/messages`,
         headers: {
           'content-Type': 'application/json',
           'Authorization': 'Bearer ' + token
@@ -441,7 +441,7 @@ export default function UserView({ currentUser }) {
       await axios(
         {
           method: 'post',
-          url: 'https://localhost:7290/api/Users/User',
+          url: 'http://localhost:7290/api/Users/User',
           headers: {
             'content-Type': 'application/json',
           },
@@ -466,7 +466,7 @@ export default function UserView({ currentUser }) {
     await axios(
       {
         method: 'get',
-        url: 'https://localhost:7290/api/Contacts',
+        url: 'http://localhost:7290/api/Contacts',
         headers: {
           'content-Type': 'application/json',
           'Authorization': 'Bearer ' + token

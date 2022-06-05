@@ -15,7 +15,7 @@ async function GetContactMessages(contactName) {
     await axios(
         {
             method: 'get',
-            url: `https://localhost:7290/api/contacts/${contactName}/messages`,
+            url: `http://localhost:7290/api/contacts/${contactName}/messages`,
             headers: {
                 'content-Type': 'application/json',
                 'Authorization': 'Bearer ' + token
