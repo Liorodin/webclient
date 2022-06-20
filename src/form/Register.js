@@ -62,7 +62,7 @@ export default function Register() {
         const res = await axios(
             {
                 method: 'post',
-                url: 'https://localhost:7290/api/Users/Register',
+                url: 'http://localhost:7290/api/Users/Register',
                 headers: {
                     'content-Type': 'application/json',
                 },
